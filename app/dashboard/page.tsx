@@ -16,6 +16,8 @@ export default function DashboardPage() {
   const [recipes, setRecipes] = useState<BaseCardProps[]>([])
   const [loading, setLoading] = useState(true)
   const [activities, setActivities] = useState<Activity[]>([])
+  const [page, setPage] = useState(1)
+  const perPage = 5
 
   useEffect(() => {
     const load = async () => {
