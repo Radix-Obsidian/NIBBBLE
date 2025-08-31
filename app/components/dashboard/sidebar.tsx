@@ -5,14 +5,11 @@ import { useMemo } from 'react'
 import {
   Home,
   Search,
-  Heart,
   BookOpen,
   Plus,
   User,
   Settings,
   TrendingUp,
-  Clock,
-  Star,
   Users,
   BarChart3
 } from 'lucide-react'
