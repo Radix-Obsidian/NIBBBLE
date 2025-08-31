@@ -2,17 +2,19 @@
 
 import Link from 'next/link'
 import { useMemo } from 'react'
-import { 
-  Home, 
-  Search, 
-  Heart, 
-  BookOpen, 
-  Plus, 
-  User, 
+import {
+  Home,
+  Search,
+  Heart,
+  BookOpen,
+  Plus,
+  User,
   Settings,
   TrendingUp,
   Clock,
-  Star
+  Star,
+  Users,
+  BarChart3
 } from 'lucide-react'
 import { Button } from '../ui/button'
 
