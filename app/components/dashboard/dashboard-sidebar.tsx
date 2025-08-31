@@ -78,16 +78,6 @@ export function DashboardSidebar() {
     <aside className={`bg-white border-r border-gray-200 transition-all duration-300 ${
       isCollapsed ? 'w-16' : 'w-64'
     }`}>
-      <div className="p-4">
-        {/* Create Recipe Button */}
-        <Button 
-          className="w-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-medium"
-          size="sm"
-        >
-          <Plus className="w-4 h-4 mr-2" />
-          {!isCollapsed && 'Create Recipe'}
-        </Button>
-      </div>
 
       <nav className="mt-6">
         {/* Main Navigation */}
