@@ -11,6 +11,7 @@ import { StatsCard } from '@/app/components/dashboard/stats-card'
 import { TrendingUp, Heart, Users, Clock, BookOpen, Search, Folder } from 'lucide-react'
 import { ActivityFeed } from '@/app/components/dashboard/activity-feed'
 import { Button } from '@/app/components/ui/button'
+import Link from 'next/link'
 
 export default function DashboardPage() {
   const { user } = useAuth()
