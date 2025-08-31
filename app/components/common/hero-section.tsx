@@ -31,8 +31,8 @@ export function HeroSection() {
                   <span>Start Cooking</span>
                 </a>
               </Button>
-              <Button asChild variant="outline" size="xl">
-                <a href="https://www.tiktok.com/@createaplatewithdina/video/7471783720647724334?lang=en" target="_blank" rel="noopener noreferrer">Watch Demo</a>
+              <Button variant="outline" size="xl" className="flex items-center justify-center">
+                <a href="https://www.tiktok.com/@createaplatewithdina/video/7471783720647724334?lang=en" target="_blank" rel="noopener noreferrer" className="w-full h-full flex items-center justify-center">Watch Demo</a>
               </Button>
             </div>
 
