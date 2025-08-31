@@ -1,98 +1,93 @@
 'use client'
 
+import { useEffect, useMemo, useState } from 'react'
 import { useAuth } from '@/hooks/useAuth'
-import { LoadingSpinner } from '@/app/components/ui/loading-spinner'
+import { logger } from '@/lib/logger'
 import { supabase } from '@/lib/supabase/client'
+import { Activity } from '@/types'
+import { RecipeCardProps as BaseCardProps } from '@/app/components/recipe/recipe-card'
+import { RecipeGrid } from '@/app/components/recipe/recipe-grid'
+import { StatsCard } from '@/app/components/dashboard/stats-card'
+import { TrendingUp, Heart, Users, Clock } from 'lucide-react'
+import { ActivityFeed } from '@/app/components/dashboard/activity-feed'
 
 export default function DashboardPage() {
-  const { user, loading } = useAuth()
+  const { user } = useAuth()
+  const [recipes, setRecipes] = useState<BaseCardProps[]>([])
+  const [loading, setLoading] = useState(true)
+  const [activities, setActivities] = useState<Activity[]>([])
 
-  const handleSignOut = async () => {
-    try {
-      await supabase.auth.signOut()
-      window.location.href = '/'
-    } catch (error) {
-      console.error('Error signing out:', error)
+  useEffect(() => {
+    const load = async () => {
+      if (!user) return
+      try {
+        setLoading(true)
+        const { data, error } = await supabase
+          .from('recipes')
+          .select('id, title, description, cook_time, difficulty, rating, creator_id, likes_count')
+          .order('created_at', { ascending: false })
+          .limit(6)
+
+        if (error) {
+          logger.error('Error fetching recipes', error)
+          setRecipes([])
+        } else {
+          const mapped: BaseCardProps[] = (data || []).map((r: any) => ({
+            id: r.id,
+            title: r.title,
+            description: r.description,
+            cookTime: r.cook_time,
+            difficulty: r.difficulty,
+            rating: r.rating || 0,
+            creator: { name: 'Creator', avatar: '', initials: 'CR' },
+            isTrending: (r.likes_count || 0) > 100,
+            isLiked: false
+          }))
+          setRecipes(mapped)
+        }
+
+        const baseActivity: Activity[] = user ? [{
+          id: 'signin',
+          type: 'recipe',
+          actor: { id: user.id, name: user.email || 'User' },
+          message: 'Signed in to PantryPals',
+          createdAt: new Date()
+        }] : []
+        setActivities(baseActivity)
+      } catch (e) {
+        logger.error('Dashboard load error', e)
+      } finally {
+        setLoading(false)
+      }
     }
-  }
+    load()
+  }, [user])
 
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <LoadingSpinner />
-      </div>
-    )
-  }
-
-  if (!user) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold text-red-600 mb-4">Access Denied</h1>
-          <p className="text-gray-600">You need to be signed in to view this page.</p>
-        </div>
-      </div>
-    )
-  }
+  const stats = useMemo(() => ([
+    { title: 'Total Recipes', value: recipes.length, change: 0, icon: <TrendingUp className="w-6 h-6" />, color: 'orange' as const },
+    { title: 'Your Favorites', value: 0, change: 0, icon: <Heart className="w-6 h-6" />, color: 'amber' as const },
+    { title: 'Active Chefs', value: '—', icon: <Users className="w-6 h-6" />, color: 'green' as const },
+    { title: 'Avg. Cook Time', value: recipes.length ? `${Math.round(recipes.reduce((a, r) => a + r.cookTime, 0) / recipes.length)} min` : '—', icon: <Clock className="w-6 h-6" />, color: 'blue' as const }
+  ]), [recipes])
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-amber-50">
-      {/* Simple Header */}
-      <header className="bg-white shadow-sm border-b border-gray-100">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            <h1 className="text-2xl font-bold text-orange-600">PantryPals Dashboard</h1>
-            <div className="flex items-center space-x-4">
-              <span className="text-sm text-gray-600">Welcome, {user.email}</span>
-              <button 
-                onClick={handleSignOut}
-                className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
-              >
-                Sign Out
-              </button>
-            </div>
-          </div>
-        </div>
-      </header>
+    <div className="space-y-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {stats.map((s) => (
+          <StatsCard key={s.title} title={s.title} value={s.value} change={s.change as any} icon={s.icon} color={s.color} />
+        ))}
+      </div>
 
-      {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="bg-white rounded-2xl p-8 shadow-sm border border-gray-100">
-          <h2 className="text-3xl font-bold text-gray-900 mb-4">
-            🎉 Success! You&apos;re in the Dashboard!
-          </h2>
-          <p className="text-gray-600 mb-6">
-            This is a simple dashboard that proves the authentication and routing is working.
-          </p>
-          
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            <div className="bg-orange-50 p-6 rounded-xl border border-orange-100">
-              <h3 className="text-lg font-semibold text-orange-800 mb-2">Total Recipes</h3>
-              <p className="text-3xl font-bold text-orange-600">0</p>
-            </div>
-            <div className="bg-green-50 p-6 rounded-xl border border-green-100">
-              <h3 className="text-lg font-semibold text-green-800 mb-2">Favorites</h3>
-              <p className="text-3xl font-bold text-green-600">0</p>
-            </div>
-            <div className="bg-blue-50 p-6 rounded-xl border border-blue-100">
-              <h3 className="text-lg font-semibold text-blue-800 mb-2">Following</h3>
-              <p className="text-3xl font-bold text-blue-600">0</p>
-            </div>
-          </div>
+      <RecipeGrid
+        recipes={recipes}
+        title="Recent Recipes"
+        subtitle="Latest from the community"
+        showViewAll={false}
+        onViewAll={() => {}}
+        onLike={(id) => logger.info('Like recipe', { id })}
+      />
 
-          <div className="bg-gray-50 p-6 rounded-xl">
-            <h3 className="text-xl font-semibold text-gray-900 mb-4">Next Steps</h3>
-            <ul className="space-y-2 text-gray-600">
-              <li>✅ Authentication working</li>
-              <li>✅ Dashboard routing working</li>
-              <li>✅ User session management working</li>
-              <li>🔄 Add recipe upload functionality</li>
-              <li>🔄 Add recipe browsing</li>
-              <li>🔄 Add user profiles</li>
-            </ul>
-          </div>
-        </div>
-      </main>
+      <ActivityFeed activities={activities} onLoadMore={() => {}} isLoading={loading} />
     </div>
   )
 }
