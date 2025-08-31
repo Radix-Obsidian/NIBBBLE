@@ -2,6 +2,7 @@
 
 import { Play, Users, BookOpen, TrendingUp } from 'lucide-react';
 import { Button } from '../ui/button';
+import { TikTokVideo } from './tiktok-video'
 
 export function HeroSection() {
   return (
@@ -17,12 +18,12 @@ export function HeroSection() {
                 </span>
               </h2>
               <p className="text-xl text-gray-600 leading-relaxed">
-                Discover thousands of recipes from home cooks and professional chefs. 
-                Follow your favorite creators, save recipes, and build your cooking skills 
+                Discover thousands of recipes from home cooks and professional chefs.
+                Follow your favorite creators, save recipes, and build your cooking skills
                 with our step-by-step video guides.
               </p>
             </div>
-            
+
             <div className="flex flex-col sm:flex-row gap-4">
               <Button size="xl" className="flex items-center justify-center space-x-2">
                 <a href="/signin" className="flex items-center justify-center space-x-2 w-full h-full">
@@ -30,8 +31,8 @@ export function HeroSection() {
                   <span>Start Cooking</span>
                 </a>
               </Button>
-              <Button variant="outline" size="xl">
-                Watch Demo
+              <Button asChild variant="outline" size="xl">
+                <a href="https://www.tiktok.com/@createaplatewithdina/video/7471783720647724334?lang=en" target="_blank" rel="noopener noreferrer">Watch Demo</a>
               </Button>
             </div>
 
@@ -54,16 +55,14 @@ export function HeroSection() {
           <div className="relative">
             <div className="relative z-10">
               <div className="bg-white rounded-3xl shadow-2xl p-6 transform rotate-3 hover:rotate-0 transition-transform duration-300">
-                <div className="aspect-video bg-gradient-to-br from-orange-100 to-amber-100 rounded-2xl flex items-center justify-center">
-                  <Play className="w-16 h-16 text-orange-600" />
-                </div>
+                <TikTokVideo url="https://www.tiktok.com/@createaplatewithdina/video/7471783720647724334?lang=en" />
                 <div className="mt-4 space-y-2">
                   <h3 className="font-semibold text-gray-900">Quick Pasta Carbonara</h3>
                   <p className="text-sm text-gray-600">15 min • Easy • Italian</p>
                 </div>
               </div>
             </div>
-            
+
             {/* Floating Recipe Cards */}
             <div className="absolute top-10 -right-10 z-0">
               <div className="bg-white rounded-2xl shadow-xl p-4 transform -rotate-6">
@@ -73,7 +72,7 @@ export function HeroSection() {
                 <p className="text-xs font-medium text-gray-700 mt-2">Fresh Salad</p>
               </div>
             </div>
-            
+
             <div className="absolute -bottom-10 -left-10 z-0">
               <div className="bg-white rounded-2xl shadow-xl p-4 transform rotate-6">
                 <div className="w-24 h-24 bg-gradient-to-br from-red-100 to-pink-200 rounded-xl flex items-center justify-center">
