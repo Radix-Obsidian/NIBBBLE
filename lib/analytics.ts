@@ -11,19 +11,25 @@ declare global {
 export const analytics = {
   track: (event: string, properties?: Record<string, unknown>) => {
     if (typeof window !== 'undefined' && window.va) {
-      window.va('track', event, properties)
+      window.va('event', {
+        name: event,
+        properties
+      })
     }
   },
 
   page: (url: string) => {
     if (typeof window !== 'undefined' && window.va) {
-      window.va('page', { url })
+      window.va('pageview', { url })
     }
   },
 
   identify: (userId: string, traits?: Record<string, unknown>) => {
     if (typeof window !== 'undefined' && window.va) {
-      window.va('identify', { userId, traits })
+      window.va('event', {
+        name: 'identify',
+        properties: { userId, traits }
+      })
     }
   }
 }

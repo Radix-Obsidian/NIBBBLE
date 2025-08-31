@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { supabase } from '@/lib/supabase/client'
 import { useAuth } from '@/hooks/useAuth'
 import { Button } from '../ui/button'
@@ -42,14 +42,7 @@ export function ProfileManagement() {
     favorite_cuisines: [] as string[]
   })
 
-  // Load profile data
-  useEffect(() => {
-    if (user) {
-      loadProfile()
-    }
-  }, [user])
-
-  const loadProfile = async () => {
+  const loadProfile = useCallback(async () => {
     try {
       setLoading(true)
       const { data, error } = await supabase
@@ -81,7 +74,14 @@ export function ProfileManagement() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [user])
+
+  // Load profile data
+  useEffect(() => {
+    if (user) {
+      loadProfile()
+    }
+  }, [user, loadProfile])
 
   const createProfile = async () => {
     if (!user) return

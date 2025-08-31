@@ -48,10 +48,13 @@ class Logger {
   private sendToAnalytics(entry: LogEntry) {
     // In production, send to Vercel Analytics or other service
     if (typeof window !== 'undefined' && window.va) {
-      window.va('track', 'log', {
-        level: entry.level,
-        message: entry.message,
-        timestamp: entry.timestamp
+      window.va('event', {
+        name: 'log',
+        properties: {
+          level: entry.level,
+          message: entry.message,
+          timestamp: entry.timestamp
+        }
       })
     }
   }
