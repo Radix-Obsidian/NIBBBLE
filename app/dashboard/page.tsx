@@ -1,8 +1,6 @@
 'use client'
 
 import { useAuth } from '@/hooks/useAuth'
-import { useEffect, useState } from 'react'
-import { useEffect, useState } from 'react'
 import { LoadingSpinner } from '@/app/components/ui/loading-spinner'
 import { supabase } from '@/lib/supabase/client'
 
@@ -46,12 +44,12 @@ export default function DashboardPage() {
             <h1 className="text-2xl font-bold text-orange-600">PantryPals Dashboard</h1>
             <div className="flex items-center space-x-4">
               <span className="text-sm text-gray-600">Welcome, {user.email}</span>
-                             <button 
-                 onClick={handleSignOut}
-                 className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
-               >
-                 Sign Out
-               </button>
+              <button 
+                onClick={handleSignOut}
+                className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
+              >
+                Sign Out
+              </button>
             </div>
           </div>
         </div>

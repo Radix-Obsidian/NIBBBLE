@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/hooks/useAuth';
+import { logger } from '@/lib/logger';
 import { 
   Header, 
   Footer, 
@@ -72,9 +73,14 @@ export default function Home() {
 
   // Check if user is authenticated and redirect to dashboard
   useEffect(() => {
-    console.log('🔐 HomePage useEffect - user:', user, 'authLoading:', authLoading, 'hasRedirected:', hasRedirected)
+    logger.debug('HomePage auth check', { 
+      hasUser: !!user, 
+      authLoading, 
+      hasRedirected 
+    })
+    
     if (user && !authLoading && !hasRedirected) {
-      console.log('🔐 HomePage redirecting to dashboard...')
+      logger.info('Redirecting authenticated user to dashboard')
       setHasRedirected(true)
       setTimeout(() => {
         router.push('/dashboard')
@@ -83,12 +89,12 @@ export default function Home() {
   }, [user, authLoading, hasRedirected, router])
 
   const handleRecipeLike = (id: string) => {
-    console.log('Liked recipe:', id);
+    logger.info('Recipe liked', { recipeId: id })
     // TODO: Implement like functionality
   };
 
   const handleViewAllTrending = () => {
-    console.log('View all trending recipes');
+    logger.info('View all trending recipes requested')
     // TODO: Navigate to trending recipes page
   };
 

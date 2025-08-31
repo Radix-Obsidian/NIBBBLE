@@ -5,112 +5,88 @@ import { supabase } from '@/lib/supabase/client'
 import { Button } from '../ui/button'
 import { Input } from '../ui/input'
 import { Card } from '../ui/card'
+import { logger } from '@/lib/logger'
 
 export function AuthForm() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
-  const [isSignUp, setIsSignUp] = useState(false)
   const [message, setMessage] = useState('')
 
-  // Note: Redirect logic is handled by the parent page component
-  // to avoid conflicts between multiple redirect attempts
-
-  const handleAuth = async (e: React.FormEvent) => {
+  const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault()
-    setLoading(true)
-    setMessage('')
+    
+    if (!email || !password) {
+      setMessage('Please enter both email and password')
+      return
+    }
 
     try {
-      if (isSignUp) {
-        const { error } = await supabase.auth.signUp({
-          email,
-          password,
-          options: {
-            emailRedirectTo: `${window.location.origin}/auth/callback`
-          }
-        })
-        if (error) throw error
-        setMessage('Check your email for the confirmation link!')
+      setLoading(true)
+      setMessage('')
+      
+      logger.debug('Attempting sign in', { email })
+      
+      const { error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      })
+
+      if (error) {
+        logger.error('Sign in error', error)
+        setMessage(error.message)
       } else {
-        console.log('🔐 Attempting sign in...')
-        const { error } = await supabase.auth.signInWithPassword({
-          email,
-          password,
-        })
-        if (error) throw error
-        console.log('🔐 Sign in successful!')
-        setMessage('Signed in successfully!')
-        
-        // The useAuth hook will handle the redirect automatically
+        logger.info('Sign in successful')
+        setMessage('Sign in successful! Redirecting...')
       }
-    } catch (error: unknown) {
-      const errorMessage = error instanceof Error ? error.message : 'An error occurred';
-      setMessage(errorMessage)
+    } catch (error) {
+      logger.error('Unexpected sign in error', error)
+      setMessage('An unexpected error occurred')
     } finally {
       setLoading(false)
     }
   }
 
   return (
-    <Card className="max-w-md mx-auto p-6">
-      <div className="text-center mb-6">
-        <h2 className="text-2xl font-bold text-gray-900 mb-2">
-          {isSignUp ? 'Create Account' : 'Welcome Back'}
-        </h2>
-        <p className="text-gray-600">
-          {isSignUp ? 'Join PantryPals and start sharing recipes' : 'Sign in to your account'}
-        </p>
-      </div>
+    <Card className="p-6">
+      <form onSubmit={handleSignIn} className="space-y-4">
+        <div>
+          <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+            Email
+          </label>
+          <Input
+            id="email"
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="Enter your email"
+            required
+          />
+        </div>
 
-      <form onSubmit={handleAuth} className="space-y-4">
-        <Input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-          disabled={loading}
-        />
-        <Input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-          disabled={loading}
-          minLength={6}
-        />
-        
+        <div>
+          <label htmlFor="password" className="block textFor="password" className="block text-sm font-medium text-gray-700 mb-1">
+            Password
+          </label>
+          <Input
+            id="password"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="Enter your password"
+            required
+          />
+        </div>
+
         {message && (
-          <div className={`p-3 rounded-lg text-sm ${
-            message.includes('error') || message.includes('Error') 
-              ? 'bg-red-100 text-red-700' 
-              : 'bg-green-100 text-green-700'
-          }`}>
+          <div className={`text-sm ${message.includes('error') ? 'text-red-600' : 'text-green-600'}`}>
             {message}
           </div>
         )}
 
-        <Button 
-          type="submit" 
-          disabled={loading} 
-          className="w-full"
-          size="lg"
-        >
-          {loading ? 'Loading...' : isSignUp ? 'Sign Up' : 'Sign In'}
+        <Button type="submit" disabled={loading} className="w-full">
+          {loading ? 'Signing in...' : 'Sign In'}
         </Button>
-        
-        <button
-          type="button"
-          onClick={() => {
-            setIsSignUp(!isSignUp)
-            setMessage('')
-          }}
-          className="text-sm text-gray-600 hover:text-orange-600 transition-colors w-full"
-        >
-          {isSignUp ? 'Already have an account? Sign In' : "Don't have an account? Sign Up"}
-        </button>
       </form>
     </Card>
   )

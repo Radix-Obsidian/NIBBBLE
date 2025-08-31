@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import { User } from '@supabase/supabase-js'
 import { supabase } from '@/lib/supabase/client'
+import { logger } from '@/lib/logger'
 
 export function useAuth() {
   const [user, setUser] = useState<User | null>(null)
@@ -12,16 +13,15 @@ export function useAuth() {
     // Get initial session
     const getSession = async () => {
       try {
-        console.log('🔐 Getting initial session...')
+        logger.debug('Getting initial session')
         const { data: { session } } = await supabase.auth.getSession()
-        console.log('🔐 Initial session:', session)
-        console.log('🔐 Initial user:', session?.user)
+        logger.debug('Initial session retrieved', { hasSession: !!session })
         setUser(session?.user ?? null)
       } catch (error) {
-        console.error('🔐 Error getting session:', error)
+        logger.error('Error getting session', error)
       } finally {
         setLoading(false)
-        console.log('🔐 Initial loading set to false')
+        logger.debug('Initial loading complete')
       }
     }
 
@@ -30,12 +30,9 @@ export function useAuth() {
     // Listen for auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
-        console.log('🔐 Auth state changed:', event, session?.user?.email)
-        console.log('🔐 Session data:', session)
-        console.log('🔐 User data:', session?.user)
+        logger.info('Auth state changed', { event, userId: session?.user?.id })
         setUser(session?.user ?? null)
         setLoading(false)
-        console.log('🔐 Updated user state:', session?.user ?? null)
       }
     )
 
@@ -45,8 +42,9 @@ export function useAuth() {
   const signOut = async () => {
     try {
       await supabase.auth.signOut()
+      logger.info('User signed out successfully')
     } catch (error) {
-      console.error('Error signing out:', error)
+      logger.error('Error signing out', error)
     }
   }
 
