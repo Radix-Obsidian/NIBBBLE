@@ -66,11 +66,42 @@ export default function SocialPage() {
     load()
   }, [user])
 
+  const [tab, setTab] = useState<'feed'|'activity'>('feed')
   return (
     <div className="space-y-6">
-      <h2 className="text-2xl font-bold text-gray-900">Following Feed</h2>
-      <RecipeGrid recipes={recipes} title="" subtitle="" showViewAll={false} onViewAll={() => {}} onLike={(id) => logger.info('Like', { id })} />
-      {loading && <div className="text-sm text-gray-600">Loading...</div>}
+      <h2 className="text-2xl font-bold text-gray-900">Social Feed</h2>
+      <div className="flex items-center gap-2 text-sm">
+        <button onClick={() => setTab('feed')} className={`rounded-full px-3 py-1 ${tab==='feed'?'bg-orange-600 text-white':'border border-gray-300 text-gray-700'}`}>Recipe Feed</button>
+        <button onClick={() => setTab('activity')} className={`rounded-full px-3 py-1 ${tab==='activity'?'bg-orange-600 text-white':'border border-gray-300 text-gray-700'}`}>Recent Activity</button>
+      </div>
+      {tab==='feed' ? (
+        <>
+          {recipes.length === 0 && !loading ? (
+            <div className="bg-white rounded-2xl p-6 border border-gray-100 text-center text-gray-600">
+              Your feed is empty
+              <div className="mt-3">
+                <a href="/dashboard/discover" className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-orange-500 to-amber-600 text-white h-10 px-4 text-sm">Discover Chefs</a>
+              </div>
+            </div>
+          ) : (
+            <RecipeGrid recipes={recipes} title="" subtitle="" showViewAll={false} onViewAll={() => {}} onLike={(id) => logger.info('Like', { id })} />
+          )}
+          {loading && <div className="text-sm text-gray-600">Loading...</div>}
+        </>
+      ) : (
+        <div className="bg-white rounded-2xl p-6 border border-gray-100 text-gray-600">No recent activity</div>
+      )}
+
+      <div className="grid grid-cols-2 gap-6">
+        <div className="bg-white rounded-2xl p-6 border border-gray-100 text-center">
+          <div className="text-2xl font-bold text-orange-600">0</div>
+          <div className="text-sm text-gray-500">Following</div>
+        </div>
+        <div className="bg-white rounded-2xl p-6 border border-gray-100 text-center">
+          <div className="text-2xl font-bold text-orange-600">0</div>
+          <div className="text-sm text-gray-500">Followers</div>
+        </div>
+      </div>
     </div>
   )
 }
