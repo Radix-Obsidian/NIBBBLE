@@ -14,6 +14,12 @@ export interface RecipeCreatorProps {
 
 export function RecipeCreator({ onSave, onCancel, initialData = {} }: RecipeCreatorProps) {
   const [step, setStep] = useState(1)
+  const DIETARY_PRESETS = ['Vegetarian','Vegan','Gluten-Free','Dairy-Free','Nut-Free','Halal','Kosher','Keto','Paleo','Low-Carb','Low-Fat','Low-Sodium','Sugar-Free','Whole30']
+  const TAG_PRESETS = ['Breakfast','Lunch','Dinner','Snack','Dessert','Appetizer','Main Course','Side Dish','Soup','Salad','Beverage','Quick','Easy','Healthy','Comfort Food','Family Friendly','Meal Prep','Spicy','Grilled','Baked','Roasted','One-Pot','Slow Cooker','Air Fryer']
+  const [dietaryQuery, setDietaryQuery] = useState('')
+  const [tagQuery, setTagQuery] = useState('')
+  const [showDietary, setShowDietary] = useState(false)
+  const [showTags, setShowTags] = useState(false)
   const [form, setForm] = useState<CreateRecipeForm>({
     title: initialData.title || '',
     description: initialData.description || '',
@@ -172,22 +178,41 @@ export function RecipeCreator({ onSave, onCancel, initialData = {} }: RecipeCrea
           </div>
 
           <div className="grid grid-cols-2 gap-4">
-            <div>
+            <div className="relative">
               <label className="block text-sm font-medium text-gray-700 mb-1">Dietary Tags</label>
               <input
                 className="w-full rounded-full border border-gray-200 bg-gray-50 px-4 py-2"
-                placeholder="Type a tag and press Enter"
+                placeholder="Type a tag or choose below"
+                value={dietaryQuery}
+                onFocus={() => setShowDietary(true)}
+                onBlur={() => setTimeout(() => setShowDietary(false), 150)}
+                onChange={(e) => setDietaryQuery(e.target.value)}
                 onKeyDown={(e) => {
                   if (e.key === 'Enter') {
                     e.preventDefault()
-                    const val = (e.target as HTMLInputElement).value.trim()
+                    const val = dietaryQuery.trim()
                     if (val && !form.dietaryTags.includes(val)) {
                       setForm({ ...form, dietaryTags: [...form.dietaryTags, val] })
-                      ;(e.target as HTMLInputElement).value = ''
+                      setDietaryQuery('')
                     }
                   }
                 }}
               />
+              {showDietary && (
+                <div className="absolute z-20 mt-2 w-full bg-white border border-gray-200 rounded-2xl shadow-lg max-h-48 overflow-auto">
+                  {DIETARY_PRESETS.filter((t)=>t.toLowerCase().includes(dietaryQuery.toLowerCase()) && !form.dietaryTags.includes(t)).map((t) => (
+                    <button
+                      key={t}
+                      type="button"
+                      className="w-full text-left px-3 py-2 text-sm hover:bg-orange-50"
+                      onMouseDown={() => { setForm({ ...form, dietaryTags: [...form.dietaryTags, t] }); setDietaryQuery('') }}
+                    >{t}</button>
+                  ))}
+                  {DIETARY_PRESETS.filter((t)=>t.toLowerCase().includes(dietaryQuery.toLowerCase()) && !form.dietaryTags.includes(t)).length === 0 && (
+                    <div className="px-3 py-2 text-sm text-gray-500">No matches</div>
+                  )}
+                </div>
+              )}
               <div className="flex flex-wrap gap-2 mt-2">
                 {form.dietaryTags.map((t, i) => (
                   <span key={i} className='inline-flex items-center bg-orange-50 text-orange-700 rounded-full px-3 py-1 text-sm'>
@@ -197,22 +222,41 @@ export function RecipeCreator({ onSave, onCancel, initialData = {} }: RecipeCrea
                 ))}
               </div>
             </div>
-            <div>
+            <div className="relative">
               <label className="block text-sm font-medium text-gray-700 mb-1">Tags</label>
               <input
                 className="w-full rounded-full border border-gray-200 bg-gray-50 px-4 py-2"
-                placeholder="Type a tag and press Enter"
+                placeholder="Type a tag or choose below"
+                value={tagQuery}
+                onFocus={() => setShowTags(true)}
+                onBlur={() => setTimeout(() => setShowTags(false), 150)}
+                onChange={(e) => setTagQuery(e.target.value)}
                 onKeyDown={(e) => {
                   if (e.key === 'Enter') {
                     e.preventDefault()
-                    const val = (e.target as HTMLInputElement).value.trim()
+                    const val = tagQuery.trim()
                     if (val && !form.tags.includes(val)) {
                       setForm({ ...form, tags: [...form.tags, val] })
-                      ;(e.target as HTMLInputElement).value = ''
+                      setTagQuery('')
                     }
                   }
                 }}
               />
+              {showTags && (
+                <div className="absolute z-20 mt-2 w-full bg-white border border-gray-200 rounded-2xl shadow-lg max-h-48 overflow-auto">
+                  {TAG_PRESETS.filter((t)=>t.toLowerCase().includes(tagQuery.toLowerCase()) && !form.tags.includes(t)).map((t) => (
+                    <button
+                      key={t}
+                      type="button"
+                      className="w-full text-left px-3 py-2 text-sm hover:bg-orange-50"
+                      onMouseDown={() => { setForm({ ...form, tags: [...form.tags, t] }); setTagQuery('') }}
+                    >{t}</button>
+                  ))}
+                  {TAG_PRESETS.filter((t)=>t.toLowerCase().includes(tagQuery.toLowerCase()) && !form.tags.includes(t)).length === 0 && (
+                    <div className="px-3 py-2 text-sm text-gray-500">No matches</div>
+                  )}
+                </div>
+              )}
               <div className="flex flex-wrap gap-2 mt-2">
                 {form.tags.map((t, i) => (
                   <span key={i} className='inline-flex items-center bg-gray-100 text-gray-700 rounded-full px-3 py-1 text-sm'>
