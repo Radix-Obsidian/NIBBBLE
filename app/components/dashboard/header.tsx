@@ -17,11 +17,17 @@ export interface HeaderProps {
 
 export function Header({ user, onSearch, onNotificationClick }: HeaderProps) {
   const [query, setQuery] = useState('')
+  const { signOut } = useAuth()
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     logger.info('Global search submitted', { query })
     onSearch(query)
+  }
+
+  const handleSignOut = async () => {
+    await signOut()
+    window.location.href = '/'
   }
 
   return (
