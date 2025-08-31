@@ -30,7 +30,6 @@ export default function SignInPage() {
   if (user) {
     return null // Will redirect
   }
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-amber-50">
       <Header />

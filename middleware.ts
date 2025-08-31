@@ -36,10 +36,9 @@ export async function middleware(request: NextRequest) {
   }
 
   // If accessing signin/signup with session, redirect to dashboard
-  // Temporarily disabled to avoid conflicts with client-side redirects
-  // if ((request.nextUrl.pathname === '/signin' || request.nextUrl.pathname === '/') && session) {
-  //   return NextResponse.redirect(new URL('/dashboard', request.url))
-  // }
+  if ((request.nextUrl.pathname === '/signin' || request.nextUrl.pathname === '/') && session) {
+    return NextResponse.redirect(new URL('/dashboard', request.url))
+  }
 
   return supabaseResponse
 }

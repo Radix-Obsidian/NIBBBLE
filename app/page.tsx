@@ -66,7 +66,6 @@ const trendingRecipes: RecipeCardProps[] = [
 
 export default function Home() {
   const { user } = useAuth();
-
   const handleRecipeLike = (id: string) => {
     logger.info('Recipe liked', { recipeId: id })
     // TODO: Implement like functionality
