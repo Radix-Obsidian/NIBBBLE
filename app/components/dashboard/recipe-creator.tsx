@@ -28,10 +28,15 @@ export function RecipeCreator({ onSave, onCancel, initialData = {} }: RecipeCrea
     dietaryTags: initialData.dietaryTags || [],
     tags: initialData.tags || [],
     images: initialData.images || [],
+    coverImageUrl: initialData.coverImageUrl || '',
+    nutritionCalories: initialData.nutritionCalories || undefined,
+    nutritionProtein: initialData.nutritionProtein || undefined,
+    nutritionFats: initialData.nutritionFats || undefined,
+    nutritionCarbs: initialData.nutritionCarbs || undefined,
     videoUrl: initialData.videoUrl
   })
 
-  const next = () => setStep((s) => Math.min(4, s + 1))
+  const next = () => setStep((s) => Math.min(5, s + 1))
   const prev = () => setStep((s) => Math.max(1, s - 1))
 
   const addIngredient = () => {
@@ -62,9 +67,9 @@ export function RecipeCreator({ onSave, onCancel, initialData = {} }: RecipeCrea
         <h3 className="text-xl font-semibold text-gray-900">Create Recipe</h3>
         <div className="space-x-2">
           {step > 1 && <Button variant="outline" onClick={prev}>Back</Button>}
-          {step < 4 && <Button onClick={next}>Next</Button>}
-          {step === 4 && (
-            <Button onClick={() => onSave(form)}>Save</Button>
+          {step < 5 && <Button onClick={next}>Next</Button>}
+          {step === 5 && (
+            <Button onClick={() => onSave(form)} disabled={!form.title || !form.cuisine || form.instructions.length === 0}>Save</Button>
           )}
           <Button variant="outline" onClick={onCancel}>Cancel</Button>
         </div>
@@ -139,9 +144,69 @@ export function RecipeCreator({ onSave, onCancel, initialData = {} }: RecipeCrea
             </div>
           </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Images</label>
-            <input type="file" multiple accept="image/*" onChange={(e) => handleImages(e.target.files)} />
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Cover Image URL</label>
+              <Input value={form.coverImageUrl || ''} onChange={(e) => setForm({ ...form, coverImageUrl: e.target.value })} placeholder="https://..." />
+              <p className="text-xs text-gray-500 mt-1">Paste an image URL for the recipe cover.</p>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Additional Images</label>
+              <input type="file" multiple accept="image/*" onChange={(e) => handleImages(e.target.files)} />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Dietary Tags</label>
+              <input
+                className="w-full rounded-full border border-gray-200 bg-gray-50 px-4 py-2"
+                placeholder="Type a tag and press Enter"
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    e.preventDefault()
+                    const val = (e.target as HTMLInputElement).value.trim()
+                    if (val && !form.dietaryTags.includes(val)) {
+                      setForm({ ...form, dietaryTags: [...form.dietaryTags, val] })
+                      ;(e.target as HTMLInputElement).value = ''
+                    }
+                  }
+                }}
+              />
+              <div className="flex flex-wrap gap-2 mt-2">
+                {form.dietaryTags.map((t, i) => (
+                  <span key={i} className='inline-flex items-center bg-orange-50 text-orange-700 rounded-full px-3 py-1 text-sm'>
+                    {t}
+                    <button className='ml-2' onClick={() => setForm({ ...form, dietaryTags: form.dietaryTags.filter((_, idx) => idx !== i) })}>×</button>
+                  </span>
+                ))}
+              </div>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Tags</label>
+              <input
+                className="w-full rounded-full border border-gray-200 bg-gray-50 px-4 py-2"
+                placeholder="Type a tag and press Enter"
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    e.preventDefault()
+                    const val = (e.target as HTMLInputElement).value.trim()
+                    if (val && !form.tags.includes(val)) {
+                      setForm({ ...form, tags: [...form.tags, val] })
+                      ;(e.target as HTMLInputElement).value = ''
+                    }
+                  }
+                }}
+              />
+              <div className="flex flex-wrap gap-2 mt-2">
+                {form.tags.map((t, i) => (
+                  <span key={i} className='inline-flex items-center bg-gray-100 text-gray-700 rounded-full px-3 py-1 text-sm'>
+                    {t}
+                    <button className='ml-2' onClick={() => setForm({ ...form, tags: form.tags.filter((_, idx) => idx !== i) })}>×</button>
+                  </span>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       )}
@@ -181,6 +246,70 @@ export function RecipeCreator({ onSave, onCancel, initialData = {} }: RecipeCrea
                 placeholder={`Step ${i + 1}`}
               />
             ))}
+          </div>
+        </div>
+      )}
+
+      {step === 5 && (
+        <div className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <h4 className="font-semibold text-gray-800 mb-2">Nutrition</h4>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Calories (kcal)</label>
+                  <Input type="number" value={form.nutritionCalories || 0} onChange={(e) => setForm({ ...form, nutritionCalories: Number(e.target.value) })} />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Protein (g)</label>
+                  <Input type="number" value={form.nutritionProtein || 0} onChange={(e) => setForm({ ...form, nutritionProtein: Number(e.target.value) })} />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Fats (g)</label>
+                  <Input type="number" value={form.nutritionFats || 0} onChange={(e) => setForm({ ...form, nutritionFats: Number(e.target.value) })} />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Carbs (g)</label>
+                  <Input type="number" value={form.nutritionCarbs || 0} onChange={(e) => setForm({ ...form, nutritionCarbs: Number(e.target.value) })} />
+                </div>
+              </div>
+            </div>
+            <div>
+              <h4 className="font-semibold text-gray-800 mb-2">Preview</h4>
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 p-4 border rounded-2xl">
+                <div>
+                  <h5 className="text-lg font-semibold text-gray-900">{form.title || 'Recipe Title'}</h5>
+                  <p className="text-sm text-gray-600 line-clamp-4">{form.description || 'Add a short description of your recipe.'}</p>
+                  <div className="mt-3">
+                    <h6 className="font-medium text-gray-900 mb-1">Ingredients</h6>
+                    <ul className="text-sm text-gray-700 list-disc list-inside space-y-1 max-h-40 overflow-auto pr-2">
+                      {form.ingredients.map((ing, i) => (
+                        <li key={i}>{(ing as any).name} {(ing as any).amount ? `- ${(ing as any).amount} ${(ing as any).unit}` : ''}</li>
+                      ))}
+                      {form.ingredients.length === 0 && <li>Add ingredients to see them here</li>}
+                    </ul>
+                  </div>
+                </div>
+                <div className="flex flex-col items-center justify-center">
+                  <div className="w-48 h-48 rounded-full bg-gray-100 overflow-hidden flex items-center justify-center">
+                    {form.coverImageUrl ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img src={form.coverImageUrl} alt="cover" className="w-full h-full object-cover" />
+                    ) : (
+                      <span className="text-5xl">🍽️</span>
+                    )}
+                  </div>
+                  <div className="grid grid-cols-4 gap-3 w-full mt-4">
+                    {[{label:'Calories',v:form.nutritionCalories||0,unit:'Kcal'},{label:'Protein',v:form.nutritionProtein||0,unit:'g'},{label:'Fats',v:form.nutritionFats||0,unit:'g'},{label:'Carbs',v:form.nutritionCarbs||0,unit:'g'}].map((n)=> (
+                      <div key={n.label} className="text-center border rounded-xl p-3 bg-white">
+                        <div className="text-xl font-bold text-purple-600">{n.v}</div>
+                        <div className="text-xs text-gray-500">{n.label} {n.unit}</div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       )}
