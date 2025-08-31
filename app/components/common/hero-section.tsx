@@ -56,12 +56,11 @@ export function HeroSection() {
             <div className="relative z-10">
               <div className="bg-white rounded-3xl shadow-2xl border border-gray-100 overflow-hidden">
                 <div className="relative">
-                  <TikTokVideo className="rounded-none" url="https://www.tiktok.com/@createaplatewithdina/video/7471783720647724334?lang=en" />
-                  <div className="pointer-events-none absolute bottom-3 left-3 z-10">
-                    <span className="bg-white/90 backdrop-blur px-3 py-1 rounded-full text-sm font-medium text-gray-800">
-                      Demo Video
-                    </span>
-                  </div>
+                  <TikTokEmbed
+                    className="rounded-none"
+                    url="https://www.tiktok.com/@createaplatewithdina/video/7471783720647724334"
+                    videoId="7471783720647724334"
+                  />
                 </div>
               </div>
             </div>
