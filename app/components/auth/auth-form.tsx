@@ -65,7 +65,7 @@ export function AuthForm() {
         </div>
 
         <div>
-          <label htmlFor="password" className="block textFor="password" className="block text-sm font-medium text-gray-700 mb-1">
+          <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
             Password
           </label>
           <Input
