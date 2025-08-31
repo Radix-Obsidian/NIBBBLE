@@ -15,6 +15,7 @@ export default function MyRecipesPage() {
   const [recipes, setRecipes] = useState<RecipeCardProps[]>([])
   const [loading, setLoading] = useState(true)
   const [creating, setCreating] = useState(false)
+  const [errorMsg, setErrorMsg] = useState<string | null>(null)
 
   useEffect(() => {
     const load = async () => {
