@@ -215,6 +215,32 @@ export function ProfileManagement() {
           </div>
 
           <div>
+            <label className='block text-sm font-medium text-gray-700 mb-1'>Favorite Cuisines</label>
+            <div className='flex flex-wrap gap-2 mb-2'>
+              {formData.favorite_cuisines.map((tag, i) => (
+                <span key={i} className='inline-flex items-center bg-orange-50 text-orange-700 rounded-full px-3 py-1 text-sm'>
+                  {tag}
+                  <button className='ml-2 text-orange-700' onClick={() => setFormData({ ...formData, favorite_cuisines: formData.favorite_cuisines.filter((_, idx) => idx !== i) })}>×</button>
+                </span>
+              ))}
+            </div>
+            <input
+              className='rounded-full border border-gray-200 bg-gray-50 px-4 py-2'
+              placeholder='Type a cuisine and press Enter'
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  e.preventDefault()
+                  const value = (e.target as HTMLInputElement).value.trim()
+                  if (value && !formData.favorite_cuisines.includes(value)) {
+                    setFormData({ ...formData, favorite_cuisines: [...formData.favorite_cuisines, value] })
+                    ;(e.target as HTMLInputElement).value = ''
+                  }
+                }
+              }}
+            />
+          </div>
+
+          <div>
             <label className='block text-sm font-medium text-gray-700 mb-1'>
               Location
             </label>

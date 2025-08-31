@@ -1,8 +1,7 @@
 'use client'
 
-import { useState } from 'react'
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { useMemo } from 'react'
 import {
   Home,
   Search,
@@ -15,57 +14,25 @@ import {
 } from 'lucide-react'
 import { Button } from '../ui/button'
 
-const navigationItems = [
-  {
-    name: 'Dashboard',
-    href: '/dashboard',
-    icon: Home,
-    description: 'Overview and activity'
-  },
-  {
-    name: 'Discover',
-    href: '/dashboard/discover',
-    icon: Search,
-    description: 'Find new recipes'
-  },
-  {
-    name: 'My Recipes',
-    href: '/dashboard/recipes',
-    icon: BookOpen,
-    description: 'Your created recipes'
-  },
-  {
-    name: 'Collections',
-    href: '/dashboard/collections',
-    icon: TrendingUp,
-    description: 'Organized recipe lists'
-  },
-  {
-    name: 'Social',
-    href: '/dashboard/social',
-    icon: Users,
-    description: 'Connect with chefs'
-  },
-  {
-    name: 'Analytics',
-    href: '/dashboard/analytics',
-    icon: BarChart3,
-    description: 'Performance insights'
-  }
-]
+export interface SidebarProps {
+  isCollapsed: boolean
+  onToggle: () => void
+  currentPath: string
+}
 
-const userItems = [
-  {
-    name: 'Settings',
-    href: '/dashboard/settings',
-    icon: Settings,
-    description: 'App preferences'
-  }
-]
+export function Sidebar({ isCollapsed, onToggle, currentPath }: SidebarProps) {
+  const navigationItems = useMemo(() => ([
+    { name: 'Dashboard', href: '/dashboard', icon: Home, description: 'Overview and activity' },
+    { name: 'Discover', href: '/dashboard/discover', icon: Search, description: 'Find new recipes' },
+    { name: 'My Recipes', href: '/dashboard/recipes', icon: BookOpen, description: 'Your created recipes' },
+    { name: 'Collections', href: '/dashboard/collections', icon: TrendingUp, description: 'Organized recipe lists' },
+    { name: 'Social', href: '/dashboard/social', icon: Users, description: 'Connect with chefs' },
+    { name: 'Analytics', href: '/dashboard/analytics', icon: BarChart3, description: 'Performance insights' }
+  ]), [])
 
-export function DashboardSidebar() {
-  const pathname = usePathname()
-  const [isCollapsed, setIsCollapsed] = useState(false)
+  const userItems = useMemo(() => ([
+    { name: 'Settings', href: '/dashboard/settings', icon: Settings, description: 'App preferences' }
+  ]), [])
 
   return (
     <aside className={`bg-white border-r border-gray-200 transition-all duration-300 ${
@@ -73,17 +40,15 @@ export function DashboardSidebar() {
     }`}>
 
       <nav className="mt-6">
-        {/* Main Navigation */}
         <div className="px-4">
           <h3 className={`text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3 ${
             isCollapsed ? 'sr-only' : ''
           }`}>
             Navigation
           </h3>
-          
           <ul className="space-y-1">
             {navigationItems.map((item) => {
-              const isActive = pathname === item.href
+              const isActive = currentPath === item.href
               return (
                 <li key={item.name}>
                   <Link
@@ -112,17 +77,15 @@ export function DashboardSidebar() {
           </ul>
         </div>
 
-        {/* User Section */}
         <div className="mt-8 px-4">
           <h3 className={`text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3 ${
             isCollapsed ? 'sr-only' : ''
           }`}>
             Account
           </h3>
-          
           <ul className="space-y-1">
             {userItems.map((item) => {
-              const isActive = pathname === item.href
+              const isActive = currentPath === item.href
               return (
                 <li key={item.name}>
                   <Link
@@ -152,12 +115,11 @@ export function DashboardSidebar() {
         </div>
       </nav>
 
-      {/* Collapse Toggle */}
       <div className="absolute bottom-4 left-4">
         <Button
           variant="ghost"
           size="sm"
-          onClick={() => setIsCollapsed(!isCollapsed)}
+          onClick={onToggle}
           className="w-8 h-8 p-0"
         >
           <div className={`w-4 h-4 border-2 border-gray-400 rounded transition-transform ${

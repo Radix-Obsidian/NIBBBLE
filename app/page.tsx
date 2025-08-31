@@ -111,6 +111,7 @@ export default function Home() {
         showViewAll={true}
         onViewAll={handleViewAllTrending}
         onLike={handleRecipeLike}
+        onView={(id) => window.location.assign(`/dashboard/recipes/${id}`)}
       />
       
       <FeaturesSection />
