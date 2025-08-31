@@ -6,11 +6,13 @@ import { useAuth } from '@/hooks/useAuth'
 import { LoadingSpinner } from '@/app/components/ui/loading-spinner'
 import { Sidebar } from '@/app/components/dashboard/sidebar'
 import { Header } from '@/app/components/dashboard/header'
+import { NotificationsPanel } from '@/app/components/dashboard/notifications-panel'
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const { user, loading } = useAuth()
   const pathname = usePathname()
   const [collapsed, setCollapsed] = useState(false)
+  const [showNotifications, setShowNotifications] = useState(false)
 
   if (loading) {
     return (
@@ -34,11 +36,12 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-amber-50 flex">
       <Sidebar isCollapsed={collapsed} onToggle={() => setCollapsed((c) => !c)} currentPath={pathname} />
-      <div className="flex-1 min-w-0">
-        <Header user={user} onSearch={() => {}} onNotificationClick={() => {}} />
-        <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="flex-1 min-w-0 relative">
+        <Header user={user} onSearch={() => {}} onNotificationClick={() => setShowNotifications((v) => !v)} />
+        <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 relative">
           {children}
         </main>
+        <NotificationsPanel open={showNotifications} onClose={() => setShowNotifications(false)} userId={user.id} />
       </div>
     </div>
   )
