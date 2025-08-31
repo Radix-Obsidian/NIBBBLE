@@ -2,7 +2,6 @@
 
 import { Play, Users, BookOpen, TrendingUp } from 'lucide-react';
 import { Button } from '../ui/button';
-import { TikTokEmbed } from './tiktok-embed'
 
 export function HeroSection() {
   return (
