@@ -14,8 +14,8 @@ export default function SignInPage() {
 
   useEffect(() => {
     if (user && !loading) {
-      logger.info('User authenticated, redirecting to dashboard')
-      router.push('/dashboard')
+      logger.info('User authenticated, redirecting to home')
+      router.push('/')
     }
   }, [user, loading, router])
 
