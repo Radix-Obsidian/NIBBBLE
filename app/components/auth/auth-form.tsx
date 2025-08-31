@@ -1,16 +1,12 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
+import { useState } from 'react'
 import { supabase } from '@/lib/supabase/client'
-import { useAuth } from '@/hooks/useAuth'
 import { Button } from '../ui/button'
 import { Input } from '../ui/input'
 import { Card } from '../ui/card'
 
 export function AuthForm() {
-  const router = useRouter()
-  const { user, loading: authLoading } = useAuth()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)

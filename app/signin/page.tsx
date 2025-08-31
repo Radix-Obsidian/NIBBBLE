@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { useAuth } from '@/hooks/useAuth'
 import { AuthForm } from '@/app/components/auth/auth-form'
@@ -10,20 +10,26 @@ import { Footer } from '@/app/components/layout/footer'
 export default function SignInPage() {
   const router = useRouter()
   const { user, loading: authLoading } = useAuth()
-  const [hasRedirected, setHasRedirected] = useState(false)
 
-  // Check if user is already authenticated and redirect to dashboard
+  // Simple redirect when user is authenticated
   useEffect(() => {
-    console.log('🔐 SignInPage useEffect - user:', user, 'authLoading:', authLoading, 'hasRedirected:', hasRedirected)
-    if (user && !authLoading && !hasRedirected) {
-      console.log('🔐 SignInPage redirecting to dashboard...')
-      setHasRedirected(true)
-      // Use router.push with a small delay to prevent throttling
-      setTimeout(() => {
-        router.push('/dashboard')
-      }, 100)
+    if (user && !authLoading) {
+      console.log('🔐 User authenticated, redirecting to dashboard...')
+      router.replace('/dashboard')
     }
-  }, [user, authLoading, hasRedirected, router])
+  }, [user, authLoading, router])
+
+  // If user is already authenticated, show loading
+  if (user && !authLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Redirecting to dashboard...</p>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-amber-50">
