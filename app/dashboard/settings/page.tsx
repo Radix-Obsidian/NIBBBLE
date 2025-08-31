@@ -38,6 +38,23 @@ export default function SettingsPage() {
     favorite_cuisines: [] as string[]
   })
 
+  // Social connections stored locally per user for now
+  const [accounts, setAccounts] = useState<{ tiktok: string; instagram: string }>({ tiktok: '', instagram: '' })
+  const accountsKey = (uid?: string) => `pp_connected_accounts:${uid || 'anon'}`
+
+  useEffect(() => {
+    if (!user) return
+    try {
+      const raw = localStorage.getItem(accountsKey(user.id))
+      if (raw) setAccounts(JSON.parse(raw))
+    } catch {}
+  }, [user])
+
+  useEffect(() => {
+    if (!user) return
+    try { localStorage.setItem(accountsKey(user.id), JSON.stringify(accounts)) } catch {}
+  }, [accounts, user])
+
   const loadProfile = useCallback(async () => {
     if (!user) return
     try {
