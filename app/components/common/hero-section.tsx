@@ -32,7 +32,7 @@ export function HeroSection() {
                 </a>
               </Button>
               <Button variant="outline" size="xl" className="flex items-center justify-center">
-                <a href="https://www.tiktok.com/@createaplatewithdina/video/7471783720647724334?lang=en" target="_blank" rel="noopener noreferrer" className="w-full h-full flex items-center justify-center">Watch Demo</a>
+                <a href="https://www.tiktok.com/@createaplatewithdina/video/7471783720647724334?lang=en" target="_blank" rel="noopener noreferrer" className="w-full h-full flex items-center justify-center">Watch Chef Dina</a>
               </Button>
             </div>
 
