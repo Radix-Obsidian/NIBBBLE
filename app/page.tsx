@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/hooks/useAuth';
 import { 
@@ -68,15 +68,19 @@ const trendingRecipes: RecipeCardProps[] = [
 export default function Home() {
   const router = useRouter();
   const { user, loading: authLoading } = useAuth();
+  const [hasRedirected, setHasRedirected] = useState(false);
 
   // Check if user is authenticated and redirect to dashboard
   useEffect(() => {
-    console.log('🔐 HomePage useEffect - user:', user, 'authLoading:', authLoading)
-    if (user && !authLoading) {
+    console.log('🔐 HomePage useEffect - user:', user, 'authLoading:', authLoading, 'hasRedirected:', hasRedirected)
+    if (user && !authLoading && !hasRedirected) {
       console.log('🔐 HomePage redirecting to dashboard...')
-      router.push('/dashboard')
+      setHasRedirected(true)
+      setTimeout(() => {
+        router.push('/dashboard')
+      }, 100)
     }
-  }, [user, authLoading, router])
+  }, [user, authLoading, hasRedirected, router])
 
   const handleRecipeLike = (id: string) => {
     console.log('Liked recipe:', id);

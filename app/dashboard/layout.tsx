@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useAuth } from '@/hooks/useAuth'
 import { LoadingSpinner } from '@/app/components/ui/loading-spinner'
@@ -12,15 +12,19 @@ export default function DashboardLayout({
 }) {
   const { user, loading } = useAuth()
   const router = useRouter()
+  const [hasRedirected, setHasRedirected] = useState(false)
 
   useEffect(() => {
-    console.log('🔐 DashboardLayout useEffect - user:', user, 'loading:', loading)
-    if (!loading && !user) {
+    console.log('🔐 DashboardLayout useEffect - user:', user, 'loading:', loading, 'hasRedirected:', hasRedirected)
+    if (!loading && !user && !hasRedirected) {
       console.log('🔐 DashboardLayout redirecting to signin...')
-      // Use window.location.href for a more forceful redirect
-      window.location.href = '/signin'
+      setHasRedirected(true)
+      // Use router.push with a small delay to prevent throttling
+      setTimeout(() => {
+        router.push('/signin')
+      }, 100)
     }
-  }, [user, loading, router])
+  }, [user, loading, hasRedirected, router])
 
   if (loading) {
     return (
