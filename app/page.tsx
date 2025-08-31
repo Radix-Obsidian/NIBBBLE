@@ -1,8 +1,5 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { useAuth } from '@/hooks/useAuth';
 import { logger } from '@/lib/logger';
 import { 
   Header, 
@@ -67,27 +64,6 @@ const trendingRecipes: RecipeCardProps[] = [
 ];
 
 export default function Home() {
-  const router = useRouter();
-  const { user, loading: authLoading } = useAuth();
-  const [hasRedirected, setHasRedirected] = useState(false);
-
-  // Check if user is authenticated and redirect to dashboard
-  useEffect(() => {
-    logger.debug('HomePage auth check', { 
-      hasUser: !!user, 
-      authLoading, 
-      hasRedirected 
-    })
-    
-    if (user && !authLoading && !hasRedirected) {
-      logger.info('Redirecting authenticated user to dashboard')
-      setHasRedirected(true)
-      setTimeout(() => {
-        router.push('/dashboard')
-      }, 100)
-    }
-  }, [user, authLoading, hasRedirected, router])
-
   const handleRecipeLike = (id: string) => {
     logger.info('Recipe liked', { recipeId: id })
     // TODO: Implement like functionality
