@@ -151,6 +151,11 @@ export interface CreateRecipeForm {
   dietaryTags: string[];
   tags: string[];
   images: File[];
+  coverImageUrl?: string;
+  nutritionCalories?: number;
+  nutritionProtein?: number;
+  nutritionFats?: number;
+  nutritionCarbs?: number;
   videoUrl?: string;
 }
 
