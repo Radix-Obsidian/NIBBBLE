@@ -27,6 +27,14 @@ export default async function RecipeDetailPage({ params }: PageProps) {
     .eq('recipe_id', params.id)
     .order('step_number', { ascending: true })
 
+  const parseTag = (key: string) => {
+    const tags: string[] = Array.isArray((recipe as any).tags) ? (recipe as any).tags : []
+    const found = tags.find((t) => t.startsWith(`${key}:`))
+    if (!found) return 0
+    const v = Number(found.split(':')[1])
+    return Number.isFinite(v) ? v : 0
+  }
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -56,13 +64,13 @@ export default async function RecipeDetailPage({ params }: PageProps) {
             <h4 className="font-semibold text-gray-900 mb-3">Nutritional Values</h4>
             <div className="grid grid-cols-4 gap-3">
               {[
-                { label: 'Calories', unit: 'Kcal' },
-                { label: 'Protein', unit: 'g' },
-                { label: 'Fats', unit: 'g' },
-                { label: 'Carbs', unit: 'g' }
+                { label: 'Calories', unit: 'Kcal', value: parseTag('calories') },
+                { label: 'Protein', unit: 'g', value: parseTag('protein_g') },
+                { label: 'Fats', unit: 'g', value: parseTag('fats_g') },
+                { label: 'Carbs', unit: 'g', value: parseTag('carbs_g') }
               ].map((n) => (
                 <div key={n.label} className="text-center border rounded-xl p-3 bg-white">
-                  <div className="text-2xl font-bold text-purple-600">0</div>
+                  <div className="text-2xl font-bold text-purple-600">{n.value}</div>
                   <div className="text-xs text-gray-500">{n.label} {n.unit}</div>
                 </div>
               ))}
