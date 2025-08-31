@@ -59,6 +59,7 @@ export function Header({ user, onSearch, onNotificationClick }: HeaderProps) {
               <Bell className="w-5 h-5" />
             </Button>
             <div className="text-sm text-gray-600 hidden sm:block">{user.email}</div>
+            <Button variant="outline" size="sm" onClick={handleSignOut}>Sign out</Button>
           </div>
         </div>
       </div>
