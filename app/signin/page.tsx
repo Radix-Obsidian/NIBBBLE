@@ -14,8 +14,8 @@ export default function SignInPage() {
 
   useEffect(() => {
     if (user && !loading) {
-      logger.info('User authenticated, redirecting to home')
-      router.push('/')
+      logger.info('User authenticated, redirecting to dashboard')
+      router.push('/dashboard')
     }
   }, [user, loading, router])
 
@@ -30,6 +30,7 @@ export default function SignInPage() {
   if (user) {
     return null // Will redirect
   }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-amber-50">
       <Header />
