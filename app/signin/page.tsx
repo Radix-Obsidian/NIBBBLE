@@ -15,7 +15,8 @@ export default function SignInPage() {
   useEffect(() => {
     if (user && !authLoading) {
       console.log('🔐 User authenticated, redirecting to dashboard...')
-      router.replace('/dashboard')
+      // Use window.location.href for a more reliable redirect
+      window.location.href = '/dashboard'
     }
   }, [user, authLoading, router])
 
