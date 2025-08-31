@@ -16,6 +16,8 @@ import Link from 'next/link'
 export default function DashboardPage() {
   const { user } = useAuth()
   const [recipes, setRecipes] = useState<BaseCardProps[]>([])
+  const [favorites, setFavorites] = useState<BaseCardProps[]>([])
+  const [topRated, setTopRated] = useState<BaseCardProps[]>([])
   const [loading, setLoading] = useState(true)
   const [activities, setActivities] = useState<Activity[]>([])
   const [page, setPage] = useState(1)
