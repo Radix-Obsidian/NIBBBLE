@@ -7,6 +7,7 @@ import Link from 'next/link'
 import { Input } from '../ui/input'
 import { Button } from '../ui/button'
 import { logger } from '@/lib/logger'
+import { useAuth } from '@/hooks/useAuth'
 
 export interface HeaderProps {
   user: SupabaseUser
