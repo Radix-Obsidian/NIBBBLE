@@ -8,8 +8,9 @@ import { Activity } from '@/types'
 import { RecipeCardProps as BaseCardProps } from '@/app/components/recipe/recipe-card'
 import { RecipeGrid } from '@/app/components/recipe/recipe-grid'
 import { StatsCard } from '@/app/components/dashboard/stats-card'
-import { TrendingUp, Heart, Users, Clock } from 'lucide-react'
+import { TrendingUp, Heart, Users, Clock, BookOpen, Search, Folder } from 'lucide-react'
 import { ActivityFeed } from '@/app/components/dashboard/activity-feed'
+import { Button } from '@/app/components/ui/button'
 
 export default function DashboardPage() {
   const { user } = useAuth()
@@ -85,14 +86,26 @@ export default function DashboardPage() {
   }
 
   const stats = useMemo(() => ([
-    { title: 'Total Recipes', value: recipes.length, change: 0, icon: <TrendingUp className="w-6 h-6" />, color: 'orange' as const },
-    { title: 'Your Favorites', value: 0, change: 0, icon: <Heart className="w-6 h-6" />, color: 'amber' as const },
-    { title: 'Active Chefs', value: '—', icon: <Users className="w-6 h-6" />, color: 'green' as const },
+    { title: 'Recipes', value: recipes.length, change: 0, icon: <BookOpen className="w-6 h-6" />, color: 'orange' as const },
+    { title: 'Total Likes', value: 0, change: 0, icon: <Heart className="w-6 h-6" />, color: 'amber' as const },
+    { title: 'Total Views', value: 0, icon: <Users className="w-6 h-6" />, color: 'green' as const },
     { title: 'Avg. Cook Time', value: recipes.length ? `${Math.round(recipes.reduce((a, r) => a + r.cookTime, 0) / recipes.length)} min` : '—', icon: <Clock className="w-6 h-6" />, color: 'blue' as const }
   ]), [recipes])
 
   return (
     <div className="space-y-8">
+      <div className="flex items-center justify-between">
+        <div>
+          <h2 className="text-3xl font-bold text-gray-900">Welcome back{user?.email ? `, ${user.email.split('@')[0]}` : ''}!</h2>
+          <p className="text-gray-600">Ready to create some delicious recipes today?</p>
+        </div>
+        <div className="flex items-center gap-3">
+          <Button size="md" className="flex items-center"><BookOpen className="w-4 h-4 mr-2" /> New Recipe</Button>
+          <Button variant="outline" size="md" className="flex items-center"><Search className="w-4 h-4 mr-2" /> Discover</Button>
+          <Button variant="outline" size="md" className="flex items-center"><Folder className="w-4 h-4 mr-2" /> Collections</Button>
+        </div>
+      </div>
+
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {stats.map((s) => (
           <StatsCard key={s.title} title={s.title} value={s.value} change={s.change as any} icon={s.icon} color={s.color} />
@@ -101,9 +114,9 @@ export default function DashboardPage() {
 
       <RecipeGrid
         recipes={recipes}
-        title="Recent Recipes"
-        subtitle="Latest from the community"
-        showViewAll={false}
+        title="Your Recent Recipes"
+        subtitle={recipes.length ? 'Start where you left off' : ''}
+        showViewAll={!!recipes.length}
         onViewAll={() => {}}
         onLike={(id) => logger.info('Like recipe', { id })}
       />
