@@ -30,20 +30,20 @@ export function Footer() {
           <div className="space-y-4">
             <h3 className="font-semibold">Support</h3>
             <ul className="space-y-2 text-sm text-gray-400">
-              <li><a href="#" className="hover:text-white transition-colors">Help Center</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Contact Us</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">FAQ</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Feedback</a></li>
+              <li><a href="/learn-more" className="hover:text-white transition-colors">Learn More</a></li>
+              <li><a href="/feedback" className="hover:text-white transition-colors">Contact Us</a></li>
+              <li><a href="/faq" className="hover:text-white transition-colors">FAQ</a></li>
+              <li><a href="/feedback" className="hover:text-white transition-colors">Feedback</a></li>
             </ul>
           </div>
           
           <div className="space-y-4">
             <h3 className="font-semibold">Legal</h3>
             <ul className="space-y-2 text-sm text-gray-400">
-              <li><a href="#" className="hover:text-white transition-colors">Privacy Policy</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Terms of Service</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Cookie Policy</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Community Guidelines</a></li>
+              <li><a href="/privacy" className="hover:text-white transition-colors">Privacy Policy</a></li>
+              <li><a href="/terms" className="hover:text-white transition-colors">Terms of Service</a></li>
+              <li><a href="/cookies" className="hover:text-white transition-colors">Cookie Policy</a></li>
+              <li><a href="/community-guidelines" className="hover:text-white transition-colors">Community Guidelines</a></li>
             </ul>
           </div>
         </div>

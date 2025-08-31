@@ -25,8 +25,10 @@ export function HeroSection() {
             
             <div className="flex flex-col sm:flex-row gap-4">
               <Button size="xl" className="flex items-center justify-center space-x-2">
-                <Play className="w-5 h-5" />
-                <span>Start Cooking</span>
+                <a href="/signin" className="flex items-center justify-center space-x-2 w-full h-full">
+                  <Play className="w-5 h-5" />
+                  <span>Start Cooking</span>
+                </a>
               </Button>
               <Button variant="outline" size="xl">
                 Watch Demo
