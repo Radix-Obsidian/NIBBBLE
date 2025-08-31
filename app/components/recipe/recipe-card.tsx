@@ -21,6 +21,7 @@ export interface RecipeCardProps {
   isTrending?: boolean;
   isLiked?: boolean;
   onLike?: (id: string) => void;
+  onView?: (id: string) => void;
 }
 
 export function RecipeCard({
@@ -35,16 +36,28 @@ export function RecipeCard({
   emoji,
   isTrending = false,
   isLiked = false,
-  onLike
+  onLike,
+  onView
 }: RecipeCardProps) {
   const handleLike = () => {
     onLike?.(id);
   };
 
+  const handleView = () => {
+    try {
+      const key = 'pp_recently_viewed'
+      const list = JSON.parse(localStorage.getItem(key) || '[]') as string[]
+      const next = [id, ...list.filter((x) => x !== id)].slice(0, 50)
+      localStorage.setItem(key, JSON.stringify(next))
+    } catch {}
+    onView?.(id)
+  }
+
   return (
-    <Card 
-      variant="elevated" 
+    <Card
+      variant="elevated"
       className="hover:-translate-y-2 transition-all duration-300 cursor-pointer"
+      onClick={handleView}
     >
       <div className="relative">
         {image ? (
