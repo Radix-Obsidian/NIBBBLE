@@ -58,6 +58,15 @@ export default function MyRecipesPage() {
         <Button onClick={() => setCreating(true)}>New Recipe</Button>
       </div>
 
+      <div className="flex items-center gap-3">
+        <input className="w-full rounded-full border border-gray-200 bg-gray-50 px-4 py-2" placeholder="Search recipes..." />
+        <div className="flex items-center gap-2 text-sm">
+          <button className="rounded-full px-3 py-1 bg-orange-600 text-white">All</button>
+          <button className="rounded-full px-3 py-1 border border-gray-300 text-gray-700">Published</button>
+          <button className="rounded-full px-3 py-1 border border-gray-300 text-gray-700">Drafts</button>
+        </div>
+      </div>
+
       {creating && (
         <div className="fixed inset-0 z-40">
           <div className="absolute inset-0 bg-black/30" onClick={() => setCreating(false)} />
@@ -119,7 +128,6 @@ export default function MyRecipesPage() {
                     }
 
                     setCreating(false)
-                    // Reload list
                     const { data, error: rErr } = await supabase
                       .from('recipes')
                       .select('id, title, description, cook_time, difficulty, rating, likes_count')
