@@ -79,6 +79,13 @@ export default function MyRecipesPage() {
                   if (!user) return
                   try {
                     setLoading(true)
+                    const nutritionTags = [
+                      form.nutritionCalories !== undefined ? `calories:${form.nutritionCalories}` : null,
+                      form.nutritionProtein !== undefined ? `protein_g:${form.nutritionProtein}` : null,
+                      form.nutritionFats !== undefined ? `fats_g:${form.nutritionFats}` : null,
+                      form.nutritionCarbs !== undefined ? `carbs_g:${form.nutritionCarbs}` : null
+                    ].filter(Boolean) as string[]
+
                     const { data: inserted, error } = await supabase
                       .from('recipes')
                       .insert({
@@ -92,8 +99,8 @@ export default function MyRecipesPage() {
                         cuisine: form.cuisine,
                         meal_type: form.mealType,
                         dietary_tags: form.dietaryTags,
-                        tags: form.tags,
-                        images: [],
+                        tags: [...form.tags, ...nutritionTags],
+                        images: form.coverImageUrl ? [form.coverImageUrl] : [],
                         video_url: form.videoUrl || null,
                         is_published: true,
                         creator_id: user.id
