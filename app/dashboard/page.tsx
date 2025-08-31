@@ -26,7 +26,7 @@ export default function DashboardPage() {
         setLoading(true)
         const { data, error } = await supabase
           .from('recipes')
-          .select('id, title, description, cook_time, difficulty, rating, creator_id, likes_count')
+          .select('id, title, description, cook_time, difficulty, rating, creator_id, likes_count, created_at')
           .order('created_at', { ascending: false })
           .limit(6)
 
@@ -48,14 +48,8 @@ export default function DashboardPage() {
           setRecipes(mapped)
         }
 
-        const baseActivity: Activity[] = user ? [{
-          id: 'signin',
-          type: 'recipe',
-          actor: { id: user.id, name: user.email || 'User' },
-          message: 'Signed in to PantryPals',
-          createdAt: new Date()
-        }] : []
-        setActivities(baseActivity)
+        // Initial activities
+        await fetchActivities(1)
       } catch (e) {
         logger.error('Dashboard load error', e)
       } finally {
@@ -63,7 +57,32 @@ export default function DashboardPage() {
       }
     }
     load()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user])
+
+  const fetchActivities = async (pg: number) => {
+    if (!user) return
+    const from = (pg - 1) * perPage
+    const to = from + perPage - 1
+    const { data, error } = await supabase
+      .from('recipes')
+      .select('id, title, created_at')
+      .order('created_at', { ascending: false })
+      .range(from, to)
+    if (error) {
+      logger.error('Activities fetch error', error)
+      return
+    }
+    const mapped: Activity[] = (data || []).map((r: any) => ({
+      id: `r-${r.id}-${pg}`,
+      type: 'recipe',
+      actor: { id: user.id, name: user.email || 'User' },
+      message: `New recipe: ${r.title}`,
+      createdAt: new Date(r.created_at)
+    }))
+    setActivities((prev) => (pg === 1 ? mapped : [...prev, ...mapped]))
+    setPage(pg)
+  }
 
   const stats = useMemo(() => ([
     { title: 'Total Recipes', value: recipes.length, change: 0, icon: <TrendingUp className="w-6 h-6" />, color: 'orange' as const },
@@ -89,7 +108,7 @@ export default function DashboardPage() {
         onLike={(id) => logger.info('Like recipe', { id })}
       />
 
-      <ActivityFeed activities={activities} onLoadMore={() => {}} isLoading={loading} />
+      <ActivityFeed activities={activities} onLoadMore={() => fetchActivities(page + 1)} isLoading={loading} />
     </div>
   )
 }
