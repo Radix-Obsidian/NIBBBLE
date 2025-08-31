@@ -1,6 +1,7 @@
 'use client';
 
 import { Heart, Clock, Star } from 'lucide-react';
+import Image from 'next/image';
 import { Card } from '../ui/card';
 
 export interface RecipeCardProps {
@@ -47,9 +48,11 @@ export function RecipeCard({
     >
       <div className="relative">
         {image ? (
-          <img 
+          <Image 
             src={image} 
             alt={title}
+            width={400}
+            height={225}
             className="w-full aspect-video object-cover rounded-t-2xl"
           />
         ) : (

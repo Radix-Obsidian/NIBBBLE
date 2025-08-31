@@ -61,7 +61,7 @@ export function Header() {
                 </Button>
               </div>
             ) : (
-              <Button size="md" asChild>
+              <Button size="md">
                 <a href="/signin">Sign In</a>
               </Button>
             )}
