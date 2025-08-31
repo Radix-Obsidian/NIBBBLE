@@ -61,17 +61,32 @@ export function RecipeCreator({ onSave, onCancel, initialData = {} }: RecipeCrea
     setForm({ ...form, images: Array.from(files) })
   }
 
+  const steps = ['Basics', 'Details & Media', 'Ingredients', 'Instructions', 'Nutrition & Preview']
+  const progress = ((step - 1) / (steps.length - 1)) * 100
+
   return (
     <Card className="p-6">
-      <div className="flex items-center justify-between mb-6">
-        <h3 className="text-xl font-semibold text-gray-900">Create Recipe</h3>
-        <div className="space-x-2">
-          {step > 1 && <Button variant="outline" onClick={prev}>Back</Button>}
-          {step < 5 && <Button onClick={next}>Next</Button>}
-          {step === 5 && (
-            <Button onClick={() => onSave(form)} disabled={!form.title || !form.cuisine || form.instructions.length === 0}>Save</Button>
-          )}
-          <Button variant="outline" onClick={onCancel}>Cancel</Button>
+      <div className="mb-4">
+        <div className="flex items-center justify-between mb-2">
+          <h3 className="text-xl font-semibold text-gray-900">Create Recipe</h3>
+          <div className="space-x-2">
+            {step > 1 && <Button variant="outline" onClick={prev}>Back</Button>}
+            {step < 5 && <Button onClick={next}>Next</Button>}
+            {step === 5 && (
+              <Button onClick={() => onSave(form)} disabled={!form.title || !form.cuisine || form.instructions.length === 0}>Save</Button>
+            )}
+            <Button variant="outline" onClick={onCancel}>Cancel</Button>
+          </div>
+        </div>
+        <div className="flex items-center justify-between text-xs text-gray-600">
+          {steps.map((label, i) => (
+            <div key={label} className={`flex-1 ${i !== steps.length - 1 ? 'mr-2' : ''}`}>
+              <div className={`rounded-full px-3 py-1 border ${i + 1 <= step ? 'bg-orange-50 border-orange-200 text-orange-700' : 'bg-white border-gray-200'}`}>{i + 1}. {label}</div>
+            </div>
+          ))}
+        </div>
+        <div className="h-1 bg-gray-200 rounded mt-2">
+          <div className="h-1 bg-orange-500 rounded" style={{ width: `${progress}%` }} />
         </div>
       </div>
 
