@@ -6,8 +6,7 @@ import {
   HeroSection, 
   FeaturesSection, 
   CTASection,
-  RecipeGrid,
-  SupabaseTest
+  RecipeGrid
 } from './components';
 import { RecipeCardProps } from './components/recipe';
 
@@ -76,7 +75,6 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-amber-50">
-      <SupabaseTest />
       <Header />
       
       <HeroSection />
