@@ -184,6 +184,7 @@ export default function DashboardPage() {
         showViewAll={!!recipes.length}
         onViewAll={() => {}}
         onLike={(id) => logger.info('Like recipe', { id })}
+        onView={(id) => window.location.assign(`/dashboard/recipes/${id}`)}
       />
 
       <RecipeGrid
@@ -193,6 +194,7 @@ export default function DashboardPage() {
         showViewAll={false}
         onViewAll={() => {}}
         onLike={(id) => logger.info('Like recipe', { id })}
+        onView={(id) => window.location.assign(`/dashboard/recipes/${id}`)}
       />
 
       <RecipeGrid
@@ -202,6 +204,7 @@ export default function DashboardPage() {
         showViewAll={false}
         onViewAll={() => {}}
         onLike={(id) => logger.info('Like recipe', { id })}
+        onView={(id) => window.location.assign(`/dashboard/recipes/${id}`)}
       />
 
       <ActivityFeed activities={activities} onLoadMore={() => fetchActivities(page + 1)} isLoading={loading} />

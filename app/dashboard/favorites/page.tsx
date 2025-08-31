@@ -53,7 +53,7 @@ export default function FavoritesPage() {
   return (
     <div className="space-y-6">
       <h2 className="text-2xl font-bold text-gray-900">Favorites</h2>
-      <RecipeGrid recipes={recipes} title="" subtitle="" showViewAll={false} onViewAll={() => {}} />
+      <RecipeGrid recipes={recipes} title="" subtitle="" showViewAll={false} onViewAll={() => {}} onView={(id) => window.location.assign(`/dashboard/recipes/${id}`)} />
       {loading && <div className="text-sm text-gray-600">Loading...</div>}
     </div>
   )

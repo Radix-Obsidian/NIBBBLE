@@ -9,15 +9,17 @@ export interface RecipeGridProps {
   showViewAll?: boolean;
   onViewAll?: () => void;
   onLike?: (id: string) => void;
+  onView?: (id: string) => void;
 }
 
-export function RecipeGrid({ 
-  recipes, 
-  title, 
-  subtitle, 
-  showViewAll = false, 
+export function RecipeGrid({
+  recipes,
+  title,
+  subtitle,
+  showViewAll = false,
   onViewAll,
-  onLike
+  onLike,
+  onView
 }: RecipeGridProps) {
   return (
     <section className="py-20 bg-white">
@@ -39,7 +41,7 @@ export function RecipeGrid({
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {recipes.map((recipe) => (
-            <RecipeCard key={recipe.id} {...recipe} onLike={onLike} />
+            <RecipeCard key={recipe.id} {...recipe} onLike={onLike} onView={onView} />
           ))}
         </div>
 

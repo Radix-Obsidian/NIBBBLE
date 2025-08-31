@@ -45,7 +45,7 @@ export default function RecentPage() {
         <h2 className="text-2xl font-bold text-gray-900">Recently Viewed</h2>
         <button onClick={clear} className="text-sm text-gray-600 hover:text-orange-600">Clear</button>
       </div>
-      <RecipeGrid recipes={recipes} title="" subtitle="" showViewAll={false} onViewAll={() => {}} />
+      <RecipeGrid recipes={recipes} title="" subtitle="" showViewAll={false} onViewAll={() => {}} onView={(id) => window.location.assign(`/dashboard/recipes/${id}`)} />
       {recipes.length === 0 && (
         <div className="text-sm text-gray-600">No recently viewed recipes yet.</div>
       )}
