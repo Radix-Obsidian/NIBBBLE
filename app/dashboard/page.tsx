@@ -186,6 +186,24 @@ export default function DashboardPage() {
         onLike={(id) => logger.info('Like recipe', { id })}
       />
 
+      <RecipeGrid
+        recipes={favorites}
+        title="Saved Favorites"
+        subtitle={favorites.length ? '' : 'You haven\'t liked any recipes yet'}
+        showViewAll={false}
+        onViewAll={() => {}}
+        onLike={(id) => logger.info('Like recipe', { id })}
+      />
+
+      <RecipeGrid
+        recipes={topRated}
+        title="Top Rated"
+        subtitle="Community favorites"
+        showViewAll={false}
+        onViewAll={() => {}}
+        onLike={(id) => logger.info('Like recipe', { id })}
+      />
+
       <ActivityFeed activities={activities} onLoadMore={() => fetchActivities(page + 1)} isLoading={loading} />
     </div>
   )
