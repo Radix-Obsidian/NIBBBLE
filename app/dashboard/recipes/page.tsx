@@ -58,7 +58,7 @@ export default function MyRecipesPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h2 className="text-2xl font-bold text-gray-900">My Recipes</h2>
-        <Button onClick={() => setCreating(true)}>New Recipe</Button>
+        <Button onClick={() => { setErrorMsg(null); setCreating(true) }}>New Recipe</Button>
       </div>
 
       <div className="flex items-center gap-3">
@@ -101,7 +101,7 @@ export default function MyRecipesPage() {
                         meal_type: form.mealType,
                         dietary_tags: form.dietaryTags,
                         tags: [...form.tags, ...nutritionTags],
-                        images: form.coverImageUrl ? [form.coverImageUrl] : [],
+                        images: form.coverImageUrl ? [form.coverImageUrl] : null,
                         video_url: form.videoUrl || null,
                         is_published: true,
                         creator_id: user.id
@@ -109,11 +109,15 @@ export default function MyRecipesPage() {
                       .select('id')
                       .single()
 
-                    if (error) throw error
+                    if (error) {
+                      logger.error('Recipe insert failed', { message: error.message, details: (error as any).details, code: (error as any).code })
+                      setErrorMsg(error.message || 'Failed to create recipe')
+                      throw error
+                    }
                     const recipeId = inserted!.id
 
                     if (form.ingredients.length) {
-                      await supabase.from('ingredients').insert(
+                      const { error: ingErr } = await supabase.from('ingredients').insert(
                         form.ingredients.map((ing, i) => ({
                           recipe_id: recipeId,
                           name: ing.name,
@@ -123,10 +127,15 @@ export default function MyRecipesPage() {
                           order_index: i
                         }))
                       )
+                      if (ingErr) {
+                        logger.error('Ingredients insert failed', { message: ingErr.message, details: (ingErr as any).details, code: (ingErr as any).code })
+                        setErrorMsg(ingErr.message || 'Failed to save ingredients')
+                        throw ingErr
+                      }
                     }
 
                     if (form.instructions.length) {
-                      await supabase.from('instructions').insert(
+                      const { error: instErr } = await supabase.from('instructions').insert(
                         form.instructions.map((instruction, i) => ({
                           recipe_id: recipeId,
                           step_number: i + 1,
@@ -135,6 +144,11 @@ export default function MyRecipesPage() {
                           video_url: null
                         }))
                       )
+                      if (instErr) {
+                        logger.error('Instructions insert failed', { message: instErr.message, details: (instErr as any).details, code: (instErr as any).code })
+                        setErrorMsg(instErr.message || 'Failed to save instructions')
+                        throw instErr
+                      }
                     }
 
                     setCreating(false)
@@ -156,8 +170,8 @@ export default function MyRecipesPage() {
                       isLiked: false
                     }))
                     setRecipes(mapped)
-                  } catch (e) {
-                    logger.error('Create recipe error', e)
+                  } catch (e: any) {
+                    logger.error('Create recipe error', { message: e?.message, details: e?.details, code: e?.code })
                   } finally {
                     setLoading(false)
                   }
@@ -169,6 +183,9 @@ export default function MyRecipesPage() {
         </div>
       )}
 
+      {errorMsg && (
+        <div className="rounded-2xl border border-red-200 bg-red-50 text-red-700 p-3 text-sm">{errorMsg}</div>
+      )}
       <RecipeGrid recipes={recipes} title="" subtitle="" showViewAll={false} onViewAll={() => {}} onLike={(id) => logger.info('Like', { id })} onView={(id) => router.push(`/dashboard/recipes/${id}`)} />
       {loading && <div className="text-sm text-gray-600">Loading...</div>}
     </div>
