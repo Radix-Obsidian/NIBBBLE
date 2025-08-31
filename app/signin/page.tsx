@@ -13,8 +13,11 @@ export default function SignInPage() {
 
   // Check if user is already authenticated and redirect to dashboard
   useEffect(() => {
+    console.log('🔐 SignInPage useEffect - user:', user, 'authLoading:', authLoading)
     if (user && !authLoading) {
-      router.push('/dashboard')
+      console.log('🔐 SignInPage redirecting to dashboard...')
+      // Use window.location.href for a more forceful redirect
+      window.location.href = '/dashboard'
     }
   }, [user, authLoading, router])
 

@@ -17,7 +17,8 @@ export default function DashboardLayout({
     console.log('🔐 DashboardLayout useEffect - user:', user, 'loading:', loading)
     if (!loading && !user) {
       console.log('🔐 DashboardLayout redirecting to signin...')
-      router.push('/signin')
+      // Use window.location.href for a more forceful redirect
+      window.location.href = '/signin'
     }
   }, [user, loading, router])
 

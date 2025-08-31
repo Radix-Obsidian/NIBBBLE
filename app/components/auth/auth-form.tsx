@@ -17,14 +17,8 @@ export function AuthForm() {
   const [isSignUp, setIsSignUp] = useState(false)
   const [message, setMessage] = useState('')
 
-  // Redirect if user is authenticated
-  useEffect(() => {
-    console.log('🔐 AuthForm useEffect - user:', user, 'authLoading:', authLoading)
-    if (user && !authLoading) {
-      console.log('🔐 AuthForm redirecting to dashboard...')
-      router.push('/dashboard')
-    }
-  }, [user, authLoading, router])
+  // Note: Redirect logic is handled by the parent page component
+  // to avoid conflicts between multiple redirect attempts
 
   const handleAuth = async (e: React.FormEvent) => {
     e.preventDefault()
