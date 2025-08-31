@@ -31,6 +31,8 @@ export function Sidebar({ isCollapsed, onToggle, currentPath }: SidebarProps) {
     { name: 'My Recipes', href: '/dashboard/recipes', icon: BookOpen, description: 'Your created recipes' },
     { name: 'Favorites', href: '/dashboard/favorites', icon: Heart, description: 'Saved recipes' },
     { name: 'Collections', href: '/dashboard/collections', icon: TrendingUp, description: 'Organized recipe lists' },
+    { name: 'Social', href: '/dashboard/social', icon: Users, description: 'Connect with chefs' },
+    { name: 'Analytics', href: '/dashboard/analytics', icon: BarChart3, description: 'Performance insights' },
     { name: 'Recent', href: '/dashboard/recent', icon: Clock, description: 'Recently viewed' },
     { name: 'Top Rated', href: '/dashboard/top-rated', icon: Star, description: 'Community favorites' }
   ]), [])
