@@ -1,17 +1,30 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabase/client'
+import { useAuth } from '@/hooks/useAuth'
 import { Button } from '../ui/button'
 import { Input } from '../ui/input'
 import { Card } from '../ui/card'
 
 export function AuthForm() {
+  const router = useRouter()
+  const { user, loading: authLoading } = useAuth()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
   const [isSignUp, setIsSignUp] = useState(false)
   const [message, setMessage] = useState('')
+
+  // Redirect if user is authenticated
+  useEffect(() => {
+    console.log('🔐 AuthForm useEffect - user:', user, 'authLoading:', authLoading)
+    if (user && !authLoading) {
+      console.log('🔐 AuthForm redirecting to dashboard...')
+      router.push('/dashboard')
+    }
+  }, [user, authLoading, router])
 
   const handleAuth = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -30,12 +43,16 @@ export function AuthForm() {
         if (error) throw error
         setMessage('Check your email for the confirmation link!')
       } else {
+        console.log('🔐 Attempting sign in...')
         const { error } = await supabase.auth.signInWithPassword({
           email,
           password,
         })
         if (error) throw error
+        console.log('🔐 Sign in successful!')
         setMessage('Signed in successfully!')
+        
+        // The useAuth hook will handle the redirect automatically
       }
     } catch (error: unknown) {
       const errorMessage = error instanceof Error ? error.message : 'An error occurred';
