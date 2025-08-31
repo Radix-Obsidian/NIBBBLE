@@ -3,17 +3,16 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { 
-  Home, 
-  Search, 
-  Heart, 
-  BookOpen, 
-  Plus, 
-  User, 
+import {
+  Home,
+  Search,
+  BookOpen,
+  Plus,
+  User,
   Settings,
   TrendingUp,
-  Clock,
-  Star
+  Users,
+  BarChart3
 } from 'lucide-react'
 import { Button } from '../ui/button'
 
@@ -32,15 +31,9 @@ const navigationItems = [
   },
   {
     name: 'My Recipes',
-    href: '/dashboard/my-recipes',
+    href: '/dashboard/recipes',
     icon: BookOpen,
     description: 'Your created recipes'
-  },
-  {
-    name: 'Favorites',
-    href: '/dashboard/favorites',
-    icon: Heart,
-    description: 'Saved recipes'
   },
   {
     name: 'Collections',
@@ -49,16 +42,16 @@ const navigationItems = [
     description: 'Organized recipe lists'
   },
   {
-    name: 'Recent',
-    href: '/dashboard/recent',
-    icon: Clock,
-    description: 'Recently viewed'
+    name: 'Social',
+    href: '/dashboard/social',
+    icon: Users,
+    description: 'Connect with chefs'
   },
   {
-    name: 'Top Rated',
-    href: '/dashboard/top-rated',
-    icon: Star,
-    description: 'Community favorites'
+    name: 'Analytics',
+    href: '/dashboard/analytics',
+    icon: BarChart3,
+    description: 'Performance insights'
   }
 ]
 
