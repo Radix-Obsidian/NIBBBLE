@@ -8,7 +8,6 @@ import {
   Search,
   BookOpen,
   Plus,
-  User,
   Settings,
   TrendingUp,
   Users,
@@ -56,12 +55,6 @@ const navigationItems = [
 ]
 
 const userItems = [
-  {
-    name: 'Profile',
-    href: '/dashboard/profile',
-    icon: User,
-    description: 'Your profile settings'
-  },
   {
     name: 'Settings',
     href: '/dashboard/settings',
