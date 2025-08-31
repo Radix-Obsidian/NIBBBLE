@@ -10,6 +10,9 @@ export const metadata: Metadata = {
   description: 'Learn to cook like a pro with step-by-step video guides from home cooks and professional chefs.',
   keywords: 'recipes, cooking, food, video guides, community',
   authors: [{ name: 'PantryPals Team' }],
+  icons: {
+    icon: '/favicon.svg',
+  },
   openGraph: {
     title: 'PantryPals - Recipe Sharing Platform',
     description: 'Learn to cook like a pro with step-by-step video guides',
