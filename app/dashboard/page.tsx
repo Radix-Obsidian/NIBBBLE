@@ -165,9 +165,9 @@ export default function DashboardPage() {
           <p className="text-gray-600">Ready to create some delicious recipes today?</p>
         </div>
         <div className="flex items-center gap-3">
-          <Button size="md" className="flex items-center"><BookOpen className="w-4 h-4 mr-2" /> New Recipe</Button>
-          <Button variant="outline" size="md" className="flex items-center"><Search className="w-4 h-4 mr-2" /> Discover</Button>
-          <Button variant="outline" size="md" className="flex items-center"><Folder className="w-4 h-4 mr-2" /> Collections</Button>
+          <Link href="/dashboard/recipes"><Button size="md" className="flex items-center"><BookOpen className="w-4 h-4 mr-2" /> New Recipe</Button></Link>
+          <Link href="/dashboard/discover"><Button variant="outline" size="md" className="flex items-center"><Search className="w-4 h-4 mr-2" /> Discover</Button></Link>
+          <Link href="/dashboard/collections"><Button variant="outline" size="md" className="flex items-center"><Folder className="w-4 h-4 mr-2" /> Collections</Button></Link>
         </div>
       </div>
 
