@@ -52,6 +52,68 @@ export default function DashboardPage() {
           setRecipes(mapped)
         }
 
+        // Favorites
+        const { data: likeRows, error: likeErr } = await supabase
+          .from('recipe_likes')
+          .select('recipe_id')
+          .eq('user_id', user.id)
+        if (likeErr) {
+          logger.error('Favorites fetch error', likeErr)
+          setFavorites([])
+        } else {
+          const ids = (likeRows || []).map((r: any) => r.recipe_id)
+          if (ids.length) {
+            const { data: favData, error: favErr } = await supabase
+              .from('recipes')
+              .select('id, title, description, cook_time, difficulty, rating, likes_count')
+              .in('id', ids)
+            if (favErr) {
+              logger.error('Favorites recipes error', favErr)
+              setFavorites([])
+            } else {
+              const favMapped: BaseCardProps[] = (favData || []).map((r: any) => ({
+                id: r.id,
+                title: r.title,
+                description: r.description,
+                cookTime: r.cook_time,
+                difficulty: r.difficulty,
+                rating: r.rating || 0,
+                creator: { name: 'Creator', avatar: '', initials: 'CR' },
+                isTrending: (r.likes_count || 0) > 100,
+                isLiked: true
+              }))
+              setFavorites(favMapped)
+            }
+          } else {
+            setFavorites([])
+          }
+        }
+
+        // Top rated
+        const { data: topData, error: topErr } = await supabase
+          .from('recipes')
+          .select('id, title, description, cook_time, difficulty, rating, likes_count')
+          .order('rating', { ascending: false })
+          .order('likes_count', { ascending: false })
+          .limit(6)
+        if (topErr) {
+          logger.error('Top rated fetch error', topErr)
+          setTopRated([])
+        } else {
+          const topMapped: BaseCardProps[] = (topData || []).map((r: any) => ({
+            id: r.id,
+            title: r.title,
+            description: r.description,
+            cookTime: r.cook_time,
+            difficulty: r.difficulty,
+            rating: r.rating || 0,
+            creator: { name: 'Creator', avatar: '', initials: 'CR' },
+            isTrending: (r.likes_count || 0) > 100,
+            isLiked: false
+          }))
+          setTopRated(topMapped)
+        }
+
         // Initial activities
         await fetchActivities(1)
       } catch (e) {
