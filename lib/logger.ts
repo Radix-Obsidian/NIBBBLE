@@ -14,6 +14,24 @@ interface LogEntry {
 class Logger {
   private isDevelopment = process.env.NODE_ENV === 'development'
 
+  private format(data?: unknown) {
+    if (!data) return ''
+    try {
+      if (data instanceof Error) {
+        const anyErr = data as any
+        return { message: data.message, stack: data.stack, code: anyErr.code, details: anyErr.details }
+      }
+      if (typeof data === 'object') {
+        const anyObj = data as any
+        if (anyObj && (anyObj.message || anyObj.code || anyObj.details)) return anyObj
+        return JSON.stringify(anyObj)
+      }
+      return data
+    } catch {
+      return data
+    }
+  }
+
   private log(level: LogLevel, message: string, data?: unknown) {
     const entry: LogEntry = {
       level,
@@ -22,25 +40,23 @@ class Logger {
       timestamp: new Date().toISOString()
     }
 
-    // In development, use console methods
     if (this.isDevelopment) {
+      const payload = this.format(data)
       switch (level) {
         case 'debug':
-          console.log(`�� [DEBUG] ${message}`, data || '')
+          console.log(`�� [DEBUG] ${message}`, payload)
           break
         case 'info':
-          console.log(`ℹ️ [INFO] ${message}`, data || '')
+          console.log(`ℹ️ [INFO] ${message}`, payload)
           break
         case 'warn':
-          console.warn(`⚠️ [WARN] ${message}`, data || '')
+          console.warn(`⚠️ [WARN] ${message}`, payload)
           break
         case 'error':
-          console.error(`❌ [ERROR] ${message}`, data || '')
+          console.error(`❌ [ERROR] ${message}`, payload)
           break
       }
     } else {
-      // In production, you could send to a logging service
-      // For now, we'll just store in memory or send to analytics
       this.sendToAnalytics(entry)
     }
   }

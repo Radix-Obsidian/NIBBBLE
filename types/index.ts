@@ -68,6 +68,25 @@ export interface RecipeLike {
   createdAt: Date;
 }
 
+// Activity types
+export interface Activity {
+  id: string;
+  type: 'like' | 'comment' | 'follow' | 'recipe';
+  actor: {
+    id: string;
+    name: string;
+    avatar?: string;
+  };
+  target?: {
+    id: string;
+    type: 'recipe' | 'user';
+    title?: string;
+    name?: string;
+  };
+  message: string;
+  createdAt: Date;
+}
+
 // Collection types
 export interface Collection {
   id: string;
@@ -132,6 +151,11 @@ export interface CreateRecipeForm {
   dietaryTags: string[];
   tags: string[];
   images: File[];
+  coverImageUrl?: string;
+  nutritionCalories?: number;
+  nutritionProtein?: number;
+  nutritionFats?: number;
+  nutritionCarbs?: number;
   videoUrl?: string;
 }
 

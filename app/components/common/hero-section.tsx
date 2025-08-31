@@ -2,8 +2,24 @@
 
 import { Play, Users, BookOpen, TrendingUp } from 'lucide-react';
 import { Button } from '../ui/button';
+import { useRef, useState } from 'react'
 
 export function HeroSection() {
+  const videoRef = useRef<HTMLVideoElement>(null)
+  const [paused, setPaused] = useState(false)
+
+  const togglePlay = () => {
+    const v = videoRef.current
+    if (!v) return
+    if (v.paused) {
+      v.play()
+      setPaused(false)
+    } else {
+      v.pause()
+      setPaused(true)
+    }
+  }
+
   return (
     <section className="relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
@@ -17,12 +33,12 @@ export function HeroSection() {
                 </span>
               </h2>
               <p className="text-xl text-gray-600 leading-relaxed">
-                Discover thousands of recipes from home cooks and professional chefs. 
-                Follow your favorite creators, save recipes, and build your cooking skills 
+                Discover thousands of recipes from home cooks and professional chefs.
+                Follow your favorite creators, save recipes, and build your cooking skills
                 with our step-by-step video guides.
               </p>
             </div>
-            
+
             <div className="flex flex-col sm:flex-row gap-4">
               <Button size="xl" className="flex items-center justify-center space-x-2">
                 <a href="/signin" className="flex items-center justify-center space-x-2 w-full h-full">
@@ -30,8 +46,8 @@ export function HeroSection() {
                   <span>Start Cooking</span>
                 </a>
               </Button>
-              <Button variant="outline" size="xl">
-                Watch Demo
+              <Button variant="outline" size="xl" className="flex items-center justify-center">
+                <a href="https://www.tiktok.com/@createaplatewithdina" target="_blank" rel="noopener noreferrer" className="w-full h-full flex items-center justify-center">Watch Chef Dina</a>
               </Button>
             </div>
 
@@ -53,17 +69,40 @@ export function HeroSection() {
 
           <div className="relative">
             <div className="relative z-10">
-              <div className="bg-white rounded-3xl shadow-2xl p-6 transform rotate-3 hover:rotate-0 transition-transform duration-300">
-                <div className="aspect-video bg-gradient-to-br from-orange-100 to-amber-100 rounded-2xl flex items-center justify-center">
-                  <Play className="w-16 h-16 text-orange-600" />
+              <div className="bg-white rounded-3xl shadow-2xl border border-gray-100 overflow-hidden">
+                <div className="relative aspect-video">
+                  <video
+                    ref={videoRef}
+                    src="https://cdn.builder.io/o/assets%2F4218c0306881441f993eb2c79b2c9dc3%2F12bfef8eeca6445c9f98a5bc5aa5fa39?alt=media&token=272ff243-5f8e-40fd-9b84-c280f9987fdb&apiKey=4218c0306881441f993eb2c79b2c9dc3"
+                    className="absolute inset-0 w-full h-full object-cover"
+                    playsInline
+                    muted
+                    loop
+                    autoPlay
+                    onClick={togglePlay}
+                  />
                 </div>
-                <div className="mt-4 space-y-2">
-                  <h3 className="font-semibold text-gray-900">Quick Pasta Carbonara</h3>
-                  <p className="text-sm text-gray-600">15 min • Easy • Italian</p>
+                <div className="p-6">
+                  <div className="flex items-center justify-between mb-2">
+                    <h3 className="text-xl font-semibold text-gray-900">Braised Beef Short Ribs</h3>
+                  </div>
+                  <p className="text-gray-600 mb-4">Slow-braised short ribs with red wine, herbs, and aromatics—fall-off-the-bone tender.</p>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-4 text-sm text-gray-500">
+                      <div className="flex items-center space-x-1">
+                        <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                        <span>3 hr</span>
+                      </div>
+                      <span>•</span>
+                      <span>Medium</span>
+                      <span>•</span>
+                      <span>Dinner</span>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
-            
+
             {/* Floating Recipe Cards */}
             <div className="absolute top-10 -right-10 z-0">
               <div className="bg-white rounded-2xl shadow-xl p-4 transform -rotate-6">
@@ -73,7 +112,7 @@ export function HeroSection() {
                 <p className="text-xs font-medium text-gray-700 mt-2">Fresh Salad</p>
               </div>
             </div>
-            
+
             <div className="absolute -bottom-10 -left-10 z-0">
               <div className="bg-white rounded-2xl shadow-xl p-4 transform rotate-6">
                 <div className="w-24 h-24 bg-gradient-to-br from-red-100 to-pink-200 rounded-xl flex items-center justify-center">
