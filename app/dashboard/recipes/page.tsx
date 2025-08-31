@@ -7,8 +7,6 @@ import { logger } from '@/lib/logger'
 import { RecipeGrid } from '@/app/components/recipe/recipe-grid'
 import { RecipeCardProps } from '@/app/components/recipe/recipe-card'
 import { Button } from '@/app/components/ui/button'
-import Link from 'next/link'
-
 export default function MyRecipesPage() {
   const { user } = useAuth()
   const [recipes, setRecipes] = useState<RecipeCardProps[]>([])
