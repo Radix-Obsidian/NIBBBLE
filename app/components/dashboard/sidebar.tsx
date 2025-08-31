@@ -7,7 +7,6 @@ import {
   Search,
   BookOpen,
   Plus,
-  User,
   Settings,
   TrendingUp,
   Users,
@@ -32,7 +31,6 @@ export function Sidebar({ isCollapsed, onToggle, currentPath }: SidebarProps) {
   ]), [])
 
   const userItems = useMemo(() => ([
-    { name: 'Profile', href: '/dashboard/profile', icon: User, description: 'Your profile settings' },
     { name: 'Settings', href: '/dashboard/settings', icon: Settings, description: 'App preferences' }
   ]), [])
 
