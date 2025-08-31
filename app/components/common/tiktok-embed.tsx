@@ -19,26 +19,24 @@ export function TikTokEmbed({ url, videoId, className }: Props) {
       s.src = 'https://www.tiktok.com/embed.js'
       s.async = true
       document.body.appendChild(s)
-    } else if ((window as any).tiktokEmbedLoaded) {
-      // Reprocess embeds if script signals loaded
-      ;(window as any).tiktokEmbedLoaded()
     }
   }, [])
 
   return (
-    <div className={cn('relative rounded-2xl overflow-hidden bg-white', className)}>
+    <div className={cn('relative aspect-video rounded-2xl overflow-hidden bg-white', className)}>
       <blockquote
         key={id}
         className="tiktok-embed"
         cite={url}
         data-video-id={videoId}
         data-embed-from="oembed"
-        style={{ maxWidth: 605, minWidth: 325 }}
+        style={{ maxWidth: '100%', minWidth: '100%', width: '100%', height: '100%' }}
       >
         <section />
       </blockquote>
-      <style jsx>{`
-        :global(.tiktok-embed) { margin: 0; }
+      <style jsx global>{`
+        .tiktok-embed { margin: 0; height: 100%; }
+        .tiktok-embed iframe { position: absolute !important; inset: 0; width: 100% !important; height: 100% !important; display: block; }
       `}</style>
     </div>
   )
