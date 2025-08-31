@@ -8,6 +8,7 @@ import { Input } from '../ui/input'
 import { Button } from '../ui/button'
 import { logger } from '@/lib/logger'
 import { useAuth } from '@/hooks/useAuth'
+import { useRouter } from 'next/navigation'
 
 export interface HeaderProps {
   user: SupabaseUser
@@ -18,6 +19,7 @@ export interface HeaderProps {
 export function Header({ user, onSearch, onNotificationClick }: HeaderProps) {
   const [query, setQuery] = useState('')
   const { signOut } = useAuth()
+  const router = useRouter()
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -27,7 +29,7 @@ export function Header({ user, onSearch, onNotificationClick }: HeaderProps) {
 
   const handleSignOut = async () => {
     await signOut()
-    window.location.href = '/'
+    router.replace('/signin')
   }
 
   return (
