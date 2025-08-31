@@ -8,8 +8,10 @@ import { RecipeGrid } from '@/app/components/recipe/recipe-grid'
 import { RecipeCardProps } from '@/app/components/recipe/recipe-card'
 import { Button } from '@/app/components/ui/button'
 import { RecipeCreator } from '@/app/components/dashboard/recipe-creator'
+import { useRouter } from 'next/navigation'
 export default function MyRecipesPage() {
   const { user } = useAuth()
+  const router = useRouter()
   const [recipes, setRecipes] = useState<RecipeCardProps[]>([])
   const [loading, setLoading] = useState(true)
   const [creating, setCreating] = useState(false)
@@ -159,7 +161,7 @@ export default function MyRecipesPage() {
         </div>
       )}
 
-      <RecipeGrid recipes={recipes} title="" subtitle="" showViewAll={false} onViewAll={() => {}} onLike={(id) => logger.info('Like', { id })} />
+      <RecipeGrid recipes={recipes} title="" subtitle="" showViewAll={false} onViewAll={() => {}} onLike={(id) => logger.info('Like', { id })} onView={(id) => router.push(`/dashboard/recipes/${id}`)} />
       {loading && <div className="text-sm text-gray-600">Loading...</div>}
     </div>
   )

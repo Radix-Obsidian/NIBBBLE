@@ -84,7 +84,7 @@ export default function SocialPage() {
               </div>
             </div>
           ) : (
-            <RecipeGrid recipes={recipes} title="" subtitle="" showViewAll={false} onViewAll={() => {}} onLike={(id) => logger.info('Like', { id })} />
+            <RecipeGrid recipes={recipes} title="" subtitle="" showViewAll={false} onViewAll={() => {}} onLike={(id) => logger.info('Like', { id })} onView={(id) => window.location.assign(`/dashboard/recipes/${id}`)} />
           )}
           {loading && <div className="text-sm text-gray-600">Loading...</div>}
         </>

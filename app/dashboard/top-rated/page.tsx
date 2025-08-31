@@ -35,7 +35,7 @@ export default function TopRatedPage() {
   return (
     <div className="space-y-6">
       <h2 className="text-2xl font-bold text-gray-900">Top Rated</h2>
-      <RecipeGrid recipes={recipes} title="" subtitle="" showViewAll={false} onViewAll={() => {}} />
+      <RecipeGrid recipes={recipes} title="" subtitle="" showViewAll={false} onViewAll={() => {}} onView={(id) => window.location.assign(`/dashboard/recipes/${id}`)} />
     </div>
   )
 }
