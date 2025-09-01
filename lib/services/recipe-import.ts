@@ -46,7 +46,10 @@ async function checkDuplicateRecipe(title: string, creatorId: string): Promise<b
     
     return data && data.length > 0
   } catch (error) {
-    logger.error('Error checking for duplicate recipe', { error: error.message, title })
+    logger.error('Error checking for duplicate recipe', { 
+      error: error instanceof Error ? error.message : String(error), 
+      title 
+    })
     return false
   }
 }
@@ -126,12 +129,12 @@ async function importSingleRecipe(
     
   } catch (error) {
     logger.error('Error importing recipe', { 
-      error: error.message, 
+      error: error instanceof Error ? error.message : String(error), 
       title: recipe.title 
     })
     return { 
       success: false, 
-      error: `Unexpected error: ${error.message}` 
+      error: `Unexpected error: ${error instanceof Error ? error.message : String(error)}` 
     }
   }
 }
@@ -240,9 +243,11 @@ export async function importRecipesFromSpoonacular(
     return result
     
   } catch (error) {
-    logger.error('Recipe import failed', { error: error.message })
+    logger.error('Recipe import failed', { 
+      error: error instanceof Error ? error.message : String(error) 
+    })
     result.success = false
-    result.errors.push(`Import failed: ${error.message}`)
+    result.errors.push(`Import failed: ${error instanceof Error ? error.message : String(error)}`)
     return result
   }
 }
@@ -275,12 +280,14 @@ export async function importRecipesByIds(
     return await importRecipesFromSpoonacular(spoonacularRecipes, options, onProgress)
     
   } catch (error) {
-    logger.error('Error importing recipes by IDs', { error: error.message })
+    logger.error('Error importing recipes by IDs', { 
+      error: error instanceof Error ? error.message : String(error) 
+    })
     return {
       success: false,
       imported: 0,
       failed: 0,
-      errors: [`Failed to fetch recipes: ${error.message}`],
+      errors: [`Failed to fetch recipes: ${error instanceof Error ? error.message : String(error)}`],
       recipeIds: []
     }
   }
@@ -334,7 +341,9 @@ export async function getImportStats(creatorId: string): Promise<{
     }
     
   } catch (error) {
-    logger.error('Error getting import stats', { error: error.message })
+    logger.error('Error getting import stats', { 
+      error: error instanceof Error ? error.message : String(error) 
+    })
     return {
       totalRecipes: 0,
       importedToday: 0,
@@ -359,10 +368,12 @@ export async function cleanupFailedImports(creatorId: string): Promise<{
       errors: []
     }
   } catch (error) {
-    logger.error('Error cleaning up failed imports', { error: error.message })
+    logger.error('Error cleaning up failed imports', { 
+      error: error instanceof Error ? error.message : String(error) 
+    })
     return {
       cleaned: 0,
-      errors: [`Cleanup failed: ${error.message}`]
+      errors: [`Cleanup failed: ${error instanceof Error ? error.message : String(error)}`]
     }
   }
 }
