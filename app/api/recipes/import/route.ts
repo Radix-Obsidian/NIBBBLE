@@ -95,7 +95,7 @@ export async function POST(request: NextRequest) {
         } catch (error) {
           logger.error('Error searching for recipes', { 
             cuisine, 
-            error: error.message 
+            error: error instanceof Error ? error.message : String(error)
           })
           // Continue with other cuisines
         }
@@ -150,12 +150,14 @@ export async function POST(request: NextRequest) {
     })
     
   } catch (error) {
-    logger.error('Recipe import API error', { error: error.message })
+    logger.error('Recipe import API error', { 
+      error: error instanceof Error ? error.message : String(error)
+    })
     
     return NextResponse.json(
       { 
         error: 'Internal server error',
-        message: error.message 
+        message: error instanceof Error ? error.message : String(error)
       },
       { status: 500 }
     )
@@ -183,7 +185,9 @@ export async function GET(request: NextRequest) {
     })
     
   } catch (error) {
-    logger.error('Error getting import stats', { error: error.message })
+    logger.error('Error getting import stats', { 
+      error: error instanceof Error ? error.message : String(error)
+    })
     
     return NextResponse.json(
       { error: 'Internal server error' },
