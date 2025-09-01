@@ -1,6 +1,7 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
+import Image from 'next/image'
 import { useAuth } from '@/hooks/useAuth'
 import { tiktokAPI } from '@/lib/services/tiktok-api'
 import { instagramAPI } from '@/lib/services/instagram-api'
@@ -8,14 +9,14 @@ import { contentSyncService, SocialConnection, ImportedContent } from '@/lib/ser
 import { Button } from '../ui/button'
 import { Card } from '../ui/card'
 import { logger } from '@/lib/logger'
-import { 
-  ExternalLink, 
-  RefreshCw, 
-  CheckCircle, 
-  XCircle, 
+import {
+  ExternalLink,
+  RefreshCw,
+  CheckCircle,
+  XCircle,
   AlertCircle,
   Video,
-  Image,
+  Image as ImageIcon,
   Heart,
   MessageCircle,
   Eye,
@@ -34,14 +35,7 @@ export function SocialConnections({ onContentImported }: SocialConnectionsProps)
   const [importing, setImporting] = useState<string | null>(null)
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null)
 
-  useEffect(() => {
-    if (user) {
-      loadConnections()
-      loadImportedContent()
-    }
-  }, [user])
-
-  const loadConnections = async () => {
+  const loadConnections = useCallback(async () => {
     try {
       setLoading(true)
       const userConnections = await contentSyncService.getUserConnections(user!.id)
@@ -52,26 +46,33 @@ export function SocialConnections({ onContentImported }: SocialConnectionsProps)
     } finally {
       setLoading(false)
     }
-  }
+  }, [user])
 
-  const loadImportedContent = async () => {
+  const loadImportedContent = useCallback(async () => {
     try {
       const content = await contentSyncService.getUserImportedContent(user!.id)
       setImportedContent(content)
     } catch (error) {
       logger.error('Error loading imported content', error)
     }
-  }
+  }, [user])
+
+  useEffect(() => {
+    if (user) {
+      loadConnections()
+      loadImportedContent()
+    }
+  }, [user, loadConnections, loadImportedContent])
 
   const handleConnectTikTok = () => {
     if (!user) return
 
     const state = `tiktok_${user.id}_${Date.now()}`
     const authUrl = tiktokAPI.getAuthUrl(state)
-    
+
     // Store state in localStorage for verification
     localStorage.setItem('tiktok_oauth_state', state)
-    
+
     // Redirect to TikTok OAuth
     window.location.href = authUrl
   }
@@ -81,10 +82,10 @@ export function SocialConnections({ onContentImported }: SocialConnectionsProps)
 
     const state = `instagram_${user.id}_${Date.now()}`
     const authUrl = instagramAPI.getAuthUrl(state)
-    
+
     // Store state in localStorage for verification
     localStorage.setItem('instagram_oauth_state', state)
-    
+
     // Redirect to Instagram OAuth
     window.location.href = authUrl
   }
@@ -108,9 +109,9 @@ export function SocialConnections({ onContentImported }: SocialConnectionsProps)
         throw new Error(result.error || 'Import failed')
       }
 
-      setMessage({ 
-        type: 'success', 
-        text: `Successfully imported ${result.importedCount} items from ${platform}` 
+      setMessage({
+        type: 'success',
+        text: `Successfully imported ${result.importedCount} items from ${platform}`
       })
 
       // Reload imported content
@@ -123,9 +124,9 @@ export function SocialConnections({ onContentImported }: SocialConnectionsProps)
 
     } catch (error) {
       logger.error(`Error importing ${platform} content`, error)
-      setMessage({ 
-        type: 'error', 
-        text: `Failed to import from ${platform}: ${error instanceof Error ? error.message : 'Unknown error'}` 
+      setMessage({
+        type: 'error',
+        text: `Failed to import from ${platform}: ${error instanceof Error ? error.message : 'Unknown error'}`
       })
     } finally {
       setImporting(null)
@@ -146,9 +147,9 @@ export function SocialConnections({ onContentImported }: SocialConnectionsProps)
         throw new Error('Failed to disconnect account')
       }
 
-      setMessage({ 
-        type: 'success', 
-        text: `${platform} account disconnected successfully` 
+      setMessage({
+        type: 'success',
+        text: `${platform} account disconnected successfully`
       })
 
       // Reload connections
@@ -156,9 +157,9 @@ export function SocialConnections({ onContentImported }: SocialConnectionsProps)
 
     } catch (error) {
       logger.error(`Error disconnecting ${platform}`, error)
-      setMessage({ 
-        type: 'error', 
-        text: `Failed to disconnect ${platform} account` 
+      setMessage({
+        type: 'error',
+        text: `Failed to disconnect ${platform} account`
       })
     }
   }
@@ -166,11 +167,11 @@ export function SocialConnections({ onContentImported }: SocialConnectionsProps)
   const handleApproveContent = async (contentId: string) => {
     try {
       await contentSyncService.approveContent(contentId)
-      
+
       // Update local state
-      setImportedContent(prev => 
-        prev.map(content => 
-          content.id === contentId 
+      setImportedContent(prev =>
+        prev.map(content =>
+          content.id === contentId
             ? { ...content, is_approved: true }
             : content
         )
@@ -224,11 +225,11 @@ export function SocialConnections({ onContentImported }: SocialConnectionsProps)
       case 'video':
         return <Video className="w-4 h-4" />
       case 'image':
-        return <Image className="w-4 h-4" />
+        return <ImageIcon className="w-4 h-4" />
       case 'carousel':
-        return <Image className="w-4 h-4" />
+        return <ImageIcon className="w-4 h-4" />
       default:
-        return <Image className="w-4 h-4" />
+        return <ImageIcon className="w-4 h-4" />
     }
   }
 
@@ -248,8 +249,8 @@ export function SocialConnections({ onContentImported }: SocialConnectionsProps)
       {/* Message Display */}
       {message && (
         <div className={`p-4 rounded-lg ${
-          message.type === 'success' 
-            ? 'bg-green-50 text-green-800 border border-green-200' 
+          message.type === 'success'
+            ? 'bg-green-50 text-green-800 border border-green-200'
             : 'bg-red-50 text-red-800 border border-red-200'
         }`}>
           {message.text}
@@ -382,8 +383,8 @@ export function SocialConnections({ onContentImported }: SocialConnectionsProps)
                     </span>
                   </div>
                   <div className={`px-2 py-1 rounded-full text-xs ${
-                    content.is_approved 
-                      ? 'bg-green-100 text-green-800' 
+                    content.is_approved
+                      ? 'bg-green-100 text-green-800'
                       : 'bg-yellow-100 text-yellow-800'
                   }`}>
                     {content.is_approved ? 'Approved' : 'Pending'}
@@ -391,9 +392,11 @@ export function SocialConnections({ onContentImported }: SocialConnectionsProps)
                 </div>
 
                 {content.thumbnail_url && (
-                  <img 
-                    src={content.thumbnail_url} 
-                    alt="Content thumbnail"
+                  <Image
+                    src={content.thumbnail_url}
+                    alt={`${content.platform} content thumbnail`}
+                    width={300}
+                    height={128}
                     className="w-full h-32 object-cover rounded-lg mb-3"
                   />
                 )}

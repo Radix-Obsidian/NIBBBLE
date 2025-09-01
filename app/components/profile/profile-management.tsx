@@ -42,48 +42,7 @@ export function ProfileManagement() {
     favorite_cuisines: [] as string[]
   })
 
-  const loadProfile = useCallback(async () => {
-    try {
-      setLoading(true)
-      const { data, error } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('id', user?.id)
-        .single()
-
-      if (error) {
-        if (error.code === 'PGRST116') {
-          // Profile doesn't exist, create one
-          await createProfile()
-        } else {
-          logger.error('Error loading profile', error)
-        }
-      } else {
-        setProfile(data)
-        setFormData({
-          username: data.username || '',
-          display_name: data.display_name || '',
-          bio: data.bio || '',
-          location: data.location || '',
-          website: data.website || '',
-          favorite_cuisines: data.favorite_cuisines || []
-        })
-      }
-    } catch (error) {
-      logger.error('Error loading profile', error)
-    } finally {
-      setLoading(false)
-    }
-  }, [user])
-
-  // Load profile data
-  useEffect(() => {
-    if (user) {
-      loadProfile()
-    }
-  }, [user, loadProfile])
-
-  const createProfile = async () => {
+  const createProfile = useCallback(async () => {
     if (!user) return
 
     const newProfile = {
@@ -120,7 +79,48 @@ export function ProfileManagement() {
         favorite_cuisines: data.favorite_cuisines || []
       })
     }
-  }
+  }, [user])
+
+  const loadProfile = useCallback(async () => {
+    try {
+      setLoading(true)
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', user?.id)
+        .single()
+
+      if (error) {
+        if (error.code === 'PGRST116') {
+          // Profile doesn't exist, create one
+          await createProfile()
+        } else {
+          logger.error('Error loading profile', error)
+        }
+      } else {
+        setProfile(data)
+        setFormData({
+          username: data.username || '',
+          display_name: data.display_name || '',
+          bio: data.bio || '',
+          location: data.location || '',
+          website: data.website || '',
+          favorite_cuisines: data.favorite_cuisines || []
+        })
+      }
+    } catch (error) {
+      logger.error('Error loading profile', error)
+    } finally {
+      setLoading(false)
+    }
+  }, [user, createProfile])
+
+  // Load profile data
+  useEffect(() => {
+    if (user) {
+      loadProfile()
+    }
+  }, [user, loadProfile])
 
   const handleSave = async () => {
     if (!user || !profile) return
