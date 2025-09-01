@@ -170,7 +170,7 @@ async function makeRequest<T>(
         logger.warn('Spoonacular API request failed, retrying', { 
           endpoint, 
           attempt, 
-          error: error.message,
+          error: error instanceof Error ? error.message : String(error),
           delay 
         })
         await new Promise(resolve => setTimeout(resolve, delay))
