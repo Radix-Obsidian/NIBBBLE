@@ -32,7 +32,7 @@ export default function DiscoverPage() {
         query = query.in('difficulty', params.filters.difficulty as any)
       }
       if (params.filters.maxTime) {
-        query = query.lte('total_time', params.filters.maxTime)
+        query = query.lte('cook_time', params.filters.maxTime)
       }
 
       const { data, error } = await query
