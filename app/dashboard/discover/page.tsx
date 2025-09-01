@@ -12,6 +12,7 @@ export default function DiscoverPage() {
   const [recipes, setRecipes] = useState<RecipeCardProps[]>([])
   const [filters, setFilters] = useState<RecipeFilters>({})
   const [loading, setLoading] = useState(false)
+  const [seeding, setSeeding] = useState(false)
 
   const runSearch = async (params: SearchParams) => {
     try {
@@ -60,6 +61,30 @@ export default function DiscoverPage() {
     }
   }
 
+  const seedRecipes = async () => {
+    try {
+      setSeeding(true)
+      const response = await fetch('/api/recipes/seed', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' }
+      })
+      
+      const result = await response.json()
+      
+      if (response.ok) {
+        logger.info('Recipes seeded successfully', result)
+        // Refresh the recipes list
+        await runSearch({ query: '', filters: {}, sortBy: 'newest', page: 1, limit: 12 })
+      } else {
+        logger.error('Failed to seed recipes', result)
+      }
+    } catch (error) {
+      logger.error('Error seeding recipes', error)
+    } finally {
+      setSeeding(false)
+    }
+  }
+
   useEffect(() => {
     runSearch({ query: '', filters: {}, sortBy: 'newest', page: 1, limit: 12 })
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -67,7 +92,18 @@ export default function DiscoverPage() {
 
   return (
     <div className="space-y-6">
-      <h2 className="text-2xl font-bold text-gray-900">Discover</h2>
+      <div className="flex items-center justify-between">
+        <h2 className="text-2xl font-bold text-gray-900">Discover</h2>
+        {recipes.length === 0 && (
+          <button
+            onClick={seedRecipes}
+            disabled={seeding}
+            className="px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          >
+            {seeding ? 'Seeding Recipes...' : 'Seed Sample Recipes'}
+          </button>
+        )}
+      </div>
       <SearchInterface onSearch={runSearch} filters={filters} onFilterChange={setFilters} />
       <RecipeGrid recipes={recipes} title="" subtitle="" showViewAll={false} onViewAll={() => {}} onLike={(id) => logger.info('Like', { id })} onView={(id) => window.location.assign(`/dashboard/recipes/${id}`)} />
       {loading && <div className="text-sm text-gray-600">Loading...</div>}
