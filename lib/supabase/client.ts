@@ -25,6 +25,9 @@ export type Database = {
           recipes_count: number
           created_at: string
           updated_at: string
+          tiktok_handle: string | null
+          instagram_handle: string | null
+          social_media_connected: boolean
         }
         Insert: {
           id: string
@@ -41,6 +44,9 @@ export type Database = {
           recipes_count?: number
           created_at?: string
           updated_at?: string
+          tiktok_handle?: string | null
+          instagram_handle?: string | null
+          social_media_connected?: boolean
         }
         Update: {
           id?: string
@@ -57,262 +63,156 @@ export type Database = {
           recipes_count?: number
           created_at?: string
           updated_at?: string
+          tiktok_handle?: string | null
+          instagram_handle?: string | null
+          social_media_connected?: boolean
+        }
+      }
+      social_media_connections: {
+        Row: {
+          id: string
+          user_id: string
+          platform: string
+          platform_user_id: string | null
+          access_token: string | null
+          refresh_token: string | null
+          token_expires_at: string | null
+          is_active: boolean
+          last_sync_at: string | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          platform: string
+          platform_user_id?: string | null
+          access_token?: string | null
+          refresh_token?: string | null
+          token_expires_at?: string | null
+          is_active?: boolean
+          last_sync_at?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          platform?: string
+          platform_user_id?: string | null
+          access_token?: string | null
+          refresh_token?: string | null
+          token_expires_at?: string | null
+          is_active?: boolean
+          last_sync_at?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+      }
+      imported_content: {
+        Row: {
+          id: string
+          user_id: string
+          platform: string
+          platform_content_id: string
+          content_type: string
+          content_url: string | null
+          thumbnail_url: string | null
+          caption: string | null
+          engagement_metrics: any | null
+          is_approved: boolean
+          imported_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          platform: string
+          platform_content_id: string
+          content_type: string
+          content_url?: string | null
+          thumbnail_url?: string | null
+          caption?: string | null
+          engagement_metrics?: any | null
+          is_approved?: boolean
+          imported_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          platform?: string
+          platform_content_id?: string
+          content_type?: string
+          content_url?: string | null
+          thumbnail_url?: string | null
+          caption?: string | null
+          engagement_metrics?: any | null
+          is_approved?: boolean
+          imported_at?: string
         }
       }
       recipes: {
         Row: {
           id: string
           title: string
-          description: string
-          prep_time: number
+          description: string | null
+          ingredients: string[] | null
+          instructions: string[] | null
           cook_time: number
-          total_time: number
-          servings: number
-          difficulty: 'Easy' | 'Medium' | 'Hard'
-          cuisine: string
-          meal_type: 'Breakfast' | 'Lunch' | 'Dinner' | 'Snack' | 'Dessert'
-          dietary_tags: string[] | null
+          prep_time: number
+          difficulty: string
+          cuisine: string | null
           tags: string[] | null
-          images: string[] | null
+          image_url: string | null
           video_url: string | null
-          rating: number
-          review_count: number
+          creator_id: string
+          rating: number | null
           likes_count: number
           views_count: number
-          is_published: boolean
-          creator_id: string
+          is_public: boolean
           created_at: string
           updated_at: string
         }
         Insert: {
           id?: string
           title: string
-          description: string
-          prep_time: number
+          description?: string | null
+          ingredients?: string[] | null
+          instructions?: string[] | null
           cook_time: number
-          total_time?: number
-          servings: number
-          difficulty: 'Easy' | 'Medium' | 'Hard'
-          cuisine: string
-          meal_type: 'Breakfast' | 'Lunch' | 'Dinner' | 'Snack' | 'Dessert'
-          dietary_tags?: string[] | null
+          prep_time: number
+          difficulty: string
+          cuisine?: string | null
           tags?: string[] | null
-          images?: string[] | null
+          image_url?: string | null
           video_url?: string | null
-          rating?: number
-          review_count?: number
+          creator_id: string
+          rating?: number | null
           likes_count?: number
           views_count?: number
-          is_published?: boolean
-          creator_id: string
+          is_public?: boolean
           created_at?: string
           updated_at?: string
         }
         Update: {
           id?: string
           title?: string
-          description?: string
-          prep_time?: number
+          description?: string | null
+          ingredients?: string[] | null
+          instructions?: string[] | null
           cook_time?: number
-          total_time?: number
-          servings?: number
-          difficulty?: 'Easy' | 'Medium' | 'Hard'
-          cuisine?: string
-          meal_type?: 'Breakfast' | 'Lunch' | 'Dinner' | 'Snack' | 'Dessert'
-          dietary_tags?: string[] | null
+          prep_time?: number
+          difficulty?: string
+          cuisine?: string | null
           tags?: string[] | null
-          images?: string[] | null
+          image_url?: string | null
           video_url?: string | null
-          rating?: number
-          review_count?: number
+          creator_id?: string
+          rating?: number | null
           likes_count?: number
           views_count?: number
-          is_published?: boolean
-          creator_id?: string
-          created_at?: string
-          updated_at?: string
-        }
-      }
-      ingredients: {
-        Row: {
-          id: string
-          recipe_id: string
-          name: string
-          amount: number
-          unit: string
-          notes: string | null
-          order_index: number
-          created_at: string
-        }
-        Insert: {
-          id?: string
-          recipe_id: string
-          name: string
-          amount: number
-          unit: string
-          notes?: string | null
-          order_index: number
-          created_at?: string
-        }
-        Update: {
-          id?: string
-          recipe_id?: string
-          name?: string
-          amount?: number
-          unit?: string
-          notes?: string | null
-          order_index?: number
-          created_at?: string
-        }
-      }
-      instructions: {
-        Row: {
-          id: string
-          recipe_id: string
-          step_number: number
-          instruction: string
-          image_url: string | null
-          video_url: string | null
-          created_at: string
-        }
-        Insert: {
-          id?: string
-          recipe_id: string
-          step_number: number
-          instruction: string
-          image_url?: string | null
-          video_url?: string | null
-          created_at?: string
-        }
-        Update: {
-          id?: string
-          recipe_id?: string
-          step_number?: number
-          instruction?: string
-          image_url?: string | null
-          video_url?: string | null
-          created_at?: string
-        }
-      }
-      recipe_likes: {
-        Row: {
-          id: string
-          recipe_id: string
-          user_id: string
-          created_at: string
-        }
-        Insert: {
-          id?: string
-          recipe_id: string
-          user_id: string
-          created_at?: string
-        }
-        Update: {
-          id?: string
-          recipe_id?: string
-          user_id?: string
-          created_at?: string
-        }
-      }
-      recipe_reviews: {
-        Row: {
-          id: string
-          recipe_id: string
-          user_id: string
-          rating: number
-          comment: string | null
-          created_at: string
-          updated_at: string
-        }
-        Insert: {
-          id?: string
-          recipe_id: string
-          user_id: string
-          rating: number
-          comment?: string | null
-          created_at?: string
-          updated_at?: string
-        }
-        Update: {
-          id?: string
-          recipe_id?: string
-          user_id?: string
-          rating?: number
-          comment?: string | null
-          created_at?: string
-          updated_at?: string
-        }
-      }
-      user_follows: {
-        Row: {
-          id: string
-          follower_id: string
-          following_id: string
-          created_at: string
-        }
-        Insert: {
-          id?: string
-          follower_id: string
-          following_id: string
-          created_at?: string
-        }
-        Update: {
-          id?: string
-          follower_id?: string
-          following_id?: string
-          created_at?: string
-        }
-      }
-      collections: {
-        Row: {
-          id: string
-          name: string
-          description: string | null
-          is_public: boolean
-          cover_image: string | null
-          user_id: string
-          created_at: string
-          updated_at: string
-        }
-        Insert: {
-          id?: string
-          name: string
-          description?: string | null
           is_public?: boolean
-          cover_image?: string | null
-          user_id: string
           created_at?: string
           updated_at?: string
-        }
-        Update: {
-          id?: string
-          name?: string
-          description?: string | null
-          is_public?: boolean
-          cover_image?: string | null
-          user_id?: string
-          created_at?: string
-          updated_at?: string
-        }
-      }
-      collection_recipes: {
-        Row: {
-          id: string
-          collection_id: string
-          recipe_id: string
-          added_at: string
-        }
-        Insert: {
-          id?: string
-          collection_id: string
-          recipe_id: string
-          added_at?: string
-        }
-        Update: {
-          id?: string
-          collection_id?: string
-          recipe_id?: string
-          added_at?: string
         }
       }
     }

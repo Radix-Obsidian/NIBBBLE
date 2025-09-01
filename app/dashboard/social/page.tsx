@@ -6,6 +6,7 @@ import { supabase } from '@/lib/supabase/client'
 import { logger } from '@/lib/logger'
 import { RecipeGrid } from '@/app/components/recipe/recipe-grid'
 import { RecipeCardProps } from '@/app/components/recipe/recipe-card'
+import { SocialConnections } from '@/app/components/social/social-connections'
 
 export default function SocialPage() {
   const { user } = useAuth()
@@ -66,13 +67,14 @@ export default function SocialPage() {
     load()
   }, [user])
 
-  const [tab, setTab] = useState<'feed'|'activity'>('feed')
+  const [tab, setTab] = useState<'feed'|'activity'|'connections'>('feed')
   return (
     <div className="space-y-6">
-      <h2 className="text-2xl font-bold text-gray-900">Social Feed</h2>
+      <h2 className="text-2xl font-bold text-gray-900">Social Hub</h2>
       <div className="flex items-center gap-2 text-sm">
         <button onClick={() => setTab('feed')} className={`rounded-full px-3 py-1 ${tab==='feed'?'bg-orange-600 text-white':'border border-gray-300 text-gray-700'}`}>Recipe Feed</button>
         <button onClick={() => setTab('activity')} className={`rounded-full px-3 py-1 ${tab==='activity'?'bg-orange-600 text-white':'border border-gray-300 text-gray-700'}`}>Recent Activity</button>
+        <button onClick={() => setTab('connections')} className={`rounded-full px-3 py-1 ${tab==='connections'?'bg-orange-600 text-white':'border border-gray-300 text-gray-700'}`}>Social Connections</button>
       </div>
       {tab==='feed' ? (
         <>
@@ -88,6 +90,8 @@ export default function SocialPage() {
           )}
           {loading && <div className="text-sm text-gray-600">Loading...</div>}
         </>
+      ) : tab === 'connections' ? (
+        <SocialConnections />
       ) : (
         <div className="bg-white rounded-2xl p-6 border border-gray-100 text-gray-600">No recent activity</div>
       )}
