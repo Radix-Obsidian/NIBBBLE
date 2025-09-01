@@ -21,9 +21,10 @@ export interface SidebarProps {
   onToggle: () => void
   currentPath: string
   onMobileClose?: () => void
+  isMobile?: boolean
 }
 
-export function Sidebar({ isCollapsed, onToggle, currentPath, onMobileClose }: SidebarProps) {
+export function Sidebar({ isCollapsed, onToggle, currentPath, onMobileClose, isMobile = false }: SidebarProps) {
   const navigationItems = useMemo(() => ([
     { name: 'Dashboard', href: '/dashboard', icon: Home, description: 'Overview and activity' },
     { name: 'Discover', href: '/dashboard/discover', icon: Search, description: 'Find new recipes' },
@@ -39,17 +40,20 @@ export function Sidebar({ isCollapsed, onToggle, currentPath, onMobileClose }: S
 
   return (
     <aside className={`
-      bg-white border-r border-gray-200 transition-all duration-300
-      w-64 lg:w-auto lg:flex-shrink-0
+      bg-white/95 backdrop-blur-sm border-r border-gray-200/50 transition-all duration-300 ease-in-out
+      w-full lg:w-auto lg:flex-shrink-0
       ${isCollapsed ? 'lg:w-16' : 'lg:w-64'}
-      h-full overflow-y-auto
+      h-full overflow-y-auto shadow-soft lg:shadow-none
+      ${isMobile ? 'w-80' : 'w-64'}
     `}>
       {/* Mobile Header */}
-      <div className="lg:hidden flex items-center justify-between p-4 border-b border-gray-200">
-        <h1 className="text-xl font-bold text-gray-900">PantryPals</h1>
+      <div className="lg:hidden flex items-center justify-between p-4 sm:p-6 border-b border-gray-200/50">
+        <h1 className="text-responsive-xl font-bold bg-gradient-to-r from-primary-600 to-secondary-600 bg-clip-text text-transparent">
+          PantryPals
+        </h1>
         <button
           onClick={onMobileClose}
-          className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
+          className="touch-target p-2 rounded-xl hover:bg-gray-100 transition-colors"
           aria-label="Close menu"
         >
           <X className="w-5 h-5" />
@@ -57,20 +61,24 @@ export function Sidebar({ isCollapsed, onToggle, currentPath, onMobileClose }: S
       </div>
 
       {/* Desktop Toggle Button */}
-      <div className="hidden lg:flex items-center justify-between p-4 border-b border-gray-200">
-        {!isCollapsed && <h1 className="text-xl font-bold text-gray-900">PantryPals</h1>}
+      <div className="hidden lg:flex items-center justify-between p-4 border-b border-gray-200/50">
+        {!isCollapsed && (
+          <h1 className="text-responsive-xl font-bold bg-gradient-to-r from-primary-600 to-secondary-600 bg-clip-text text-transparent">
+            PantryPals
+          </h1>
+        )}
         <button
           onClick={onToggle}
-          className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
+          className="touch-target p-2 rounded-xl hover:bg-gray-100 transition-colors"
           aria-label={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
         >
           <Menu className="w-5 h-5" />
         </button>
       </div>
 
-      <nav className="mt-6">
-        <div className="px-4">
-          <h3 className={`text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3 ${
+      <nav className="mt-4 sm:mt-6">
+        <div className="px-3 sm:px-4">
+          <h3 className={`text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3 px-3 ${
             isCollapsed ? 'sr-only' : ''
           }`}>
             Navigation
@@ -84,21 +92,21 @@ export function Sidebar({ isCollapsed, onToggle, currentPath, onMobileClose }: S
                     href={item.href}
                     onClick={onMobileClose}
                     className={`
-                      group flex items-center px-3 py-3 text-sm font-medium rounded-lg transition-colors
-                      min-h-[44px] touch-manipulation
+                      group flex items-center px-3 py-3 sm:py-4 text-sm font-medium rounded-xl transition-all duration-200
+                      touch-target hover:scale-[1.02] active:scale-[0.98]
                       ${isActive
-                        ? 'bg-orange-50 text-orange-700 border-r-2 border-orange-500'
-                        : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900'
+                        ? 'bg-gradient-to-r from-primary-50 to-secondary-50 text-primary-700 border-r-2 border-primary-500 shadow-soft'
+                        : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900 hover:shadow-soft'
                       }
                     `}
                   >
-                    <item.icon className={`w-5 h-5 flex-shrink-0 ${
-                      isActive ? 'text-orange-500' : 'text-gray-400 group-hover:text-gray-500'
+                    <item.icon className={`w-5 h-5 flex-shrink-0 transition-colors ${
+                      isActive ? 'text-primary-500' : 'text-gray-400 group-hover:text-gray-500'
                     } ${isCollapsed ? 'mx-auto' : 'mr-3'}`} />
                     {!isCollapsed && (
                       <div className="min-w-0 flex-1">
-                        <div className="truncate">{item.name}</div>
-                        <div className="text-xs text-gray-500 font-normal truncate">
+                        <div className="truncate font-medium">{item.name}</div>
+                        <div className="text-xs text-gray-500 font-normal truncate mt-0.5">
                           {item.description}
                         </div>
                       </div>
@@ -110,8 +118,8 @@ export function Sidebar({ isCollapsed, onToggle, currentPath, onMobileClose }: S
           </ul>
         </div>
 
-        <div className="mt-8 px-4">
-          <h3 className={`text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3 ${
+        <div className="mt-6 sm:mt-8 px-3 sm:px-4">
+          <h3 className={`text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3 px-3 ${
             isCollapsed ? 'sr-only' : ''
           }`}>
             Account
@@ -125,21 +133,21 @@ export function Sidebar({ isCollapsed, onToggle, currentPath, onMobileClose }: S
                     href={item.href}
                     onClick={onMobileClose}
                     className={`
-                      group flex items-center px-3 py-3 text-sm font-medium rounded-lg transition-colors
-                      min-h-[44px] touch-manipulation
+                      group flex items-center px-3 py-3 sm:py-4 text-sm font-medium rounded-xl transition-all duration-200
+                      touch-target hover:scale-[1.02] active:scale-[0.98]
                       ${isActive
-                        ? 'bg-orange-50 text-orange-700 border-r-2 border-orange-500'
-                        : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900'
+                        ? 'bg-gradient-to-r from-primary-50 to-secondary-50 text-primary-700 border-r-2 border-primary-500 shadow-soft'
+                        : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900 hover:shadow-soft'
                       }
                     `}
                   >
-                    <item.icon className={`w-5 h-5 flex-shrink-0 ${
-                      isActive ? 'text-orange-500' : 'text-gray-400 group-hover:text-gray-500'
+                    <item.icon className={`w-5 h-5 flex-shrink-0 transition-colors ${
+                      isActive ? 'text-primary-500' : 'text-gray-400 group-hover:text-gray-500'
                     } ${isCollapsed ? 'mx-auto' : 'mr-3'}`} />
                     {!isCollapsed && (
                       <div className="min-w-0 flex-1">
-                        <div className="truncate">{item.name}</div>
-                        <div className="text-xs text-gray-500 font-normal truncate">
+                        <div className="truncate font-medium">{item.name}</div>
+                        <div className="text-xs text-gray-500 font-normal truncate mt-0.5">
                           {item.description}
                         </div>
                       </div>
@@ -152,7 +160,7 @@ export function Sidebar({ isCollapsed, onToggle, currentPath, onMobileClose }: S
         </div>
 
         {/* Mobile Bottom Spacing */}
-        <div className="lg:hidden h-20" />
+        <div className="lg:hidden h-16 sm:h-20" />
       </nav>
     </aside>
   )
