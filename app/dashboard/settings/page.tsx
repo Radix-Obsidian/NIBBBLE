@@ -5,6 +5,7 @@ import { Card } from '@/app/components/ui/card'
 import { supabase } from '@/lib/supabase/client'
 import { useAuth } from '@/hooks/useAuth'
 import { logger } from '@/lib/logger'
+import { SocialConnections } from '../social/social-connections'
 
 interface Profile {
   id: string
@@ -178,25 +179,8 @@ export default function SettingsPage() {
 
       <Card className='p-6 border border-gray-200 rounded-2xl'>
         <h3 className='font-semibold text-gray-900 mb-4'>Social Connections</h3>
-        <p className='text-sm text-gray-600 mb-4'>Connect your accounts to import food content.</p>
-        <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
-          <div className='space-y-2'>
-            <label className='block text-sm text-gray-700'>TikTok Username</label>
-            <input className='w-full rounded-full border border-gray-200 bg-gray-50 px-4 py-2' placeholder='@username' value={accounts.tiktok} onChange={(e) => setAccounts({ ...accounts, tiktok: e.target.value })} />
-            <div className='flex gap-2'>
-              <button className='rounded-full border-2 border-gray-300 h-9 px-3 text-sm' onClick={() => logger.info('TikTok connected', { handle: accounts.tiktok })}>Connect</button>
-              <button className='rounded-full bg-gradient-to-r from-orange-500 to-amber-600 text-white h-9 px-4 text-sm' onClick={() => logger.info('Import from TikTok requested', { handle: accounts.tiktok })}>Import Latest</button>
-            </div>
-          </div>
-          <div className='space-y-2'>
-            <label className='block text-sm text-gray-700'>Instagram Username</label>
-            <input className='w-full rounded-full border border-gray-200 bg-gray-50 px-4 py-2' placeholder='@username' value={accounts.instagram} onChange={(e) => setAccounts({ ...accounts, instagram: e.target.value })} />
-            <div className='flex gap-2'>
-              <button className='rounded-full border-2 border-gray-300 h-9 px-3 text-sm' onClick={() => logger.info('Instagram connected', { handle: accounts.instagram })}>Connect</button>
-              <button className='rounded-full bg-gradient-to-r from-orange-500 to-amber-600 text-white h-9 px-4 text-sm' onClick={() => logger.info('Import from Instagram requested', { handle: accounts.instagram })}>Import Latest</button>
-            </div>
-          </div>
-        </div>
+        <p className='text-sm text-gray-600 mb-4'>Connect your TikTok and Instagram accounts to import food content.</p>
+        <SocialConnections />
       </Card>
 
       <Card className='p-6 border border-gray-200 rounded-2xl'>
