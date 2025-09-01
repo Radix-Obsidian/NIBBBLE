@@ -25,126 +25,6 @@ const CUISINE_OPTIONS = [
   'Italian','Mexican','Chinese','Indian','Japanese','French','Thai','Mediterranean','American','Korean','Vietnamese','Spanish','Greek','Lebanese','Moroccan','Ethiopian','Turkish','Brazilian','Peruvian'
 ]
 
-// Recipe Import Section Component
-function RecipeImportSection() {
-  const { user } = useAuth()
-  const [importing, setImporting] = useState(false)
-  const [progress, setProgress] = useState('')
-  const [result, setResult] = useState<any>(null)
-
-  const importRecipes = async (cuisine: string, count: number) => {
-    if (!user) return
-    
-    try {
-      setImporting(true)
-      setProgress('Starting import...')
-      setResult(null)
-
-      const response = await fetch('/api/recipes/import', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          type: 'cuisine',
-          cuisines: [cuisine],
-          count: count,
-          creatorId: user.id,
-          dryRun: false
-        })
-      })
-
-      const data = await response.json()
-      setResult(data)
-      
-      if (data.success) {
-        setProgress(`✅ Successfully imported ${data.imported} recipes!`)
-      } else {
-        setProgress(`❌ Import failed: ${data.errors?.join(', ') || 'Unknown error'}`)
-      }
-    } catch (error) {
-      setProgress(`❌ Error: ${error instanceof Error ? error.message : 'Unknown error'}`)
-    } finally {
-      setImporting(false)
-    }
-  }
-
-  return (
-    <div className='space-y-4'>
-      <div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
-        <div>
-          <label className='block text-sm text-gray-700 mb-2'>Cuisine</label>
-          <select 
-            className='w-full rounded-full border border-gray-200 bg-gray-50 px-4 py-2 text-responsive'
-            defaultValue='italian'
-          >
-            <option value='italian'>Italian</option>
-            <option value='mexican'>Mexican</option>
-            <option value='chinese'>Chinese</option>
-            <option value='indian'>Indian</option>
-            <option value='japanese'>Japanese</option>
-            <option value='french'>French</option>
-            <option value='thai'>Thai</option>
-            <option value='mediterranean'>Mediterranean</option>
-            <option value='american'>American</option>
-          </select>
-        </div>
-        <div>
-          <label className='block text-sm text-gray-700 mb-2'>Count</label>
-          <select 
-            className='w-full rounded-full border border-gray-200 bg-gray-50 px-4 py-2 text-responsive'
-            defaultValue='10'
-          >
-            <option value='5'>5 recipes</option>
-            <option value='10'>10 recipes</option>
-            <option value='20'>20 recipes</option>
-            <option value='50'>50 recipes</option>
-          </select>
-        </div>
-      </div>
-      
-      <div className='flex gap-2'>
-        <button
-          onClick={() => {
-            const cuisine = (document.querySelector('select[defaultValue="italian"]') as HTMLSelectElement)?.value || 'italian'
-            const count = parseInt((document.querySelector('select[defaultValue="10"]') as HTMLSelectElement)?.value || '10')
-            importRecipes(cuisine, count)
-          }}
-          disabled={importing}
-          className='btn inline-flex items-center justify-center rounded-full bg-orange-600 text-white h-10 px-4 text-sm disabled:opacity-60'
-        >
-          {importing ? 'Importing...' : 'Import Recipes'}
-        </button>
-        
-        <button
-          onClick={() => {
-            const cuisine = (document.querySelector('select[defaultValue="italian"]') as HTMLSelectElement)?.value || 'italian'
-            const count = parseInt((document.querySelector('select[defaultValue="10"]') as HTMLSelectElement)?.value || '10')
-            importRecipes(cuisine, count)
-          }}
-          disabled={importing}
-          className='btn inline-flex items-center justify-center rounded-full bg-gray-600 text-white h-10 px-4 text-sm disabled:opacity-60'
-        >
-          {importing ? 'Testing...' : 'Test Import'}
-        </button>
-      </div>
-
-      {progress && (
-        <div className='p-3 rounded-lg bg-gray-50 border border-gray-200'>
-          <p className='text-sm text-gray-700'>{progress}</p>
-        </div>
-      )}
-
-      {result && (
-        <div className='p-3 rounded-lg bg-blue-50 border border-blue-200'>
-          <h4 className='font-medium text-blue-900 mb-2'>Import Results:</h4>
-          <pre className='text-xs text-blue-800 overflow-auto'>
-            {JSON.stringify(result, null, 2)}
-          </pre>
-        </div>
-      )}
-    </div>
-  )
-}
-
 export default function SettingsPage() {
   const { user } = useAuth()
   const [profile, setProfile] = useState<Profile | null>(null)
@@ -329,12 +209,6 @@ export default function SettingsPage() {
             </button>
           ))}
         </div>
-      </Card>
-
-      <Card className='p-4 sm:p-6 border border-gray-200 rounded-2xl'>
-        <h3 className='font-semibold text-gray-900 mb-4'>Recipe Import (Admin)</h3>
-        <p className='text-sm text-gray-600 mb-4'>Import recipes from Spoonacular API to populate the platform.</p>
-        <RecipeImportSection />
       </Card>
 
       <Card className='p-4 sm:p-6 border border-gray-200 rounded-2xl'>
