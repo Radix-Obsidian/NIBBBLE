@@ -40,7 +40,10 @@ async function checkDuplicateRecipe(title: string, creatorId: string): Promise<b
       .limit(1)
     
     if (error) {
-      logger.error('Error checking for duplicate recipe', { error: error.message, title })
+      logger.error('Error checking for duplicate recipe', { 
+        error: error instanceof Error ? error.message : String(error), 
+        title 
+      })
       return false
     }
     

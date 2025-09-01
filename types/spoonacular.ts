@@ -53,8 +53,6 @@ export interface SpoonacularRecipeDetails {
   lowFodmap: boolean;
   weightWatcherSmartPoints: number;
   gaps: string;
-  preparationMinutes: number;
-  cookingMinutes: number;
   nutrition: SpoonacularNutrition;
 }
 
