@@ -21,9 +21,18 @@ export async function GET(request: NextRequest) {
     }
     
     // Get column information
-    const { data: columns, error: columnError } = await supabase
-      .rpc('get_table_columns', { table_name: 'recipes' })
-      .catch(() => ({ data: null, error: 'RPC not available' }))
+    let columns = null
+    let columnError = null
+    
+    try {
+      const columnResult = await supabase
+        .rpc('get_table_columns', { table_name: 'recipes' })
+      columns = columnResult.data
+      columnError = columnResult.error
+    } catch (rpcError) {
+      columns = null
+      columnError = 'RPC not available'
+    }
     
     return NextResponse.json({
       success: true,

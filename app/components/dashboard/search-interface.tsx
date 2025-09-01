@@ -10,6 +10,21 @@ export interface SearchInterfaceProps {
   onFilterChange: (filters: RecipeFilters) => void
 }
 
+const CUISINE_OPTIONS = [
+  'Italian', 'Mexican', 'Chinese', 'Japanese', 'Indian', 'Thai', 'French', 
+  'Mediterranean', 'American', 'Greek', 'Spanish', 'Korean', 'Vietnamese', 
+  'Middle Eastern', 'Caribbean', 'Latin American', 'African', 'British', 
+  'German', 'Russian', 'Eastern European'
+]
+
+const DIFFICULTY_OPTIONS = ['Easy', 'Medium', 'Hard']
+
+const DIETARY_OPTIONS = [
+  'Vegetarian', 'Vegan', 'Gluten-Free', 'Dairy-Free', 'Nut-Free', 'Halal', 
+  'Kosher', 'Keto', 'Paleo', 'Low-Carb', 'Low-Fat', 'Low-Sodium', 
+  'Sugar-Free', 'Whole30', 'High-Protein', 'Pescetarian'
+]
+
 export function SearchInterface({ onSearch, filters, onFilterChange }: SearchInterfaceProps) {
   const [query, setQuery] = useState('')
   const [sortBy, setSortBy] = useState<SearchParams['sortBy']>('newest')
@@ -38,24 +53,48 @@ export function SearchInterface({ onSearch, filters, onFilterChange }: SearchInt
       </form>
 
       <div className="mt-4 grid grid-cols-1 md:grid-cols-4 gap-3">
-        <input
+        <select
           className="rounded-full border border-gray-200 bg-gray-50 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-orange-500"
-          placeholder="Cuisine (comma separated)"
-          value={(filters.cuisine || []).join(', ')}
-          onChange={(e) => onFilterChange({ ...filters, cuisine: e.target.value.split(',').map(s => s.trim()).filter(Boolean) })}
-        />
-        <input
+          value={filters.cuisine?.[0] || ''}
+          onChange={(e) => onFilterChange({ 
+            ...filters, 
+            cuisine: e.target.value ? [e.target.value] : undefined 
+          })}
+        >
+          <option value="">All Cuisines</option>
+          {CUISINE_OPTIONS.map(cuisine => (
+            <option key={cuisine} value={cuisine}>{cuisine}</option>
+          ))}
+        </select>
+        
+        <select
           className="rounded-full border border-gray-200 bg-gray-50 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-orange-500"
-          placeholder="Difficulty (e.g., Easy,Medium)"
-          value={(filters.difficulty || []).join(', ')}
-          onChange={(e) => onFilterChange({ ...filters, difficulty: e.target.value.split(',').map(s => s.trim()).filter(Boolean) })}
-        />
-        <input
+          value={filters.difficulty?.[0] || ''}
+          onChange={(e) => onFilterChange({ 
+            ...filters, 
+            difficulty: e.target.value ? [e.target.value] : undefined 
+          })}
+        >
+          <option value="">All Difficulties</option>
+          {DIFFICULTY_OPTIONS.map(difficulty => (
+            <option key={difficulty} value={difficulty}>{difficulty}</option>
+          ))}
+        </select>
+        
+        <select
           className="rounded-full border border-gray-200 bg-gray-50 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-orange-500"
-          placeholder="Dietary Tags"
-          value={(filters.dietaryTags || []).join(', ')}
-          onChange={(e) => onFilterChange({ ...filters, dietaryTags: e.target.value.split(',').map(s => s.trim()).filter(Boolean) })}
-        />
+          value={filters.dietaryTags?.[0] || ''}
+          onChange={(e) => onFilterChange({ 
+            ...filters, 
+            dietaryTags: e.target.value ? [e.target.value] : undefined 
+          })}
+        >
+          <option value="">All Dietary</option>
+          {DIETARY_OPTIONS.map(dietary => (
+            <option key={dietary} value={dietary}>{dietary}</option>
+          ))}
+        </select>
+        
         <input
           className="rounded-full border border-gray-200 bg-gray-50 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-orange-500"
           type="number"
