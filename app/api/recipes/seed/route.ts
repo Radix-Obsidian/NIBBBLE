@@ -13,6 +13,15 @@ export async function POST(request: NextRequest) {
   try {
     logger.info('Starting recipe seeding process')
     
+    // Check if we have the required environment variables
+    if (!process.env.SPOONACULAR_API_KEY) {
+      logger.error('SPOONACULAR_API_KEY is not set')
+      return NextResponse.json(
+        { error: 'Spoonacular API key is not configured' },
+        { status: 500 }
+      )
+    }
+    
     // Default seeding configuration
     const seedConfig = {
       cuisines: ['italian', 'mexican', 'asian', 'american'],

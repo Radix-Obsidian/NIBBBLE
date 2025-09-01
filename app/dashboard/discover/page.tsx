@@ -64,22 +64,28 @@ export default function DiscoverPage() {
   const seedRecipes = async () => {
     try {
       setSeeding(true)
+      console.log('Starting recipe seeding...')
+      
       const response = await fetch('/api/recipes/seed', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' }
       })
       
+      console.log('Response status:', response.status)
       const result = await response.json()
+      console.log('Response result:', result)
       
       if (response.ok) {
-        logger.info('Recipes seeded successfully', result)
+        console.log('Recipes seeded successfully:', result)
         // Refresh the recipes list
         await runSearch({ query: '', filters: {}, sortBy: 'newest', page: 1, limit: 12 })
       } else {
-        logger.error('Failed to seed recipes', result)
+        console.error('Failed to seed recipes:', result)
+        alert(`Failed to seed recipes: ${result.error || result.message || 'Unknown error'}`)
       }
     } catch (error) {
-      logger.error('Error seeding recipes', error)
+      console.error('Error seeding recipes:', error)
+      alert(`Error seeding recipes: ${error instanceof Error ? error.message : 'Unknown error'}`)
     } finally {
       setSeeding(false)
     }
