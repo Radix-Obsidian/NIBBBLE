@@ -357,9 +357,9 @@ export function transformSpoonacularRecipe(
   } catch (error) {
     logger.error('Error transforming Spoonacular recipe', { 
       id: spoonacularRecipe.id,
-      error: error.message 
+      error: error instanceof Error ? error.message : String(error)
     })
-    throw new Error(`Failed to transform recipe: ${error.message}`)
+    throw new Error(`Failed to transform recipe: ${error instanceof Error ? error.message : String(error)}`)
   }
 }
 
@@ -421,7 +421,7 @@ export function transformMultipleRecipes(
         errors.push(`Recipe ${recipe.id} (${recipe.title}): ${validationErrors.join(', ')}`)
       }
     } catch (error) {
-      errors.push(`Recipe ${recipe.id} (${recipe.title}): ${error.message}`)
+      errors.push(`Recipe ${recipe.id} (${recipe.title}): ${error instanceof Error ? error.message : String(error)}`)
     }
   }
   
