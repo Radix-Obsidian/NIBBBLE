@@ -113,9 +113,6 @@ export default function DashboardPage() {
           }))
           setTopRated(topMapped)
         }
-
-        // Initial activities
-        await fetchActivities(1)
       } catch (e) {
         logger.error('Dashboard load error', e)
       } finally {
@@ -123,31 +120,37 @@ export default function DashboardPage() {
       }
     }
     load()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user])
 
   const fetchActivities = async (pg: number) => {
     if (!user) return
-    const from = (pg - 1) * perPage
-    const to = from + perPage - 1
-    const { data, error } = await supabase
-      .from('recipes')
-      .select('id, title, created_at')
-      .order('created_at', { ascending: false })
-      .range(from, to)
-    if (error) {
-      logger.error('Activities fetch error', error)
-      return
+    try {
+      const { data, error } = await supabase
+        .from('activities')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false })
+        .range((pg - 1) * perPage, pg * perPage - 1)
+
+      if (error) {
+        logger.error('Activities fetch error', error)
+        return
+      }
+
+      const mapped: Activity[] = (data || []).map((a: any) => ({
+        id: a.id,
+        type: a.type,
+        actor: { id: a.actor_id, name: a.actor_name, avatar: a.actor_avatar },
+        target: a.target_id ? { id: a.target_id, type: a.target_type, title: a.target_title } : undefined,
+        message: a.message,
+        createdAt: new Date(a.created_at)
+      }))
+
+      setActivities(mapped)
+      setPage(pg)
+    } catch (e) {
+      logger.error('Activities load error', e)
     }
-    const mapped: Activity[] = (data || []).map((r: any) => ({
-      id: `r-${r.id}-${pg}`,
-      type: 'recipe',
-      actor: { id: user.id, name: user.email || 'User' },
-      message: `New recipe: ${r.title}`,
-      createdAt: new Date(r.created_at)
-    }))
-    setActivities((prev) => (pg === 1 ? mapped : [...prev, ...mapped]))
-    setPage(pg)
   }
 
   const stats = useMemo(() => ([
@@ -158,56 +161,99 @@ export default function DashboardPage() {
   ]), [recipes])
 
   return (
-    <div className="space-y-8">
-      <div className="flex items-center justify-between">
+    <div className="space-y-6">
+      {/* Welcome Section */}
+      <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
         <div>
-          <h2 className="text-3xl font-bold text-gray-900">Welcome back{user?.email ? `, ${user.email.split('@')[0]}` : ''}!</h2>
-          <p className="text-gray-600">Ready to create some delicious recipes today?</p>
+          <h2 className="text-responsive-xl font-bold text-gray-900">
+            Welcome back{user?.email ? `, ${user.email.split('@')[0]}` : ''}!
+          </h2>
+          <p className="text-responsive text-gray-600 mt-1">
+            Ready to create some delicious recipes today?
+          </p>
         </div>
-        <div className="flex items-center gap-3">
-          <Link href="/dashboard/recipes"><Button size="md" className="flex items-center"><BookOpen className="w-4 h-4 mr-2" /> New Recipe</Button></Link>
-          <Link href="/dashboard/discover"><Button variant="outline" size="md" className="flex items-center"><Search className="w-4 h-4 mr-2" /> Discover</Button></Link>
-          <Link href="/dashboard/collections"><Button variant="outline" size="md" className="flex items-center"><Folder className="w-4 h-4 mr-2" /> Collections</Button></Link>
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+          <Link href="/dashboard/recipes" className="w-full sm:w-auto">
+            <Button size="md" className="btn w-full sm:w-auto">
+              <BookOpen className="w-4 h-4 mr-2" />
+              New Recipe
+            </Button>
+          </Link>
+          <Link href="/dashboard/discover" className="w-full sm:w-auto">
+            <Button variant="outline" size="md" className="btn w-full sm:w-auto">
+              <Search className="w-4 h-4 mr-2" />
+              Discover
+            </Button>
+          </Link>
+          <Link href="/dashboard/collections" className="w-full sm:w-auto">
+            <Button variant="outline" size="md" className="btn w-full sm:w-auto">
+              <Folder className="w-4 h-4 mr-2" />
+              Collections
+            </Button>
+          </Link>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      {/* Stats Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
         {stats.map((s) => (
           <StatsCard key={s.title} title={s.title} value={s.value} change={s.change as any} icon={s.icon} color={s.color} />
         ))}
       </div>
 
-      <RecipeGrid
-        recipes={recipes}
-        title="Your Recent Recipes"
-        subtitle={recipes.length ? 'Start where you left off' : ''}
-        showViewAll={!!recipes.length}
-        onViewAll={() => {}}
-        onLike={(id) => logger.info('Like recipe', { id })}
-        onView={(id) => window.location.assign(`/dashboard/recipes/${id}`)}
-      />
+      {/* Content Grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
+        {/* Recent Recipes */}
+        <div className="space-y-4">
+          <RecipeGrid
+            recipes={recipes}
+            title="Your Recent Recipes"
+            subtitle="Latest recipes you've created"
+            showViewAll={true}
+            onViewAll={() => window.location.assign('/dashboard/recipes')}
+            onLike={(id) => logger.info('Like', { id })}
+            onView={(id) => window.location.assign(`/dashboard/recipes/${id}`)}
+          />
+        </div>
 
-      <RecipeGrid
-        recipes={favorites}
-        title="Saved Favorites"
-        subtitle={favorites.length ? '' : 'You haven\'t liked any recipes yet'}
-        showViewAll={false}
-        onViewAll={() => {}}
-        onLike={(id) => logger.info('Like recipe', { id })}
-        onView={(id) => window.location.assign(`/dashboard/recipes/${id}`)}
-      />
+        {/* Activity Feed */}
+        <div className="space-y-4">
+          <ActivityFeed
+            activities={activities}
+            onLoadMore={() => fetchActivities(page + 1)}
+            isLoading={loading}
+          />
+        </div>
+      </div>
 
-      <RecipeGrid
-        recipes={topRated}
-        title="Top Rated"
-        subtitle="Community favorites"
-        showViewAll={false}
-        onViewAll={() => {}}
-        onLike={(id) => logger.info('Like recipe', { id })}
-        onView={(id) => window.location.assign(`/dashboard/recipes/${id}`)}
-      />
+      {/* Additional Sections */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
+        {/* Favorites */}
+        <div className="space-y-4">
+          <RecipeGrid
+            recipes={favorites}
+            title="Your Favorites"
+            subtitle="Recipes you've liked"
+            showViewAll={true}
+            onViewAll={() => window.location.assign('/dashboard/favorites')}
+            onLike={(id) => logger.info('Like', { id })}
+            onView={(id) => window.location.assign(`/dashboard/recipes/${id}`)}
+          />
+        </div>
 
-      <ActivityFeed activities={activities} onLoadMore={() => fetchActivities(page + 1)} isLoading={loading} />
+        {/* Top Rated */}
+        <div className="space-y-4">
+          <RecipeGrid
+            recipes={topRated}
+            title="Top Rated Recipes"
+            subtitle="Highest rated recipes"
+            showViewAll={true}
+            onViewAll={() => window.location.assign('/dashboard/top-rated')}
+            onLike={(id) => logger.info('Like', { id })}
+            onView={(id) => window.location.assign(`/dashboard/recipes/${id}`)}
+          />
+        </div>
+      </div>
     </div>
   )
 }
