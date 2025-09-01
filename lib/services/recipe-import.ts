@@ -1,6 +1,7 @@
 import { supabase } from '@/lib/supabase/client'
 import { PantryPalsRecipe, transformMultipleRecipes, validateTransformedRecipe } from './recipe-transform'
-import { SpoonacularRecipeDetails, getRecipeDetails, getMultipleRecipeDetails } from './spoonacular-api'
+import { getRecipeDetails, getMultipleRecipeDetails } from './spoonacular-api'
+import { SpoonacularRecipeDetails } from '@/types/spoonacular'
 import { logger } from '@/lib/logger'
 
 export interface ImportResult {
