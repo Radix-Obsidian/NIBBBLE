@@ -112,18 +112,18 @@ export default function SettingsPage() {
   return (
     <div className='space-y-6'>
       <div>
-        <h2 className='text-2xl font-bold text-gray-900'>Profile Settings</h2>
-        <p className='text-gray-600'>Manage your public profile information and preferences</p>
+        <h2 className='text-responsive-xl font-bold text-gray-900'>Profile Settings</h2>
+        <p className='text-responsive text-gray-600 mt-1'>Manage your public profile information and preferences</p>
       </div>
 
-      <Card className='p-6 border border-gray-200 rounded-2xl'>
+      <Card className='p-4 sm:p-6 border border-gray-200 rounded-2xl'>
         <h3 className='font-semibold text-gray-900 mb-4'>Profile Picture</h3>
-        <div className='flex items-center gap-4'>
-          <div className='w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center text-gray-600 font-semibold'>
+        <div className='flex flex-col sm:flex-row sm:items-center gap-4'>
+          <div className='w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center text-gray-600 font-semibold flex-shrink-0'>
             {(form.display_name || user?.email || 'U').charAt(0).toUpperCase()}
           </div>
           <button
-            className='rounded-full border border-gray-300 px-4 h-9 text-sm flex items-center justify-center'
+            className='btn rounded-full border border-gray-300 px-4 h-9 text-sm flex items-center justify-center w-full sm:w-auto'
             onClick={async () => {
               const url = prompt('Enter image URL') || ''
               if (url) setForm({ ...form, avatar_url: url })
@@ -134,33 +134,63 @@ export default function SettingsPage() {
         </div>
       </Card>
 
-      <Card className='p-6 border border-gray-200 rounded-2xl'>
+      <Card className='p-4 sm:p-6 border border-gray-200 rounded-2xl'>
         <h3 className='font-semibold text-gray-900 mb-4'>Basic Information</h3>
-        <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
-          <div>
-            <label className='block text-sm text-gray-700 mb-1'>Username</label>
-            <input className='w-full rounded-full border border-gray-200 bg-gray-50 px-4 py-2' value={form.username} onChange={(e) => setForm({ ...form, username: e.target.value })} placeholder='@your-username' />
+        <div className='space-y-4'>
+          <div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
+            <div className='form-group'>
+              <label className='block text-sm text-gray-700 mb-1'>Username</label>
+              <input 
+                className='w-full rounded-full border border-gray-200 bg-gray-50 px-4 py-2 text-responsive' 
+                value={form.username} 
+                onChange={(e) => setForm({ ...form, username: e.target.value })} 
+                placeholder='@your-username' 
+              />
+            </div>
+            <div className='form-group'>
+              <label className='block text-sm text-gray-700 mb-1'>Display Name *</label>
+              <input 
+                className='w-full rounded-full border border-gray-200 bg-gray-50 px-4 py-2 text-responsive' 
+                value={form.display_name} 
+                onChange={(e) => setForm({ ...form, display_name: e.target.value })} 
+                placeholder='Your name' 
+              />
+            </div>
           </div>
-          <div>
-            <label className='block text-sm text-gray-700 mb-1'>Display Name *</label>
-            <input className='w-full rounded-full border border-gray-200 bg-gray-50 px-4 py-2' value={form.display_name} onChange={(e) => setForm({ ...form, display_name: e.target.value })} placeholder='Your name' />
-          </div>
-          <div className='md:col-span-2'>
+          <div className='form-group'>
             <label className='block text-sm text-gray-700 mb-1'>Bio</label>
-            <textarea className='w-full rounded-2xl border border-gray-200 bg-gray-50 px-4 py-3' rows={4} value={form.bio} onChange={(e) => setForm({ ...form, bio: e.target.value })} placeholder='Tell us about yourself and your cooking style...' />
+            <textarea 
+              className='w-full rounded-2xl border border-gray-200 bg-gray-50 px-4 py-3 text-responsive' 
+              rows={4} 
+              value={form.bio} 
+              onChange={(e) => setForm({ ...form, bio: e.target.value })} 
+              placeholder='Tell us about yourself and your cooking style...' 
+            />
           </div>
-          <div>
-            <label className='block text-sm text-gray-700 mb-1'>Location</label>
-            <input className='w-full rounded-full border border-gray-200 bg-gray-50 px-4 py-2' value={form.location} onChange={(e) => setForm({ ...form, location: e.target.value })} placeholder='City, Country' />
-          </div>
-          <div>
-            <label className='block text-sm text-gray-700 mb-1'>Website</label>
-            <input className='w-full rounded-full border border-gray-200 bg-gray-50 px-4 py-2' value={form.website} onChange={(e) => setForm({ ...form, website: e.target.value })} placeholder='https://yourwebsite.com' />
+          <div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
+            <div className='form-group'>
+              <label className='block text-sm text-gray-700 mb-1'>Location</label>
+              <input 
+                className='w-full rounded-full border border-gray-200 bg-gray-50 px-4 py-2 text-responsive' 
+                value={form.location} 
+                onChange={(e) => setForm({ ...form, location: e.target.value })} 
+                placeholder='City, Country' 
+              />
+            </div>
+            <div className='form-group'>
+              <label className='block text-sm text-gray-700 mb-1'>Website</label>
+              <input 
+                className='w-full rounded-full border border-gray-200 bg-gray-50 px-4 py-2 text-responsive' 
+                value={form.website} 
+                onChange={(e) => setForm({ ...form, website: e.target.value })} 
+                placeholder='https://yourwebsite.com' 
+              />
+            </div>
           </div>
         </div>
       </Card>
 
-      <Card className='p-6 border border-gray-200 rounded-2xl'>
+      <Card className='p-4 sm:p-6 border border-gray-200 rounded-2xl'>
         <h3 className='font-semibold text-gray-900 mb-2'>Favorite Cuisines</h3>
         <p className='text-sm text-gray-600 mb-4'>Select the cuisines you love cooking and eating</p>
         <div className='flex flex-wrap gap-2'>
@@ -169,7 +199,11 @@ export default function SettingsPage() {
               key={c}
               type='button'
               onClick={() => toggleCuisine(c)}
-              className={`px-3 h-8 rounded-full text-sm border ${form.favorite_cuisines.includes(c) ? 'bg-orange-50 text-orange-700 border-orange-200' : 'bg-white text-gray-700 border-gray-300'}`}
+              className={`px-3 h-8 rounded-full text-sm border touch-manipulation min-h-[44px] ${
+                form.favorite_cuisines.includes(c) 
+                  ? 'bg-orange-50 text-orange-700 border-orange-200' 
+                  : 'bg-white text-gray-700 border-gray-300'
+              }`}
             >
               {c}
             </button>
@@ -177,33 +211,37 @@ export default function SettingsPage() {
         </div>
       </Card>
 
-      <Card className='p-6 border border-gray-200 rounded-2xl'>
+      <Card className='p-4 sm:p-6 border border-gray-200 rounded-2xl'>
         <h3 className='font-semibold text-gray-900 mb-4'>Social Connections</h3>
         <p className='text-sm text-gray-600 mb-4'>Connect your TikTok and Instagram accounts to import food content.</p>
         <SocialConnections />
       </Card>
 
-      <Card className='p-6 border border-gray-200 rounded-2xl'>
+      <Card className='p-4 sm:p-6 border border-gray-200 rounded-2xl'>
         <h3 className='font-semibold text-gray-900 mb-4'>Profile Statistics</h3>
         <div className='grid grid-cols-3 gap-4'>
           <div className='text-center'>
-            <div className='text-2xl font-bold text-purple-600'>{profile?.recipes_count || 0}</div>
+            <div className='text-xl sm:text-2xl font-bold text-purple-600'>{profile?.recipes_count || 0}</div>
             <div className='text-sm text-gray-500'>Recipes</div>
           </div>
           <div className='text-center'>
-            <div className='text-2xl font-bold text-purple-600'>{profile?.followers_count || 0}</div>
+            <div className='text-xl sm:text-2xl font-bold text-purple-600'>{profile?.followers_count || 0}</div>
             <div className='text-sm text-gray-500'>Followers</div>
           </div>
           <div className='text-center'>
-            <div className='text-2xl font-bold text-purple-600'>{profile?.following_count || 0}</div>
+            <div className='text-xl sm:text-2xl font-bold text-purple-600'>{profile?.following_count || 0}</div>
             <div className='text-sm text-gray-500'>Following</div>
           </div>
         </div>
       </Card>
 
       <div className='flex justify-end'>
-        <button onClick={save} disabled={saving} className='inline-flex items-center justify-center rounded-full bg-purple-600 text-white h-10 px-4 text-sm disabled:opacity-60'>
-          Save Changes
+        <button 
+          onClick={save} 
+          disabled={saving} 
+          className='btn inline-flex items-center justify-center rounded-full bg-purple-600 text-white h-10 px-4 text-sm disabled:opacity-60 w-full sm:w-auto'
+        >
+          {saving ? 'Saving...' : 'Save Changes'}
         </button>
       </div>
     </div>
