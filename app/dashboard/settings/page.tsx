@@ -5,7 +5,7 @@ import { Card } from '@/app/components/ui/card'
 import { supabase } from '@/lib/supabase/client'
 import { useAuth } from '@/hooks/useAuth'
 import { logger } from '@/lib/logger'
-import { SocialConnections } from '../social/social-connections'
+import { SocialConnections } from '@/app/components/social/social-connections'
 
 interface Profile {
   id: string
