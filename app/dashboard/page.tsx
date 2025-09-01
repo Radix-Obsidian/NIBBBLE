@@ -161,50 +161,55 @@ export default function DashboardPage() {
   ]), [recipes])
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6 lg:space-y-8">
       {/* Welcome Section */}
-      <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
-        <div>
-          <h2 className="text-responsive-xl font-bold text-gray-900">
-            Welcome back{user?.email ? `, ${user.email.split('@')[0]}` : ''}!
-          </h2>
-          <p className="text-responsive text-gray-600 mt-1">
-            Ready to create some delicious recipes today?
-          </p>
-        </div>
-        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
-          <Link href="/dashboard/recipes" className="w-full sm:w-auto">
-            <Button size="md" className="btn w-full sm:w-auto">
-              <BookOpen className="w-4 h-4 mr-2" />
-              New Recipe
-            </Button>
-          </Link>
-          <Link href="/dashboard/discover" className="w-full sm:w-auto">
-            <Button variant="outline" size="md" className="btn w-full sm:w-auto">
-              <Search className="w-4 h-4 mr-2" />
-              Discover
-            </Button>
-          </Link>
-          <Link href="/dashboard/collections" className="w-full sm:w-auto">
-            <Button variant="outline" size="md" className="btn w-full sm:w-auto">
-              <Folder className="w-4 h-4 mr-2" />
-              Collections
-            </Button>
-          </Link>
+      <div className="bg-white/50 backdrop-blur-sm rounded-2xl p-4 sm:p-6 lg:p-8 shadow-soft border border-white/20">
+        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 sm:gap-6">
+          <div className="min-w-0 flex-1">
+            <h2 className="text-responsive-2xl font-bold text-gray-900 mb-2">
+              Welcome back{user?.email ? `, ${user.email.split('@')[0]}` : ''}! 👋
+            </h2>
+            <p className="text-responsive text-gray-600">
+              Ready to create some delicious recipes today?
+            </p>
+          </div>
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-3 lg:flex-shrink-0">
+            <Link href="/dashboard/recipes" className="w-full sm:w-auto">
+              <Button size="md" className="btn w-full sm:w-auto bg-gradient-to-r from-primary-600 to-secondary-600 hover:from-primary-700 hover:to-secondary-700 text-white shadow-medium">
+                <BookOpen className="w-4 h-4 mr-2" />
+                <span className="hidden xs:inline">New Recipe</span>
+                <span className="xs:hidden">New</span>
+              </Button>
+            </Link>
+            <Link href="/dashboard/discover" className="w-full sm:w-auto">
+              <Button variant="outline" size="md" className="btn w-full sm:w-auto border-gray-200 hover:bg-gray-50">
+                <Search className="w-4 h-4 mr-2" />
+                <span className="hidden xs:inline">Discover</span>
+                <span className="xs:hidden">Find</span>
+              </Button>
+            </Link>
+            <Link href="/dashboard/collections" className="w-full sm:w-auto">
+              <Button variant="outline" size="md" className="btn w-full sm:w-auto border-gray-200 hover:bg-gray-50">
+                <Folder className="w-4 h-4 mr-2" />
+                <span className="hidden xs:inline">Collections</span>
+                <span className="xs:hidden">Lists</span>
+              </Button>
+            </Link>
+          </div>
         </div>
       </div>
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
+      <div className="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
         {stats.map((s) => (
           <StatsCard key={s.title} title={s.title} value={s.value} change={s.change as any} icon={s.icon} color={s.color} />
         ))}
       </div>
 
       {/* Content Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
+      <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 sm:gap-6 lg:gap-8">
         {/* Recent Recipes */}
-        <div className="space-y-4">
+        <div className="space-y-3 sm:space-y-4">
           <RecipeGrid
             recipes={recipes}
             title="Your Recent Recipes"
@@ -217,7 +222,7 @@ export default function DashboardPage() {
         </div>
 
         {/* Activity Feed */}
-        <div className="space-y-4">
+        <div className="space-y-3 sm:space-y-4">
           <ActivityFeed
             activities={activities}
             onLoadMore={() => fetchActivities(page + 1)}
@@ -227,9 +232,9 @@ export default function DashboardPage() {
       </div>
 
       {/* Additional Sections */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
+      <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 sm:gap-6 lg:gap-8">
         {/* Favorites */}
-        <div className="space-y-4">
+        <div className="space-y-3 sm:space-y-4">
           <RecipeGrid
             recipes={favorites}
             title="Your Favorites"
@@ -242,7 +247,7 @@ export default function DashboardPage() {
         </div>
 
         {/* Top Rated */}
-        <div className="space-y-4">
+        <div className="space-y-3 sm:space-y-4">
           <RecipeGrid
             recipes={topRated}
             title="Top Rated Recipes"
