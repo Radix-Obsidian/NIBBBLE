@@ -3,6 +3,7 @@ import { Card } from '@/app/components/ui/card'
 import { notFound } from 'next/navigation'
 import Image from 'next/image'
 import Link from 'next/link'
+import { PlaceholderImage } from '@/app/components/ui/placeholder-image'
 
 interface PageProps { params: { id: string } }
 
