@@ -3,7 +3,7 @@
 import { Heart, Clock, Star } from 'lucide-react';
 import Image from 'next/image';
 import { Card } from '../ui/card';
-import { PlaceholderImage } from '../ui/placeholder-image';
+import { FoodPlaceholder } from '../ui/food-placeholder';
 
 export interface RecipeCardProps {
   id: string;
@@ -72,7 +72,7 @@ export function RecipeCard({
             className="w-full aspect-video object-cover rounded-t-2xl"
           />
         ) : (
-          <PlaceholderImage title={title} className="aspect-video rounded-t-2xl" />
+          <FoodPlaceholder title={title} className="aspect-video rounded-t-2xl" />
         )}
         
         <div className="absolute top-4 right-4">
