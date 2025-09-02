@@ -82,7 +82,7 @@ export default function DiscoverPage() {
     <div className="space-y-6">
       <h2 className="text-2xl font-bold text-gray-900">Discover</h2>
       <SearchInterface onSearch={runSearch} filters={filters} onFilterChange={setFilters} />
-      <RecipeGrid recipes={recipes} title="" subtitle="" showViewAll={false} onViewAll={() => {}} onLike={(id) => logger.info('Like', { id })} onView={(id) => window.location.assign(`/dashboard/recipes/${id}`)} />
+      <RecipeGrid recipes={recipes} title="" subtitle="" showViewAll={false} onViewAll={() => {}} onLike={(id) => logger.info('Like', { id })} onView={(id) => window.location.assign(`/dashboard/recipes/${id}?from=discover`)} />
       {loading && <div className="text-sm text-gray-600">Loading...</div>}
     </div>
   )
