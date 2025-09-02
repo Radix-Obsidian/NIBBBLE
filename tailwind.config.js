@@ -116,6 +116,8 @@ module.exports = {
         'bounce-gentle': 'bounceGentle 2s infinite',
         'blob': 'blob 8s ease-in-out infinite',
         'shimmer': 'shimmer 2.5s linear infinite',
+        'float': 'float 3s ease-in-out infinite',
+        'steam': 'steam 2.2s ease-in-out infinite',
       },
 
       keyframes: {
@@ -144,6 +146,15 @@ module.exports = {
         shimmer: {
           '0%': { backgroundPosition: '-200% 0' },
           '100%': { backgroundPosition: '200% 0' },
+        },
+        float: {
+          '0%, 100%': { transform: 'translateY(0)' },
+          '50%': { transform: 'translateY(-6px)' },
+        },
+        steam: {
+          '0%': { opacity: '0', transform: 'translateY(6px) scaleY(0.9)' },
+          '30%': { opacity: '0.6', transform: 'translateY(-2px) scaleY(1)' },
+          '100%': { opacity: '0', transform: 'translateY(-16px) scaleY(1.05)' },
         },
       },
       
