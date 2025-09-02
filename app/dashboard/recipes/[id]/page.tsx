@@ -1,4 +1,5 @@
 import { getServerSupabaseClient } from '@/lib/supabase/server'
+import { getServerSupabaseClient } from '@/lib/supabase/server'
 import { Card } from '@/app/components/ui/card'
 import { notFound } from 'next/navigation'
 import Image from 'next/image'
