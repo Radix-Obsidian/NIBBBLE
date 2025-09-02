@@ -23,14 +23,44 @@ const LIB: { test: RegExp; src: string; alt: string }[] = [
 
 const FALLBACK = { src: IMG('photo-1504674900247-0877df9cc836'), alt: 'Assorted street food' }
 
+const chooseEmoji = (text: string) => {
+  const t = text.toLowerCase()
+  if (/(pizza|ital|margherita|risotto|gnocchi)/.test(t)) return '🍕'
+  if (/(pasta|carbonara|spaghetti|penne|fettuccine)/.test(t)) return '🍝'
+  if (/(taco|mex|quesadilla|burrito)/.test(t)) return '🌮'
+  if (/(sushi|nigiri|maki|jap)/.test(t)) return '🍣'
+  if (/(ramen|pho|noodle|udon)/.test(t)) return '🍜'
+  if (/(salad|greens|bowl|vegan)/.test(t)) return '🥗'
+  if (/(burger|sandwich|american)/.test(t)) return '🍔'
+  if (/(curry|masala|indian|thai)/.test(t)) return '🍛'
+  if (/(cake|dessert|cupcake|sweet|brownie|cookie)/.test(t)) return '🍰'
+  return ''
+}
+
 export function FoodPlaceholder({ title, cuisine, className }: FoodPlaceholderProps) {
   const text = `${cuisine || ''} ${title || ''}`
   const match = LIB.find(item => item.test.test(text)) || FALLBACK
+  const emoji = chooseEmoji(text)
 
   return (
     <div className={clsx('relative aspect-video overflow-hidden rounded-t-2xl', className)}>
       <Image src={match.src} alt={match.alt} fill sizes="(max-width: 768px) 100vw, 33vw" className="object-cover" />
-      <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-transparent" />
+
+      {emoji && (
+        <div className="absolute top-3 left-3 z-10">
+          <div className="relative inline-flex items-center justify-center rounded-xl bg-white/80 px-2 py-1 backdrop-blur-md shadow-soft ring-1 ring-white/60">
+            <span className="text-2xl animate-float">{emoji}</span>
+            {(emoji === '🍜' || emoji === '🍕' || emoji === '🍛') && (
+              <div className="absolute -top-1 left-1/2 h-6 w-6 -translate-x-1/2">
+                <span className="absolute left-1/2 h-5 w-px -translate-x-1/2 bg-gradient-to-b from-white/70 to-transparent blur-[1px] animate-steam" />
+                <span className="absolute left-1/3 h-4 w-px bg-gradient-to-b from-white/60 to-transparent blur-[1px] animate-steam [animation-delay:200ms]" />
+                <span className="absolute left-2/3 h-4 w-px bg-gradient-to-b from-white/60 to-transparent blur-[1px] animate-steam [animation-delay:400ms]" />
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   )
 }
