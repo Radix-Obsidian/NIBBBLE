@@ -3,6 +3,7 @@
 import { Heart, Clock, Star } from 'lucide-react';
 import Image from 'next/image';
 import { Card } from '../ui/card';
+import { RecipePlaceholder, RecipePlaceholderFallback } from './recipe-placeholder';
 
 export interface RecipeCardProps {
   id: string;
@@ -14,6 +15,10 @@ export interface RecipeCardProps {
   creator: {
     name: string;
     avatar: string;
+    initials: string;
+  };
+  resource?: {
+    name: string;
     initials: string;
   };
   image?: string;
@@ -39,6 +44,7 @@ export function RecipeCard({
   difficulty,
   rating,
   creator,
+  resource,
   image,
   emoji,
   cuisine,
@@ -66,7 +72,7 @@ export function RecipeCard({
   return (
     <Card
       variant="elevated"
-      className="hover:-translate-y-2 transition-all duration-300 cursor-pointer"
+      className="hover:-translate-y-2 transition-all duration-300 cursor-pointer w-full h-full flex flex-col"
       onClick={handleView}
     >
       <div className="relative">
@@ -79,9 +85,11 @@ export function RecipeCard({
             className="w-full aspect-video object-cover rounded-t-2xl"
           />
         ) : (
-          <div className="aspect-video bg-gradient-to-br from-orange-100 to-amber-200 rounded-t-2xl flex items-center justify-center">
-            <span className="text-6xl">{emoji || '🍽️'}</span>
-          </div>
+          <RecipePlaceholder 
+            title={title}
+            cuisine={cuisine}
+            difficulty={difficulty}
+          />
         )}
         
         <div className="absolute top-4 right-4">
@@ -102,16 +110,16 @@ export function RecipeCard({
         )}
       </div>
       
-      <div className="p-6">
-        <div className="flex items-center justify-between mb-3">
-          <h3 className="text-xl font-semibold text-gray-900 line-clamp-2">{title}</h3>
-          <div className="flex items-center space-x-1">
+      <div className="p-4 sm:p-6 flex flex-col flex-1 min-w-0">
+        <div className="flex items-start justify-between mb-3 gap-2">
+          <h3 className="text-lg sm:text-xl font-semibold text-gray-900 line-clamp-2 flex-1 min-w-0">{title}</h3>
+          <div className="flex items-center space-x-1 flex-shrink-0">
             <Star className="w-4 h-4 text-yellow-400 fill-current" />
             <span className="text-sm text-gray-600">{rating}</span>
           </div>
         </div>
         
-        <p className="text-gray-600 mb-4 line-clamp-2">{description}</p>
+        <p className="text-gray-600 mb-4 line-clamp-2 text-sm sm:text-base">{description}</p>
         
         {cuisine && (
           <div className="mb-3">
@@ -142,21 +150,21 @@ export function RecipeCard({
           </div>
         )}
         
-        <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-4 text-sm text-gray-500">
-            <div className="flex items-center space-x-1">
-              <Clock className="w-4 h-4" />
+        <div className="flex items-center justify-between mt-auto pt-4">
+          <div className="flex items-center space-x-2 sm:space-x-4 text-xs sm:text-sm text-gray-500 min-w-0">
+            <div className="flex items-center space-x-1 flex-shrink-0">
+              <Clock className="w-3 h-3 sm:w-4 sm:h-4" />
               <span>{cookTime} min</span>
             </div>
-            <span>•</span>
-            <span>{difficulty}</span>
+            <span className="hidden sm:inline">•</span>
+            <span className="flex-shrink-0">{difficulty}</span>
           </div>
           
-          <div className="flex items-center space-x-2">
-            <div className="w-8 h-8 bg-gradient-to-br from-orange-400 to-amber-500 rounded-full flex items-center justify-center">
-              <span className="text-white text-sm font-medium">{creator.initials}</span>
+          <div className="flex items-center space-x-2 flex-shrink-0">
+            <div className="w-6 h-6 sm:w-8 sm:h-8 bg-gradient-to-br from-orange-400 to-amber-500 rounded-full flex items-center justify-center">
+              <span className="text-white text-xs sm:text-sm font-medium">{resource ? resource.initials : creator.initials}</span>
             </div>
-            <span className="text-sm text-gray-600">{creator.name}</span>
+            <span className="text-xs sm:text-sm text-gray-600 hidden sm:inline">{resource ? resource.name : creator.name}</span>
           </div>
         </div>
       </div>
