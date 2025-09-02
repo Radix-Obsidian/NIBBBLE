@@ -18,6 +18,7 @@ export interface RecipeCardProps {
     initials: string;
   };
   image?: string;
+  cuisine?: string;
   emoji?: string;
   isTrending?: boolean;
   isLiked?: boolean;
@@ -34,6 +35,7 @@ export function RecipeCard({
   rating,
   creator,
   image,
+  cuisine,
   emoji,
   isTrending = false,
   isLiked = false,
