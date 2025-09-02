@@ -59,7 +59,8 @@ export default function DiscoverPage() {
           difficulty: r.difficulty,
           rating: r.rating || 0,
           creator: { name: 'Creator', avatar: '', initials: 'CR' },
-          image: r.image_url || undefined,
+          image: r.image_url && !/edamam-product-images/.test(r.image_url) ? r.image_url : undefined,
+          cuisine: r.cuisine || undefined,
           isTrending: (r.likes_count || 0) > 100,
           isLiked: false,
         }))
