@@ -3,6 +3,7 @@
 import { Heart, Clock, Star } from 'lucide-react';
 import Image from 'next/image';
 import { Card } from '../ui/card';
+import { FoodPlaceholder } from '../ui/food-placeholder';
 
 export interface RecipeCardProps {
   id: string;
@@ -17,6 +18,7 @@ export interface RecipeCardProps {
     initials: string;
   };
   image?: string;
+  cuisine?: string;
   emoji?: string;
   cuisine?: string;
   nutrition?: {
@@ -40,6 +42,7 @@ export function RecipeCard({
   rating,
   creator,
   image,
+  cuisine,
   emoji,
   cuisine,
   nutrition,
@@ -71,17 +74,15 @@ export function RecipeCard({
     >
       <div className="relative">
         {image ? (
-          <Image 
-            src={image} 
+          <Image
+            src={image}
             alt={title}
             width={400}
             height={225}
             className="w-full aspect-video object-cover rounded-t-2xl"
           />
         ) : (
-          <div className="aspect-video bg-gradient-to-br from-orange-100 to-amber-200 rounded-t-2xl flex items-center justify-center">
-            <span className="text-6xl">{emoji || '🍽️'}</span>
-          </div>
+          <FoodPlaceholder title={title} cuisine={cuisine} className="aspect-video rounded-t-2xl" />
         )}
         
         <div className="absolute top-4 right-4">

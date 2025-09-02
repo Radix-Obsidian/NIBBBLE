@@ -163,6 +163,17 @@ export default function DiscoverPage() {
         logger.error('Discover search error', error)
         setRecipes([])
       } else {
+        const summarize = (r: any) => {
+          const clip = (s: string) => s.length > 120 ? s.slice(0, 117).trimEnd() + '…' : s
+          const desc = (r.description || '').trim()
+          if (desc && !/^delicious\b/i.test(desc)) return clip(desc)
+          const ingredients: string[] = Array.isArray(r.ingredients) ? r.ingredients : []
+          const main = ingredients.slice(0, 3).join(', ')
+          const base = main ? `with ${main}` : ''
+          const lead = r.cuisine ? `${r.cuisine} ${r.title}` : r.title
+          return clip([lead, base].filter(Boolean).join(' '))
+        }
+
         // Get user's liked recipes if authenticated
         let likedRecipeIds: string[] = []
         if (user) {
@@ -179,12 +190,12 @@ export default function DiscoverPage() {
           return {
             id: r.id,
             title: r.title,
-            description: r.description,
+            description: summarize(r),
             cookTime: r.cook_time,
             difficulty: r.difficulty,
             rating: r.rating || 0,
-            cuisine: r.cuisine,
-            image: r.image_url ? r.image_url.split('?')[0] : undefined,
+            cuisine: r.cuisine || undefined,
+            image: r.image_url && !/edamam-product-images/.test(r.image_url) ? r.image_url.split('?')[0] : undefined,
             creator: { 
               name: 'Creator', 
               avatar: '', 
