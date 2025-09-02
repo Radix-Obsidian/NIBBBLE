@@ -20,6 +20,13 @@ export interface RecipeCardProps {
   image?: string;
   cuisine?: string;
   emoji?: string;
+  cuisine?: string;
+  nutrition?: {
+    calories: number;
+    protein: number;
+    fats: number;
+    carbs: number;
+  };
   isTrending?: boolean;
   isLiked?: boolean;
   onLike?: (id: string) => void;
@@ -37,12 +44,15 @@ export function RecipeCard({
   image,
   cuisine,
   emoji,
+  cuisine,
+  nutrition,
   isTrending = false,
   isLiked = false,
   onLike,
   onView
 }: RecipeCardProps) {
-  const handleLike = () => {
+  const handleLike = (e: React.MouseEvent) => {
+    e.stopPropagation(); // Prevent card click
     onLike?.(id);
   };
 
@@ -103,6 +113,35 @@ export function RecipeCard({
         </div>
         
         <p className="text-gray-600 mb-4 line-clamp-2">{description}</p>
+        
+        {cuisine && (
+          <div className="mb-3">
+            <span className="inline-block bg-orange-100 text-orange-800 text-xs px-2 py-1 rounded-full">
+              {cuisine}
+            </span>
+          </div>
+        )}
+        
+        {nutrition && (
+          <div className="mb-4 grid grid-cols-4 gap-2 text-xs">
+            <div className="text-center">
+              <div className="font-semibold text-gray-900">{nutrition.calories}</div>
+              <div className="text-gray-500">Cal</div>
+            </div>
+            <div className="text-center">
+              <div className="font-semibold text-gray-900">{nutrition.protein}g</div>
+              <div className="text-gray-500">Protein</div>
+            </div>
+            <div className="text-center">
+              <div className="font-semibold text-gray-900">{nutrition.fats}g</div>
+              <div className="text-gray-500">Fat</div>
+            </div>
+            <div className="text-center">
+              <div className="font-semibold text-gray-900">{nutrition.carbs}g</div>
+              <div className="text-gray-500">Carbs</div>
+            </div>
+          </div>
+        )}
         
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-4 text-sm text-gray-500">
