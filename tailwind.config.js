@@ -114,8 +114,10 @@ module.exports = {
         'slide-in': 'slideIn 0.6s ease-out',
         'scale-in': 'scaleIn 0.3s ease-out',
         'bounce-gentle': 'bounceGentle 2s infinite',
+        'blob': 'blob 8s ease-in-out infinite',
+        'shimmer': 'shimmer 2.5s linear infinite',
       },
-      
+
       keyframes: {
         fadeIn: {
           '0%': { opacity: '0', transform: 'translateY(20px)' },
@@ -132,6 +134,16 @@ module.exports = {
         bounceGentle: {
           '0%, 100%': { transform: 'translateY(0)' },
           '50%': { transform: 'translateY(-5px)' },
+        },
+        blob: {
+          '0%': { transform: 'translate(0px, 0px) scale(1)' },
+          '33%': { transform: 'translate(20px, -15px) scale(1.1)' },
+          '66%': { transform: 'translate(-15px, 10px) scale(0.9)' },
+          '100%': { transform: 'translate(0px, 0px) scale(1)' },
+        },
+        shimmer: {
+          '0%': { backgroundPosition: '-200% 0' },
+          '100%': { backgroundPosition: '200% 0' },
         },
       },
       
