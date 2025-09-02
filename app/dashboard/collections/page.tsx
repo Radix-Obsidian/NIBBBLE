@@ -57,7 +57,7 @@ export default function CollectionsPage() {
 
       {collections.length === 0 && !loading ? (
         <div className="bg-white rounded-2xl p-6 border border-gray-100 text-center text-gray-600">
-          You don't have any collections yet. Create your first collection!
+          You don&apos;t have any collections yet. Create your first collection!
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

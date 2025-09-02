@@ -5,6 +5,7 @@ import { Button } from '../ui/button'
 import { Input } from '../ui/input'
 import { Card } from '../ui/card'
 import { CreateRecipeForm } from '@/types'
+import Image from 'next/image'
 
 export interface RecipeCreatorProps {
   onSave: (recipe: CreateRecipeForm) => void
@@ -352,8 +353,7 @@ export function RecipeCreator({ onSave, onCancel, initialData = {} }: RecipeCrea
                 <div className="flex flex-col items-center justify-center">
                   <div className="w-48 h-48 rounded-full bg-gray-100 overflow-hidden flex items-center justify-center">
                     {form.coverImageUrl ? (
-                      // eslint-disable-next-line @next/next/no-img-element
-                      <img src={form.coverImageUrl} alt="cover" className="w-full h-full object-cover" />
+                      <Image src={form.coverImageUrl} alt="cover" width={192} height={192} className="w-full h-full object-cover" />
                     ) : (
                       <span className="text-5xl">🍽️</span>
                     )}
