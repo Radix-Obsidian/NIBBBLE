@@ -1,5 +1,8 @@
+"use client"
+
 import React from 'react'
 import { Utensils } from 'lucide-react'
+import { AnimatedEmoji } from './animated-emoji'
 
 interface PlaceholderImageProps {
   title?: string
@@ -34,20 +37,16 @@ export function PlaceholderImage({ title, cuisine, className = '' }: Placeholder
 
       <div className="relative z-10 flex h-full w-full items-center justify-center">
         {emoji ? (
-          <div className="relative inline-flex items-center justify-center">
-            {/* floating emoji */}
-            <span className="text-6xl md:text-7xl animate-float drop-shadow-sm">{emoji}</span>
-            {/* steam for hot foods */}
+          <>
+            <AnimatedEmoji emoji={emoji} size={36} speed={140} />
             {(emoji === '🍜' || emoji === '🍕' || emoji === '🍛') && (
-              <>
-                <div className="absolute -top-2 left-1/2 h-12 w-12 -translate-x-1/2">
-                  <span className="absolute left-1/2 h-10 w-px -translate-x-1/2 bg-gradient-to-b from-white/70 to-transparent blur-[1px] animate-steam" />
-                  <span className="absolute left-1/3 h-8 w-px bg-gradient-to-b from-white/60 to-transparent blur-[1px] animate-steam [animation-delay:250ms]" />
-                  <span className="absolute left-2/3 h-9 w-px bg-gradient-to-b from-white/60 to-transparent blur-[1px] animate-steam [animation-delay:500ms]" />
+              <div className="absolute inset-0">
+                <div className="absolute left-1/2 top-3 h-8 w-8 -translate-x-1/2">
+                  <span className="absolute left-1/2 h-6 w-px -translate-x-1/2 bg-gradient-to-b from-white/70 to-transparent blur-[1px] animate-steam" />
                 </div>
-              </>
+              </div>
             )}
-          </div>
+          </>
         ) : letter ? (
           <div className="inline-flex items-center justify-center rounded-xl bg-white/70 px-4 py-2 backdrop-blur-md shadow-soft ring-1 ring-white/60">
             <span className="text-4xl font-bold text-gray-800 tracking-wide">{letter}</span>
