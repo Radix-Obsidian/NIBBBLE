@@ -3,10 +3,27 @@ import { Utensils } from 'lucide-react'
 
 interface PlaceholderImageProps {
   title?: string
+  cuisine?: string
   className?: string
 }
 
-export function PlaceholderImage({ title, className = '' }: PlaceholderImageProps) {
+const chooseEmoji = (text: string) => {
+  const t = text.toLowerCase()
+  if (/(pizza|ital|margherita|risotto|gnocchi)/.test(t)) return '🍕'
+  if (/(pasta|carbonara|spaghetti|penne|fettuccine)/.test(t)) return '🍝'
+  if (/(taco|mex|quesadilla|burrito)/.test(t)) return '🌮'
+  if (/(sushi|nigiri|maki|jap)/.test(t)) return '🍣'
+  if (/(ramen|pho|noodle|udon)/.test(t)) return '🍜'
+  if (/(salad|greens|bowl|vegan)/.test(t)) return '🥗'
+  if (/(burger|sandwich|american)/.test(t)) return '🍔'
+  if (/(curry|masala|indian|thai)/.test(t)) return '🍛'
+  if (/(cake|dessert|cupcake|sweet|brownie|cookie)/.test(t)) return '🍰'
+  return ''
+}
+
+export function PlaceholderImage({ title, cuisine, className = '' }: PlaceholderImageProps) {
+  const context = `${cuisine || ''} ${title || ''}`.trim()
+  const emoji = chooseEmoji(context)
   const letter = (title || '').trim().slice(0, 1).toUpperCase() || ''
 
   return (
@@ -16,7 +33,22 @@ export function PlaceholderImage({ title, className = '' }: PlaceholderImageProp
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-36 w-36 rounded-full bg-red-300/30 blur-2xl mix-blend-multiply animate-blob [animation-delay:4s]" />
 
       <div className="relative z-10 flex h-full w-full items-center justify-center">
-        {letter ? (
+        {emoji ? (
+          <div className="relative inline-flex items-center justify-center">
+            {/* floating emoji */}
+            <span className="text-6xl md:text-7xl animate-float drop-shadow-sm">{emoji}</span>
+            {/* steam for hot foods */}
+            {(emoji === '🍜' || emoji === '🍕' || emoji === '🍛') && (
+              <>
+                <div className="absolute -top-2 left-1/2 h-12 w-12 -translate-x-1/2">
+                  <span className="absolute left-1/2 h-10 w-px -translate-x-1/2 bg-gradient-to-b from-white/70 to-transparent blur-[1px] animate-steam" />
+                  <span className="absolute left-1/3 h-8 w-px bg-gradient-to-b from-white/60 to-transparent blur-[1px] animate-steam [animation-delay:250ms]" />
+                  <span className="absolute left-2/3 h-9 w-px bg-gradient-to-b from-white/60 to-transparent blur-[1px] animate-steam [animation-delay:500ms]" />
+                </div>
+              </>
+            )}
+          </div>
+        ) : letter ? (
           <div className="inline-flex items-center justify-center rounded-xl bg-white/70 px-4 py-2 backdrop-blur-md shadow-soft ring-1 ring-white/60">
             <span className="text-4xl font-bold text-gray-800 tracking-wide">{letter}</span>
           </div>
