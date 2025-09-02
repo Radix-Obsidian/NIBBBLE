@@ -56,8 +56,6 @@ export function RecipeCard({
     onView?.(id)
   }
 
-  const cuisine = ''
-
   return (
     <Card
       variant="elevated"
