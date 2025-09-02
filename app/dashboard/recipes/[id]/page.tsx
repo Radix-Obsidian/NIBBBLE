@@ -98,7 +98,7 @@ export default async function RecipeDetailPage({ params }: PageProps) {
             {typedRecipe.image_url ? (
               <Image src={typedRecipe.image_url} alt={typedRecipe.title} fill className="object-cover" />
             ) : (
-              <div className="w-full h-full flex items-center justify-center text-5xl">🍽️</div>
+              <PlaceholderImage title={typedRecipe.title} className="w-full h-full rounded-full" />
             )}
           </div>
           <div className="grid grid-cols-3 gap-4 text-center mt-6">
