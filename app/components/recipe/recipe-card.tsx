@@ -72,7 +72,7 @@ export function RecipeCard({
             className="w-full aspect-video object-cover rounded-t-2xl"
           />
         ) : (
-          <FoodPlaceholder title={title} className="aspect-video rounded-t-2xl" />
+          <FoodPlaceholder title={title} cuisine={cuisine} className="aspect-video rounded-t-2xl" />
         )}
         
         <div className="absolute top-4 right-4">
