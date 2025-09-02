@@ -72,7 +72,7 @@ export default async function RecipeDetailPage({ params, searchParams }: PagePro
           <div className="order-2 lg:order-1">
             <div className="flex items-center justify-between gap-3">
               <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 tracking-tight">{typedRecipe.title}</h1>
-              <Link href="/dashboard/recipes" className="rounded-full border px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">Back</Link>
+              <Link href={searchParams?.from === 'discover' ? '/dashboard/discover' : '/dashboard/recipes'} className="rounded-full border px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">Back</Link>
             </div>
             {typedRecipe.description && (
               <p className="mt-3 text-gray-600 leading-relaxed">{typedRecipe.description}</p>
