@@ -1,5 +1,6 @@
 import Image from 'next/image'
 import clsx from 'clsx'
+import { AnimatedEmoji } from './animated-emoji'
 
 interface FoodPlaceholderProps {
   title?: string
@@ -48,18 +49,14 @@ export function FoodPlaceholder({ title, cuisine, className }: FoodPlaceholderPr
       <div className="absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-transparent" />
 
       {emoji && (
-        <div className="absolute top-3 left-3 z-10">
-          <div className="relative inline-flex items-center justify-center rounded-xl bg-white/80 px-2 py-1 backdrop-blur-md shadow-soft ring-1 ring-white/60">
-            <span className="text-2xl animate-float">{emoji}</span>
-            {(emoji === '🍜' || emoji === '🍕' || emoji === '🍛') && (
-              <div className="absolute -top-1 left-1/2 h-6 w-6 -translate-x-1/2">
-                <span className="absolute left-1/2 h-5 w-px -translate-x-1/2 bg-gradient-to-b from-white/70 to-transparent blur-[1px] animate-steam" />
-                <span className="absolute left-1/3 h-4 w-px bg-gradient-to-b from-white/60 to-transparent blur-[1px] animate-steam [animation-delay:200ms]" />
-                <span className="absolute left-2/3 h-4 w-px bg-gradient-to-b from-white/60 to-transparent blur-[1px] animate-steam [animation-delay:400ms]" />
-              </div>
-            )}
-          </div>
-        </div>
+        <>
+          <AnimatedEmoji emoji={emoji} size={28} speed={120} />
+          {(emoji === '🍜' || emoji === '🍕' || emoji === '🍛') && (
+            <div className="absolute left-1/2 top-2 h-6 w-6 -translate-x-1/2">
+              <span className="absolute left-1/2 h-5 w-px -translate-x-1/2 bg-gradient-to-b from-white/70 to-transparent blur-[1px] animate-steam" />
+            </div>
+          )}
+        </>
       )}
     </div>
   )
