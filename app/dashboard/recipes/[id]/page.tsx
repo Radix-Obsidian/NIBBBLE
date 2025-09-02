@@ -6,9 +6,9 @@ import Link from 'next/link'
 import { PlaceholderImage } from '@/app/components/ui/placeholder-image'
 import { Clock, Star, Flame, Beef, Wheat, BadgeCheck } from 'lucide-react'
 
-interface PageProps { params: { id: string } }
+interface PageProps { params: { id: string }, searchParams?: { from?: string } }
 
-export default async function RecipeDetailPage({ params }: PageProps) {
+export default async function RecipeDetailPage({ params, searchParams }: PageProps) {
   const { supabase: s } = await getServerSupabaseClient()
   const { data: recipe, error } = await s
     .from('recipes')
