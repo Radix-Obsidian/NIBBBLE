@@ -22,8 +22,8 @@ export interface RecipeCardProps {
     initials: string;
   };
   image?: string;
-  emoji?: string;
   cuisine?: string;
+  emoji?: string;
   nutrition?: {
     calories: number;
     protein: number;
@@ -46,8 +46,8 @@ export function RecipeCard({
   creator,
   resource,
   image,
-  emoji,
   cuisine,
+  emoji,
   nutrition,
   isTrending = false,
   isLiked = false,
@@ -77,8 +77,8 @@ export function RecipeCard({
     >
       <div className="relative">
         {image ? (
-          <Image 
-            src={image} 
+          <Image
+            src={image}
             alt={title}
             width={400}
             height={225}
@@ -150,24 +150,32 @@ export function RecipeCard({
           </div>
         )}
         
-        <div className="flex items-center justify-between mt-auto pt-4">
-          <div className="flex items-center space-x-2 sm:space-x-4 text-xs sm:text-sm text-gray-500 min-w-0">
+        <div className="mt-auto pt-4">
+          <div className="flex items-center justify-between text-gray-500 min-w-0">
             <div className="flex items-center space-x-1 flex-shrink-0">
-              <Clock className="w-3 h-3 sm:w-4 sm:h-4" />
-              <span>{cookTime} min</span>
+              <Clock className="w-4 sm:h-4" />
+              <span className="text-sm">{cookTime} min</span>
             </div>
-            <span className="hidden sm:inline">•</span>
-            <span className="flex-shrink-0">{difficulty}</span>
+            <span className="text-gray-400">•</span>
+            <span className="text-sm">{difficulty}</span>
           </div>
           
-          <div className="flex items-center space-x-2 flex-shrink-0">
-            <div className="w-6 h-6 sm:w-8 sm:h-8 bg-gradient-to-br from-orange-400 to-amber-500 rounded-full flex items-center justify-center">
-              <span className="text-white text-xs sm:text-sm font-medium">{resource ? resource.initials : creator.initials}</span>
+          <div className="flex items-center justify-between mt-3">
+            <div className="flex items-center space-x-2">
+              <div className="flex items-center justify-center w-8 h-8 bg-gray-100 rounded-full flex-shrink-0">
+                <span className="text-sm font-medium text-gray-700">{creator.initials}</span>
+              </div>
+              <span className="text-sm text-gray-600">{creator.name}</span>
             </div>
-            <span className="text-xs sm:text-sm text-gray-600 hidden sm:inline">{resource ? resource.name : creator.name}</span>
+            
+            {resource && (
+              <div className="flex items-center justify-center w-8 h-8 bg-orange-100 rounded-full flex-shrink-0">
+                <span className="text-sm font-medium text-orange-700">{resource.initials}</span>
+              </div>
+            )}
           </div>
         </div>
       </div>
     </Card>
-  );
+  )
 }
