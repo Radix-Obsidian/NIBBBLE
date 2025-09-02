@@ -18,7 +18,7 @@ export default function DiscoverPage() {
       setLoading(true)
       let query = supabase
         .from('recipes')
-        .select('id, title, description, cook_time, difficulty, rating, likes_count')
+        .select('id, title, description, ingredients, cuisine, image_url, cook_time, difficulty, rating, likes_count')
         .order(params.sortBy === 'newest' ? 'created_at' : params.sortBy === 'rating' ? 'rating' : 'likes_count', { ascending: false })
         .limit(params.limit)
 
@@ -40,16 +40,28 @@ export default function DiscoverPage() {
         logger.error('Discover search error', error)
         setRecipes([])
       } else {
+        const summarize = (r: any) => {
+          const clip = (s: string) => s.length > 120 ? s.slice(0, 117).trimEnd() + '…' : s
+          const desc = (r.description || '').trim()
+          if (desc && !/^delicious\b/i.test(desc)) return clip(desc)
+          const ingredients: string[] = Array.isArray(r.ingredients) ? r.ingredients : []
+          const main = ingredients.slice(0, 3).join(', ')
+          const base = main ? `with ${main}` : ''
+          const lead = r.cuisine ? `${r.cuisine} ${r.title}` : r.title
+          return clip([lead, base].filter(Boolean).join(' '))
+        }
+
         const mapped: RecipeCardProps[] = (data || []).map((r: any) => ({
           id: r.id,
           title: r.title,
-          description: r.description,
+          description: summarize(r),
           cookTime: r.cook_time,
           difficulty: r.difficulty,
           rating: r.rating || 0,
           creator: { name: 'Creator', avatar: '', initials: 'CR' },
+          image: r.image_url || undefined,
           isTrending: (r.likes_count || 0) > 100,
-          isLiked: false
+          isLiked: false,
         }))
         setRecipes(mapped)
       }
