@@ -3,7 +3,51 @@
 import { Heart, Clock, Star } from 'lucide-react';
 import Image from 'next/image';
 import { Card } from '../ui/card';
-import { RecipePlaceholder, RecipePlaceholderFallback } from './recipe-placeholder';
+
+// Hybrid approach: Fallback component + enhanced UI from Builder.io
+// This ensures build compatibility while maintaining sophisticated UI
+const RecipePlaceholder = ({ title, cuisine, difficulty }: { 
+  title: string; 
+  cuisine?: string; 
+  difficulty?: string 
+}) => {
+  const getCuisineStyle = (cuisine?: string) => {
+    const styles = {
+      'Italian': 'from-red-500 to-orange-500',
+      'Mexican': 'from-green-500 to-emerald-500',
+      'Chinese': 'from-red-600 to-yellow-500',
+      'Indian': 'from-purple-600 to-pink-500',
+      'French': 'from-blue-500 to-indigo-500',
+      'Mediterranean': 'from-cyan-500 to-blue-500',
+      'Thai': 'from-blue-600 to-purple-500',
+      'Japanese': 'from-red-500 to-pink-500'
+    };
+    return styles[cuisine as keyof typeof styles] || 'from-orange-400 to-amber-500';
+  };
+
+  return (
+    <div className={`w-full aspect-video bg-gradient-to-br ${getCuisineStyle(cuisine)} rounded-t-2xl flex items-center justify-center relative overflow-hidden`}>
+      {/* Glassmorphism effect from Builder.io */}
+      <div className="absolute inset-0 bg-white/10 backdrop-blur-sm" />
+      
+      {/* Content */}
+      <div className="text-center text-white relative z-10">
+        <div className="text-3xl mb-3">🍽️</div>
+        <div className="font-semibold text-sm mb-2">{title}</div>
+        {cuisine && (
+          <div className="text-xs opacity-90 bg-white/20 px-2 py-1 rounded-full mb-1">
+            {cuisine}
+          </div>
+        )}
+        {difficulty && (
+          <div className="text-xs opacity-80">
+            {difficulty} • Recipe
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
 
 export interface RecipeCardProps {
   id: string;

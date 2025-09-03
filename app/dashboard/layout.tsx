@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { useAuth } from '@/hooks/useAuth'
 import { LoadingSpinner } from '@/app/components/ui/loading-spinner'
 import { Sidebar } from '@/app/components/dashboard/sidebar'
@@ -11,6 +11,7 @@ import { NotificationsPanel } from '@/app/components/dashboard/notifications-pan
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const { user, loading } = useAuth()
   const pathname = usePathname()
+  const router = useRouter()
   const [collapsed, setCollapsed] = useState(false)
   const [showNotifications, setShowNotifications] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
