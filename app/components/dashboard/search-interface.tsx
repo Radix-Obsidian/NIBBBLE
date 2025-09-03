@@ -31,7 +31,7 @@ export function SearchInterface({ onSearch, filters, onFilterChange }: SearchInt
 
   const submit = (e: React.FormEvent) => {
     e.preventDefault()
-    onSearch({ query, filters, sortBy, page: 1, limit: 12 })
+    onSearch({ query, filters, sortBy, page: 1, limit: 50 })
   }
 
   return (

@@ -40,6 +40,7 @@ export default function MyRecipesPage() {
             difficulty: r.difficulty,
             rating: r.rating || 0,
             creator: { name: 'You', avatar: '', initials: 'YO' },
+            resource: undefined,
             isTrending: (r.likes_count || 0) > 100,
             isLiked: false
           }))
@@ -158,17 +159,18 @@ export default function MyRecipesPage() {
                       .eq('creator_id', user.id)
                       .order('created_at', { ascending: false })
                     if (rErr) throw rErr
-                    const mapped: RecipeCardProps[] = (data || []).map((r: any) => ({
-                      id: r.id,
-                      title: r.title,
-                      description: r.description,
-                      cookTime: r.cook_time,
-                      difficulty: r.difficulty,
-                      rating: r.rating || 0,
-                      creator: { name: 'You', avatar: '', initials: 'YO' },
-                      isTrending: (r.likes_count || 0) > 100,
-                      isLiked: false
-                    }))
+                              const mapped: RecipeCardProps[] = (data || []).map((r: any) => ({
+            id: r.id,
+            title: r.title,
+            description: r.description,
+            cookTime: r.cook_time,
+            difficulty: r.difficulty,
+            rating: r.rating || 0,
+            creator: { name: 'You', avatar: '', initials: 'YO' },
+            resource: undefined,
+            isTrending: (r.likes_count || 0) > 100,
+            isLiked: false
+          }))
                     setRecipes(mapped)
                   } catch (e: any) {
                     logger.error('Create recipe error', { message: e?.message, details: e?.details, code: e?.code })
