@@ -1,3 +1,12 @@
 export { HeroSection } from './hero-section';
+export { WeeklyCookingSection } from './weekly-cooking-section';
+export { RestaurantQualitySection } from './restaurant-quality-section';
+export { HowItWorksSection } from './how-it-works-section';
+export { CookingClassesSection } from './cooking-classes-section';
+export { TrendsettersSection } from './trendsetters-section';
+export { CookForYourselfSection } from './cook-for-yourself-section';
+export { GallerySection } from './gallery-section';
+export { GuidanceSection } from './guidance-section';
+export { CulinaryExpertsSection } from './culinary-experts-section';
 export { FeaturesSection } from './features-section';
 export { CTASection } from './cta-section';

@@ -33,7 +33,7 @@ export function Header({ user, onSearch, onNotificationClick, onMobileMenuToggle
 
   const handleSignOut = async () => {
     await signOut()
-    router.replace('/signin')
+    router.replace('/')
   }
 
   return (
@@ -50,8 +50,8 @@ export function Header({ user, onSearch, onNotificationClick, onMobileMenuToggle
           </button>
 
           {/* Logo */}
-          <h1 className="text-responsive-xl font-bold bg-gradient-to-r from-primary-600 to-secondary-600 bg-clip-text text-transparent">
-            PantryPals
+          <h1 className="text-responsive-xl font-bold bg-gradient-to-r from-[#FF375F] to-[#FFD84D] bg-clip-text text-transparent">
+            NIBBBLE
           </h1>
 
           {/* Desktop Search */}
@@ -80,7 +80,7 @@ export function Header({ user, onSearch, onNotificationClick, onMobileMenuToggle
           {/* Desktop Actions */}
           <div className="hidden md:flex items-center space-x-2 lg:space-x-3">
             <Link href="/dashboard/recipes">
-              <Button size="sm" className="btn text-sm">
+              <Button size="sm" className="btn text-sm" aria-label="Create new recipe">
                 <Plus className="w-4 h-4 mr-1 lg:mr-2" />
                 <span className="hidden lg:inline">Create</span>
               </Button>
@@ -102,6 +102,7 @@ export function Header({ user, onSearch, onNotificationClick, onMobileMenuToggle
               size="sm" 
               onClick={handleSignOut}
               className="btn text-sm"
+              aria-label="Sign out of account"
             >
               <span className="hidden lg:inline">Sign out</span>
               <span className="lg:hidden">Out</span>

@@ -20,21 +20,21 @@ export function FeaturesSection() {
   ];
 
   return (
-    <section className="py-20 bg-gradient-to-br from-orange-50 to-amber-50">
+    <section className="py-20 bg-gradient-to-br from-[#FFF8F2] to-[#FFD84D]/10">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
           <h2 className="text-4xl font-bold text-gray-900 mb-4">
-            Why Choose PantryPals?
+            Why Choose NIBBBLE?
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Join thousands of home cooks who are already improving their skills and sharing their passion
+            Join thousands of food creators who are already building their culinary community and sharing their passion
           </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {features.map((feature, index) => (
             <div key={index} className="text-center space-y-4">
-              <div className="w-16 h-16 bg-gradient-to-br from-orange-500 to-amber-600 rounded-2xl flex items-center justify-center mx-auto">
+              <div className="w-16 h-16 bg-gradient-to-br from-[#FF375F] to-[#FFD84D] rounded-2xl flex items-center justify-center mx-auto">
                 {feature.icon}
               </div>
               <h3 className="text-xl font-semibold text-gray-900">{feature.title}</h3>

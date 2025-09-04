@@ -1,6 +1,19 @@
+'use client';
+
 import { Button } from '../ui/button';
+import { useRouter } from 'next/navigation';
 
 export function CTASection() {
+  const router = useRouter();
+
+  const handleGetStarted = () => {
+    router.push('/signin');
+  };
+
+  const handleLearnMore = () => {
+    router.push('/learn-more');
+  };
+
   return (
     <section className="py-20 bg-white">
       <div className="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
@@ -11,15 +24,18 @@ export function CTASection() {
           Join our community of passionate cooks and food lovers today
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <Button size="xl">
-            <a href="/signin" className="w-full h-full flex items-center justify-center">
-              Get Started Free
-            </a>
+          <Button size="xl" onClick={handleGetStarted}>
+            Get Started Free
           </Button>
-          <Button variant="outline" size="xl">
-            <a href="/learn-more" className="w-full h-full flex items-center justify-center">
-              Learn More
-            </a>
+          <Button 
+            variant="outline" 
+            size="xl" 
+            onClick={() => router.push('/signin?mode=signup')}
+          >
+            Create Account
+          </Button>
+          <Button variant="outline" size="xl" onClick={handleLearnMore}>
+            Learn More
           </Button>
         </div>
       </div>

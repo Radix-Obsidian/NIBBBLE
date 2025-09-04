@@ -27,7 +27,7 @@ export type Database = {
           updated_at: string
           tiktok_handle: string | null
           instagram_handle: string | null
-          social_media_connected: boolean
+  
         }
         Insert: {
           id: string
@@ -46,7 +46,6 @@ export type Database = {
           updated_at?: string
           tiktok_handle?: string | null
           instagram_handle?: string | null
-          social_media_connected?: boolean
         }
         Update: {
           id?: string
@@ -65,91 +64,10 @@ export type Database = {
           updated_at?: string
           tiktok_handle?: string | null
           instagram_handle?: string | null
-          social_media_connected?: boolean
         }
       }
-      social_media_connections: {
-        Row: {
-          id: string
-          user_id: string
-          platform: string
-          platform_user_id: string | null
-          access_token: string | null
-          refresh_token: string | null
-          token_expires_at: string | null
-          is_active: boolean
-          last_sync_at: string | null
-          created_at: string
-          updated_at: string
-        }
-        Insert: {
-          id?: string
-          user_id: string
-          platform: string
-          platform_user_id?: string | null
-          access_token?: string | null
-          refresh_token?: string | null
-          token_expires_at?: string | null
-          is_active?: boolean
-          last_sync_at?: string | null
-          created_at?: string
-          updated_at?: string
-        }
-        Update: {
-          id?: string
-          user_id?: string
-          platform?: string
-          platform_user_id?: string | null
-          access_token?: string | null
-          refresh_token?: string | null
-          token_expires_at?: string | null
-          is_active?: boolean
-          last_sync_at?: string | null
-          created_at?: string
-          updated_at?: string
-        }
-      }
-      imported_content: {
-        Row: {
-          id: string
-          user_id: string
-          platform: string
-          platform_content_id: string
-          content_type: string
-          content_url: string | null
-          thumbnail_url: string | null
-          caption: string | null
-          engagement_metrics: any | null
-          is_approved: boolean
-          imported_at: string
-        }
-        Insert: {
-          id?: string
-          user_id: string
-          platform: string
-          platform_content_id: string
-          content_type: string
-          content_url?: string | null
-          thumbnail_url?: string | null
-          caption?: string | null
-          engagement_metrics?: any | null
-          is_approved?: boolean
-          imported_at?: string
-        }
-        Update: {
-          id?: string
-          user_id?: string
-          platform?: string
-          platform_content_id?: string
-          content_type?: string
-          content_url?: string | null
-          thumbnail_url?: string | null
-          caption?: string | null
-          engagement_metrics?: any | null
-          is_approved?: boolean
-          imported_at?: string
-        }
-      }
+
+
       recipes: {
         Row: {
           id: string

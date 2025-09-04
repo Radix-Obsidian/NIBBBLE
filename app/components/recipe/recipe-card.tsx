@@ -1,225 +1,132 @@
 'use client';
 
-import { Heart, Clock, Star } from 'lucide-react';
+import React from 'react';
 import Image from 'next/image';
-import { Card } from '../ui/card';
-
-// Hybrid approach: Fallback component + enhanced UI from Builder.io
-// This ensures build compatibility while maintaining sophisticated UI
-const RecipePlaceholder = ({ title, cuisine, difficulty }: { 
-  title: string; 
-  cuisine?: string; 
-  difficulty?: string 
-}) => {
-  const getCuisineStyle = (cuisine?: string) => {
-    const styles = {
-      'Italian': 'from-red-500 to-orange-500',
-      'Mexican': 'from-green-500 to-emerald-500',
-      'Chinese': 'from-red-600 to-yellow-500',
-      'Indian': 'from-purple-600 to-pink-500',
-      'French': 'from-blue-500 to-indigo-500',
-      'Mediterranean': 'from-cyan-500 to-blue-500',
-      'Thai': 'from-blue-600 to-purple-500',
-      'Japanese': 'from-red-500 to-pink-500'
-    };
-    return styles[cuisine as keyof typeof styles] || 'from-orange-400 to-amber-500';
-  };
-
-  return (
-    <div className={`w-full aspect-video bg-gradient-to-br ${getCuisineStyle(cuisine)} rounded-t-2xl flex items-center justify-center relative overflow-hidden`}>
-      {/* Glassmorphism effect from Builder.io */}
-      <div className="absolute inset-0 bg-white/10 backdrop-blur-sm" />
-      
-      {/* Content */}
-      <div className="text-center text-white relative z-10">
-        <div className="text-3xl mb-3">🍽️</div>
-        <div className="font-semibold text-sm mb-2">{title}</div>
-        {cuisine && (
-          <div className="text-xs opacity-90 bg-white/20 px-2 py-1 rounded-full mb-1">
-            {cuisine}
-          </div>
-        )}
-        {difficulty && (
-          <div className="text-xs opacity-80">
-            {difficulty} • Recipe
-          </div>
-        )}
-      </div>
-    </div>
-  );
-};
+import Link from 'next/link';
+import { Clock, ChefHat, User, Star } from 'lucide-react';
+import { Recipe } from '@/types';
 
 export interface RecipeCardProps {
-  id: string;
-  title: string;
-  description: string;
-  cookTime: number;
-  difficulty: 'Easy' | 'Medium' | 'Hard';
-  rating: number;
-  creator: {
-    name: string;
-    avatar: string;
-    initials: string;
-  };
-  resource?: {
-    name: string;
-    initials: string;
-  };
-  image?: string;
-  cuisine?: string;
-  emoji?: string;
-  nutrition?: {
-    calories: number;
-    protein: number;
-    fats: number;
-    carbs: number;
-  };
-  isTrending?: boolean;
-  isLiked?: boolean;
+  recipe: Recipe;
+  className?: string;
   onLike?: (id: string) => void;
   onView?: (id: string) => void;
 }
 
-export function RecipeCard({
-  id,
-  title,
-  description,
-  cookTime,
-  difficulty,
-  rating,
-  creator,
-  resource,
-  image,
-  cuisine,
-  emoji,
-  nutrition,
-  isTrending = false,
-  isLiked = false,
-  onLike,
-  onView
-}: RecipeCardProps) {
-  const handleLike = (e: React.MouseEvent) => {
-    e.stopPropagation(); // Prevent card click
-    onLike?.(id);
+function RecipeCard({ recipe, className = '' }: RecipeCardProps) {
+  const formatTime = (minutes: number): string => {
+    if (minutes < 60) return `${minutes}m`;
+    const hours = Math.floor(minutes / 60);
+    const mins = minutes % 60;
+    return mins > 0 ? `${hours}h ${mins}m` : `${hours}h`;
   };
 
-  const handleView = () => {
-    try {
-      const key = 'pp_recently_viewed'
-      const list = JSON.parse(localStorage.getItem(key) || '[]') as string[]
-      const next = [id, ...list.filter((x) => x !== id)].slice(0, 50)
-      localStorage.setItem(key, JSON.stringify(next))
-    } catch {}
-    onView?.(id)
-  }
+  const getDifficultyColor = (difficulty: string) => {
+    switch (difficulty.toLowerCase()) {
+      case 'easy':
+        return 'text-green-600 bg-green-100';
+      case 'medium':
+        return 'text-yellow-600 bg-yellow-100';
+      case 'hard':
+        return 'text-red-600 bg-red-100';
+      default:
+        return 'text-gray-600 bg-gray-100';
+    }
+  };
 
   return (
-    <Card
-      variant="elevated"
-      className="hover:-translate-y-2 transition-all duration-300 cursor-pointer w-full h-full flex flex-col"
-      onClick={handleView}
-    >
-      <div className="relative">
-        {image ? (
-          <Image
-            src={image}
-            alt={title}
-            width={400}
-            height={225}
-            className="w-full aspect-video object-cover rounded-t-2xl"
-          />
-        ) : (
-          <RecipePlaceholder 
-            title={title}
-            cuisine={cuisine}
-            difficulty={difficulty}
-          />
-        )}
-        
-        <div className="absolute top-4 right-4">
-          <button 
-            onClick={handleLike}
-            className="bg-white/90 backdrop-blur-sm p-2 rounded-full hover:bg-white transition-colors"
-          >
-            <Heart 
-              className={`w-5 h-5 ${isLiked ? 'text-red-500 fill-current' : 'text-gray-600'}`} 
+    <Link href={`/recipe/${recipe.id || 'unknown'}`}>
+      <div className={`group bg-white rounded-lg shadow-md hover:shadow-lg transition-all duration-200 overflow-hidden ${className}`}>
+        {/* Thumbnail */}
+        <div className="relative aspect-video bg-gray-200 overflow-hidden">
+          {recipe.images && recipe.images.length > 0 ? (
+            <Image
+              src={recipe.images[0]}
+              alt={recipe.title}
+              fill
+              className="object-cover group-hover:scale-105 transition-transform duration-200"
             />
-          </button>
-        </div>
-        
-        {isTrending && (
-          <div className="absolute bottom-4 left-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full">
-            <span className="text-sm font-medium text-gray-700">Trending</span>
-          </div>
-        )}
-      </div>
-      
-      <div className="p-4 sm:p-6 flex flex-col flex-1 min-w-0">
-        <div className="flex items-start justify-between mb-3 gap-2">
-          <h3 className="text-lg sm:text-xl font-semibold text-gray-900 line-clamp-2 flex-1 min-w-0">{title}</h3>
-          <div className="flex items-center space-x-1 flex-shrink-0">
-            <Star className="w-4 h-4 text-yellow-400 fill-current" />
-            <span className="text-sm text-gray-600">{rating}</span>
-          </div>
-        </div>
-        
-        <p className="text-gray-600 mb-4 line-clamp-2 text-sm sm:text-base">{description}</p>
-        
-        {cuisine && (
-          <div className="mb-3">
-            <span className="inline-block bg-orange-100 text-orange-800 text-xs px-2 py-1 rounded-full">
-              {cuisine}
-            </span>
-          </div>
-        )}
-        
-        {nutrition && (
-          <div className="mb-4 grid grid-cols-4 gap-2 text-xs">
-            <div className="text-center">
-              <div className="font-semibold text-gray-900">{nutrition.calories}</div>
-              <div className="text-gray-500">Cal</div>
+          ) : (
+            <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-orange-100 to-red-100">
+              <ChefHat className="w-12 h-12 text-orange-400" />
             </div>
-            <div className="text-center">
-              <div className="font-semibold text-gray-900">{nutrition.protein}g</div>
-              <div className="text-gray-500">Protein</div>
-            </div>
-            <div className="text-center">
-              <div className="font-semibold text-gray-900">{nutrition.fats}g</div>
-              <div className="text-gray-500">Fat</div>
-            </div>
-            <div className="text-center">
-              <div className="font-semibold text-gray-900">{nutrition.carbs}g</div>
-              <div className="text-gray-500">Carbs</div>
-            </div>
-          </div>
-        )}
-        
-        <div className="mt-auto pt-4">
-          <div className="flex items-center justify-between text-gray-500 min-w-0">
-            <div className="flex items-center space-x-1 flex-shrink-0">
-              <Clock className="w-4 sm:h-4" />
-              <span className="text-sm">{cookTime} min</span>
-            </div>
-            <span className="text-gray-400">•</span>
-            <span className="text-sm">{difficulty}</span>
-          </div>
+          )}
           
-          <div className="flex items-center justify-between mt-3">
-            <div className="flex items-center space-x-2">
-              <div className="flex items-center justify-center w-8 h-8 bg-gray-100 rounded-full flex-shrink-0">
-                <span className="text-sm font-medium text-gray-700">{creator.initials}</span>
-              </div>
-              <span className="text-sm text-gray-600">{creator.name}</span>
+          {/* Play button overlay */}
+          <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-20 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+            <div className="w-16 h-16 bg-white bg-opacity-90 rounded-full flex items-center justify-center">
+              <div className="w-0 h-0 border-l-[12px] border-l-orange-500 border-t-[8px] border-t-transparent border-b-[8px] border-b-transparent ml-1" />
             </div>
-            
-            {resource && (
-              <div className="flex items-center justify-center w-8 h-8 bg-orange-100 rounded-full flex-shrink-0">
-                <span className="text-sm font-medium text-orange-700">{resource.initials}</span>
-              </div>
-            )}
           </div>
         </div>
+
+        {/* Content */}
+        <div className="p-4">
+          {/* Title */}
+          <h3 className="font-semibold text-lg text-gray-900 group-hover:text-orange-600 transition-colors duration-200 line-clamp-2 mb-2">
+            {recipe.title || 'Untitled Recipe'}
+          </h3>
+
+          {/* Creator info */}
+          <div className="flex items-center mb-3">
+            {recipe.creator.avatar ? (
+              <Image
+                src={recipe.creator.avatar}
+                alt={recipe.creator.displayName}
+                width={20}
+                height={20}
+                className="rounded-full mr-2"
+              />
+            ) : (
+              <User className="w-5 h-5 text-gray-400 mr-2" />
+            )}
+            <span className="text-sm text-gray-600">{recipe.creator.displayName}</span>
+          </div>
+
+          {/* Recipe details */}
+          <div className="flex items-center justify-between text-sm text-gray-500 mb-3">
+            <div className="flex items-center">
+              <Clock className="w-4 h-4 mr-1" />
+              <span>{formatTime(recipe.totalTime)}</span>
+            </div>
+            <div className="flex items-center">
+              <ChefHat className="w-4 h-4 mr-1" />
+              <span>{recipe.servings || 1} serving{(recipe.servings || 1) !== 1 ? 's' : ''}</span>
+            </div>
+          </div>
+
+          {/* Difficulty and tags */}
+          <div className="flex items-center justify-between">
+            <span className={`px-2 py-1 rounded-full text-xs font-medium ${getDifficultyColor(recipe.difficulty.toLowerCase())}`}>
+              {recipe.difficulty}
+            </span>
+            
+                      {/* First few tags */}
+          {recipe.tags && recipe.tags.length > 0 && (
+            <div className="flex gap-1">
+              {recipe.tags.slice(0, 2).map((tag: string, index: number) => (
+                <span
+                  key={`${tag}-${index}`}
+                  className="px-2 py-1 bg-gray-100 text-gray-600 rounded-full text-xs"
+                >
+                  {tag}
+                </span>
+              ))}
+              {recipe.tags.length > 2 && (
+                <span className="px-2 py-1 bg-gray-100 text-gray-600 rounded-full text-xs">
+                  +{recipe.tags.length - 2}
+                </span>
+              )}
+            </div>
+          )}
+          </div>
+
+
+        </div>
       </div>
-    </Card>
-  )
+    </Link>
+  );
 }
+
+export default RecipeCard;
+export { RecipeCard };

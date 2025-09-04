@@ -1,9 +1,9 @@
 'use client';
 
-import { RecipeCard, RecipeCardProps } from './recipe-card';
+import RecipeCard from './recipe-card';
 
 export interface RecipeGridProps {
-  recipes: RecipeCardProps[];
+  recipes: any[]; // Using any[] for now to match existing usage
   title?: string;
   subtitle?: string;
   showViewAll?: boolean;
@@ -41,8 +41,8 @@ export function RecipeGrid({
       {recipes.length > 0 ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 lg:gap-8 min-w-0">
           {recipes.map((recipe) => (
-            <div key={recipe.id} className="min-w-0 flex flex-col">
-              <RecipeCard {...recipe} onLike={onLike} onView={onView} />
+            <div key={recipe.id || `recipe-${Math.random()}`} className="min-w-0 flex flex-col">
+              <RecipeCard recipe={recipe} onLike={onLike} onView={onView} />
             </div>
           ))}
         </div>

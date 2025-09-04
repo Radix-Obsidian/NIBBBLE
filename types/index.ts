@@ -14,6 +14,105 @@ export interface User {
   updatedAt: Date;
 }
 
+// Creator types for video recipes
+export interface Creator {
+  id: string;
+  name: string;
+  profileImageUrl?: string;
+  bio?: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+// Video Recipe types
+export interface VideoRecipe {
+  id: string;
+  creatorId: string;
+  creator: Creator;
+  title: string;
+  description?: string;
+  videoUrl: string;
+  thumbnailUrl?: string;
+  ingredients: VideoIngredient[];
+  instructions: string[];
+  nutrition: NutritionInfo;
+  servings: number;
+  prepTimeMinutes: number;
+  cookTimeMinutes: number;
+  totalTimeMinutes: number;
+  difficultyLevel: 'easy' | 'medium' | 'hard';
+  tags: string[];
+  isPublic: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface VideoIngredient {
+  name: string;
+  amount: number;
+  unit: string;
+  notes?: string;
+  nutrition?: {
+    calories: number;
+    protein: number;
+    fat: number;
+    carbs: number;
+    fiber?: number;
+    sugar?: number;
+  };
+}
+
+export interface NutritionInfo {
+  calories: number;
+  protein: number;
+  fat: number;
+  carbs: number;
+  fiber?: number;
+  sugar?: number;
+  sodium?: number;
+  cholesterol?: number;
+  perServing: boolean;
+}
+
+// Video Processing types
+export interface VideoProcessingResult {
+  title?: string; // Add title field for AI-generated recipe titles
+  ingredients: VideoIngredient[];
+  servings: number;
+  prepTime: number;
+  cookTime: number;
+  instructions?: string[];
+  description?: string;
+}
+
+export interface VideoUploadResult {
+  videoUrl: string;
+  thumbnailUrl?: string;
+  processingResult: VideoProcessingResult;
+}
+
+export interface VideoProcessingStatus {
+  status: 'uploading' | 'processing' | 'extracting' | 'analyzing' | 'completed' | 'error';
+  message: string;
+  progress?: number;
+  error?: string;
+}
+
+// Audio and Video Analysis types
+export interface AudioTranscript {
+  text: string;
+  confidence: number;
+  duration: number;
+}
+
+export interface VideoMetadata {
+  duration: number;
+  width: number;
+  height: number;
+  size: number;
+  type: string;
+}
+
 // Recipe types
 export interface Recipe {
   id: string;
@@ -173,3 +272,6 @@ export interface Theme {
   primaryColor: string;
   accentColor: string;
 }
+
+// NIBBBLE Collections types
+export * from './nibble-collections';
