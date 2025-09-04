@@ -276,3 +276,6 @@ export interface Theme {
 // NIBBBLE Collections types
 export * from './nibble-collections';
 export * from './dashboard-cards';
+
+// AI Cooking Assistant types
+export * from './ai-cooking';
