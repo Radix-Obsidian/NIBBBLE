@@ -271,8 +271,8 @@ export default function VideoUpload({
         createdAt: new Date().toISOString(),
         creator: {
           id: user?.id || 'unknown',
-          name: user?.displayName || 'NIBBBLE Creator',
-          profileImageUrl: user?.avatar,
+          name: user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'NIBBBLE Creator',
+          profileImageUrl: user?.user_metadata?.avatar_url,
           bio: 'Passionate food creator sharing amazing recipes',
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString()

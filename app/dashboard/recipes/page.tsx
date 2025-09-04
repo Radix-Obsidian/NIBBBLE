@@ -5,14 +5,15 @@ import { useAuth } from '@/hooks/useAuth'
 import { supabase } from '@/lib/supabase/client'
 import { logger } from '@/lib/logger'
 import { RecipeGrid } from '@/app/components/recipe/recipe-grid'
-import { RecipeCardProps } from '@/app/components/recipe/recipe-card'
 import { Button } from '@/app/components/ui/button'
 import { RecipeCreator } from '@/app/components/dashboard/recipe-creator'
 import { useRouter } from 'next/navigation'
+import { RecipePageCard } from '@/types'
+
 export default function MyRecipesPage() {
   const { user } = useAuth()
   const router = useRouter()
-  const [recipes, setRecipes] = useState<RecipeCardProps[]>([])
+  const [recipes, setRecipes] = useState<RecipePageCard[]>([])
   const [loading, setLoading] = useState(true)
   const [creating, setCreating] = useState(false)
   const [errorMsg, setErrorMsg] = useState<string | null>(null)
@@ -32,7 +33,7 @@ export default function MyRecipesPage() {
           logger.error('Error fetching user recipes', error)
           setRecipes([])
         } else {
-          const mapped: RecipeCardProps[] = (data || []).map((r: any) => ({
+          const mapped: RecipePageCard[] = (data || []).map((r: any) => ({
             id: r.id,
             title: r.title,
             description: r.description,
@@ -159,7 +160,7 @@ export default function MyRecipesPage() {
                       .eq('creator_id', user.id)
                       .order('created_at', { ascending: false })
                     if (rErr) throw rErr
-                              const mapped: RecipeCardProps[] = (data || []).map((r: any) => ({
+                              const mapped: RecipePageCard[] = (data || []).map((r: any) => ({
             id: r.id,
             title: r.title,
             description: r.description,

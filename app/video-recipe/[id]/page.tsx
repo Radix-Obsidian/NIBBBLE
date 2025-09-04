@@ -17,8 +17,10 @@ export default function VideoRecipePage() {
 
   // Update servings when recipe loads
   useEffect(() => {
-    if (recipe?.processingResult?.servings) {
-      setServings(recipe.processingResult.servings);
+    if (recipe?.servings) {
+      setServings(recipe.servings);
+    } else {
+      setServings(4); // Default servings if not available
     }
   }, [recipe]);
 
@@ -139,14 +141,14 @@ export default function VideoRecipePage() {
 
   // Scale ingredients based on servings adjustment
   const scaleIngredients = (multiplier: number) => {
-    if (!recipe?.processingResult?.ingredients) return [];
-    
-    const baseServings = recipe.processingResult.servings || 4;
+    if (!recipe?.ingredients) return [];
+
+    const baseServings = recipe.servings || 4;
     const scaleFactor = multiplier / baseServings;
-    
-    return recipe.processingResult.ingredients.map(ingredient => ({
+
+    return recipe.ingredients.map((ingredient: any) => ({
       ...ingredient,
-      amount: Math.round((ingredient.amount * scaleFactor) * 100) / 100 // Round to 2 decimal places
+      amount: Math.round((ingredient.amount * scaleFactor) * 100) / 100
     }));
   };
 
@@ -163,25 +165,37 @@ export default function VideoRecipePage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                  {/* Header */}
          <div className="mb-8">
-           <h1 className="text-4xl font-bold text-gray-900 mb-2">
-             {recipe.processingResult?.title || 'Delicious Recipe'}
+           <h1 className="text-3xl font-bold text-gray-900 mb-4">
+             {recipe.title || 'Delicious Recipe'}
            </h1>
-           <p className="text-xl text-gray-600 mb-4">
-             {recipe.processingResult?.description || 'A delicious recipe created with AI'}
+           <p className="text-gray-600 mb-6">
+             {recipe.description || 'A delicious recipe created with AI'}
            </p>
-          
+
+           {/* Recipe Stats */}
+           <div className="flex items-center gap-6 text-sm text-gray-500 mb-6">
+             <span>Prep: {recipe.prepTime || 15} min |</span>
+             <span>Cook: {recipe.cookTime || 30} min</span>
+           </div>
+
+           {/* Servings Control */}
+           <div className="flex items-center gap-4 mb-6">
+             <span className="text-sm font-medium text-gray-700">Servings:</span>
+             <span>{recipe.servings || 4} servings</span>
+           </div>
+
           {/* Recipe Meta */}
           <div className="flex items-center space-x-6 text-sm text-gray-500">
             <div className="flex items-center">
               <Clock className="w-4 h-4 mr-2" />
               <span>
-                Prep: {recipe.processingResult?.prepTime || 15} min | 
-                Cook: {recipe.processingResult?.cookTime || 30} min
+                Prep: {recipe.prepTime || 15} min | 
+                Cook: {recipe.cookTime || 30} min
               </span>
             </div>
             <div className="flex items-center">
               <Users className="w-4 h-4 mr-2" />
-              <span>{recipe.processingResult?.servings || 4} servings</span>
+              <span>{recipe.servings || 4} servings</span>
             </div>
             <div className="flex items-center">
               <ChefHat className="w-4 h-4 mr-2" />
@@ -267,7 +281,7 @@ export default function VideoRecipePage() {
                </div>
                <div>
                  <h3 className="font-semibold text-gray-900">
-                   {recipe.creator?.displayName || 'NIBBBLE Creator'}
+                   {recipe.creator?.name || 'NIBBBLE Creator'}
                  </h3>
                  <p className="text-sm text-gray-600">
                    {recipe.creator?.bio || 'Passionate food creator sharing amazing recipes'}
@@ -329,7 +343,7 @@ export default function VideoRecipePage() {
             <div className="bg-white rounded-xl border border-gray-200 p-6 mb-6">
               <h3 className="text-lg font-semibold text-gray-900 mb-4">Instructions</h3>
               <ol className="space-y-4">
-                {recipe.processingResult?.instructions?.map((instruction, index) => (
+                {recipe.instructions?.map((instruction, index) => (
                   <li key={index} className="flex">
                     <span className="w-6 h-6 bg-orange-500 text-white rounded-full flex items-center justify-center text-sm font-bold mr-3 flex-shrink-0">
                       {index + 1}

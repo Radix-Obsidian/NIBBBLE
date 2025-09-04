@@ -2,11 +2,23 @@
 
 import { useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase/client'
-import { RecipeCardProps } from '@/app/components/recipe/recipe-card'
 import { RecipeGrid } from '@/app/components/recipe/recipe-grid'
 
+// Simple interface for recent recipe cards
+interface RecentRecipeCard {
+  id: any;
+  title: any;
+  description: any;
+  cookTime: any;
+  difficulty: any;
+  rating: any;
+  creator: { name: string; avatar: string; initials: string };
+  isTrending: boolean;
+  isLiked: boolean;
+}
+
 export default function RecentPage() {
-  const [recipes, setRecipes] = useState<RecipeCardProps[]>([])
+  const [recipes, setRecipes] = useState<RecentRecipeCard[]>([])
 
   useEffect(() => {
     const load = async () => {
@@ -16,7 +28,7 @@ export default function RecentPage() {
         .from('recipes')
         .select('id, title, description, cook_time, difficulty, rating, likes_count')
         .in('id', ids.slice(0, 24))
-      const mapped: RecipeCardProps[] = (data || []).map((r: any) => ({
+      const mapped: RecentRecipeCard[] = (data || []).map((r: any) => ({
         id: r.id,
         title: r.title,
         description: r.description,

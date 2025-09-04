@@ -1,6 +1,6 @@
 // File: lib/services/nibble-collections.ts
 
-import { supabase } from '@/lib/supabase/server';
+import { supabase } from '@/lib/supabase/client';
 import { 
   NibbleCollection, 
   NibbleItem, 

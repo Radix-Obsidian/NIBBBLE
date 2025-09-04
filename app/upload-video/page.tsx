@@ -7,6 +7,7 @@ import VideoUpload from '@/app/components/recipe/video-upload';
 import { Button } from '@/app/components/ui/button';
 import { Card } from '@/app/components/ui/card';
 import { VideoUploadResult } from '@/types';
+import { VideoProcessingResult } from '@/types'
 
 export default function UploadVideoPage() {
   const router = useRouter();

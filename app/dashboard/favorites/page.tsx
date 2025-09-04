@@ -4,12 +4,12 @@ import { useEffect, useState } from 'react'
 import { useAuth } from '@/hooks/useAuth'
 import { supabase } from '@/lib/supabase/client'
 import { logger } from '@/lib/logger'
-import { RecipeCardProps } from '@/app/components/recipe/recipe-card'
+import { Recipe } from '@/types'
 import { RecipeGrid } from '@/app/components/recipe/recipe-grid'
 
 export default function FavoritesPage() {
   const { user } = useAuth()
-  const [recipes, setRecipes] = useState<RecipeCardProps[]>([])
+  const [recipes, setRecipes] = useState<Recipe[]>([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -29,16 +29,44 @@ export default function FavoritesPage() {
           .select('id, title, description, cook_time, difficulty, rating, likes_count')
           .in('id', ids)
         if (error) throw error
-        const mapped: RecipeCardProps[] = (data || []).map((r: any) => ({
+        const mapped: Recipe[] = (data || []).map((r: any) => ({
           id: r.id,
           title: r.title,
-          description: r.description,
-          cookTime: r.cook_time,
-          difficulty: r.difficulty,
+          description: r.description || '',
+          ingredients: [], // Empty array as we don't have ingredients
+          instructions: [], // Empty array as we don't have instructions
+          prepTime: 0, // Default value
+          cookTime: r.cook_time || 0,
+          totalTime: (r.cook_time || 0) + 0, // prepTime + cookTime
+          servings: 4, // Default value
+          difficulty: (r.difficulty || 'Medium') as 'Easy' | 'Medium' | 'Hard',
+          cuisine: 'Unknown', // Default value
+          mealType: 'Dinner' as const, // Default value
+          dietaryTags: [], // Empty array
+          tags: [], // Empty array
+          images: [], // Empty array
+          videoUrl: undefined,
           rating: r.rating || 0,
-          creator: { name: 'Creator', avatar: '', initials: 'CR' },
-          isTrending: (r.likes_count || 0) > 100,
-          isLiked: true
+          reviewCount: 0, // Default value
+          likesCount: r.likes_count || 0,
+          isPublished: true, // Default value
+          creatorId: 'unknown', // Default value
+          creator: {
+            id: 'unknown',
+            username: 'unknown',
+            email: 'unknown@example.com',
+            displayName: 'Unknown Creator',
+            avatar: '',
+            bio: '',
+            favoriteCuisines: [],
+            followersCount: 0,
+            followingCount: 0,
+            recipesCount: 0,
+            createdAt: new Date(),
+            updatedAt: new Date()
+          },
+          createdAt: new Date(),
+          updatedAt: new Date()
         }))
         setRecipes(mapped)
       } catch (e) {
