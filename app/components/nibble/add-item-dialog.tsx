@@ -35,7 +35,7 @@ export function AddItemDialog({ open, onClose, onAdd, collectionId }: AddItemDia
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
     
-    if (!formData.title.trim() && !formData.link_url.trim()) {
+    if (!formData.title?.trim() && !formData.link_url?.trim()) {
       newErrors.title = 'Either title or recipe link is required';
     }
 

@@ -37,27 +37,27 @@ export function EditCollectionDialog({ open, onClose, collection, onUpdate }: Ed
   }, [collection]);
 
   const toggleMood = (mood: string) => {
-    const newMoods = formData.mood_tags.includes(mood)
-      ? formData.mood_tags.filter(m => m !== mood)
-      : [...formData.mood_tags, mood];
+    const newMoods = formData.mood_tags?.includes(mood)
+      ? formData.mood_tags?.filter(m => m !== mood) || []
+      : [...(formData.mood_tags || []), mood];
     setFormData(prev => ({ ...prev, mood_tags: newMoods }));
   };
 
   const toggleDietary = (dietary: string) => {
-    const newDietary = formData.dietary_tags.includes(dietary)
-      ? formData.dietary_tags.filter(d => d !== dietary)
-      : [...formData.dietary_tags, dietary];
+    const newDietary = formData.dietary_tags?.includes(dietary)
+      ? formData.dietary_tags?.filter(d => d !== dietary) || []
+      : [...(formData.dietary_tags || []), dietary];
     setFormData(prev => ({ ...prev, dietary_tags: newDietary }));
   };
 
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
-    
-    if (!formData.title.trim()) {
+
+    if (!formData.title?.trim()) {
       newErrors.title = 'Collection title is required';
     }
-    
-    if (formData.title.length > 100) {
+
+    if (formData.title?.length && formData.title.length > 100) {
       newErrors.title = 'Title must be less than 100 characters';
     }
 
@@ -135,16 +135,16 @@ export function EditCollectionDialog({ open, onClose, collection, onUpdate }: Ed
                 <label key={mood} className="flex items-center cursor-pointer">
                   <input
                     type="checkbox"
-                    checked={formData.mood_tags.includes(mood)}
+                    checked={formData.mood_tags?.includes(mood) || false}
                     onChange={() => toggleMood(mood)}
                     className="sr-only"
                   />
                   <div className={`w-4 h-4 border-2 rounded mr-2 flex items-center justify-center ${
-                    formData.mood_tags.includes(mood)
+                    formData.mood_tags?.includes(mood)
                       ? 'border-orange-500 bg-orange-500'
                       : 'border-gray-300'
                   }`}>
-                    {formData.mood_tags.includes(mood) && (
+                    {formData.mood_tags?.includes(mood) && (
                       <Plus className="w-3 h-3 text-white" />
                     )}
                   </div>
@@ -181,16 +181,16 @@ export function EditCollectionDialog({ open, onClose, collection, onUpdate }: Ed
                 <label key={dietary} className="flex items-center cursor-pointer">
                   <input
                     type="checkbox"
-                    checked={formData.dietary_tags.includes(dietary)}
+                    checked={formData.dietary_tags?.includes(dietary) || false}
                     onChange={() => toggleDietary(dietary)}
                     className="sr-only"
                   />
                   <div className={`w-4 h-4 border-2 rounded mr-2 flex items-center justify-center ${
-                    formData.dietary_tags.includes(dietary)
+                    formData.dietary_tags?.includes(dietary)
                       ? 'border-mint-500 bg-mint-500'
                       : 'border-gray-300'
                   }`}>
-                    {formData.dietary_tags.includes(dietary) && (
+                    {formData.dietary_tags?.includes(dietary) && (
                       <Plus className="w-3 h-3 text-white" />
                     )}
                   </div>

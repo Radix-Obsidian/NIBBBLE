@@ -6,7 +6,23 @@ import { useAuth } from '@/hooks/useAuth'
 import { logger } from '@/lib/logger'
 import { supabase } from '@/lib/supabase/client'
 import { Activity } from '@/types'
-import { RecipeCardProps as BaseCardProps } from '@/app/components/recipe/recipe-card'
+
+// Simple interface for dashboard recipe cards
+interface DashboardRecipeCard {
+  id: any;
+  title: any;
+  description: any;
+  cookTime: any;
+  difficulty: any;
+  rating: any;
+  creator: { name: string; avatar: string; initials: string };
+  resource: { name: string; initials: string };
+  cuisine: any;
+  isTrending: boolean;
+  isLiked: boolean;
+  nutrition: any;
+}
+
 import { RecipeGrid } from '@/app/components/recipe/recipe-grid'
 import { StatsCard } from '@/app/components/dashboard/stats-card'
 import { TrendingUp, Heart, Users, Clock, BookOpen, Search, Folder } from 'lucide-react'
@@ -17,9 +33,9 @@ import Link from 'next/link'
 export default function DashboardPage() {
   const router = useRouter()
   const { user } = useAuth()
-  const [recipes, setRecipes] = useState<BaseCardProps[]>([])
-  const [favorites, setFavorites] = useState<BaseCardProps[]>([])
-  const [topRated, setTopRated] = useState<BaseCardProps[]>([])
+  const [recipes, setRecipes] = useState<DashboardRecipeCard[]>([])
+  const [favorites, setFavorites] = useState<DashboardRecipeCard[]>([])
+  const [topRated, setTopRated] = useState<DashboardRecipeCard[]>([])
   const [loading, setLoading] = useState(true)
   const [activities, setActivities] = useState<Activity[]>([])
   const [page, setPage] = useState(1)
@@ -139,7 +155,7 @@ export default function DashboardPage() {
           logger.error('Error fetching recipes', error)
           setRecipes([])
         } else {
-          const mapped: BaseCardProps[] = (data || []).map((r: any) => ({
+          const mapped: DashboardRecipeCard[] = (data || []).map((r: any) => ({
             id: r.id,
             title: r.title,
             description: r.description,
@@ -178,7 +194,7 @@ export default function DashboardPage() {
               logger.error('Favorites recipes error', favErr)
               setFavorites([])
             } else {
-              const favMapped: BaseCardProps[] = (favData || []).map((r: any) => ({
+              const favMapped: DashboardRecipeCard[] = (favData || []).map((r: any) => ({
                 id: r.id,
                 title: r.title,
                 description: r.description,
@@ -213,7 +229,7 @@ export default function DashboardPage() {
           logger.error('Top rated fetch error', topErr)
           setTopRated([])
         } else {
-          const topMapped: BaseCardProps[] = (topData || []).map((r: any) => ({
+          const topMapped: DashboardRecipeCard[] = (topData || []).map((r: any) => ({
             id: r.id,
             title: r.title,
             description: r.description,

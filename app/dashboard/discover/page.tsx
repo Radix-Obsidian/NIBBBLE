@@ -7,12 +7,18 @@ import { logger } from '@/lib/logger'
 import { RecipeCardProps } from '@/app/components/recipe/recipe-card'
 import { RecipeGrid } from '@/app/components/recipe/recipe-grid'
 import { SearchInterface } from '@/app/components/dashboard/search-interface'
-import { RecipeFilters, SearchParams } from '@/types'
+import { RecipeFilters, SearchParams, Recipe } from '@/types'
+import { DashboardRecipeCard } from '@/types'
 import { useAuth } from '@/hooks/useAuth'
+
+// Extend Recipe with isLiked property for UI state
+interface RecipeWithLike extends Recipe {
+  isLiked: boolean;
+}
 
 export default function DiscoverPage() {
   const router = useRouter()
-  const [recipes, setRecipes] = useState<RecipeCardProps[]>([])
+  const [recipes, setRecipes] = useState<DashboardRecipeCard[]>([])
   const [filters, setFilters] = useState<RecipeFilters>({})
   const [loading, setLoading] = useState(false)
   const { user } = useAuth()
@@ -163,6 +169,7 @@ export default function DiscoverPage() {
         logger.error('Discover search error', error)
         setRecipes([])
       } else {
+        // Add the summarize function back
         const summarize = (r: any) => {
           const clip = (s: string) => s.length > 120 ? s.slice(0, 117).trimEnd() + '…' : s
           const desc = (r.description || '').trim()
@@ -184,27 +191,19 @@ export default function DiscoverPage() {
           likedRecipeIds = (likes || []).map((l: any) => l.recipe_id)
         }
 
-        const mapped: RecipeCardProps[] = (data || []).map((r: any) => {
+        const mapped: DashboardRecipeCard[] = (data || []).map((r: any) => {
           const tags = Array.isArray(r.tags) ? r.tags : []
           
           return {
             id: r.id,
             title: r.title,
             description: summarize(r),
-            cookTime: r.cook_time,
-            difficulty: r.difficulty,
+            cookTime: r.cook_time || 0,
+            difficulty: r.difficulty || 'Medium',
             rating: r.rating || 0,
-            cuisine: r.cuisine || undefined,
-            image: r.image_url && !/edamam-product-images/.test(r.image_url) ? r.image_url.split('?')[0] : undefined,
-            creator: { 
-              name: 'Creator', 
-              avatar: '', 
-              initials: 'CR' 
-            },
-            resource: {
-              name: 'Edamam',
-              initials: 'ED'
-            },
+            creator: { name: 'Creator', avatar: '', initials: 'CR' },
+            resource: { name: 'Edamam', initials: 'ED' },
+            cuisine: r.cuisine || 'Unknown',
             isTrending: (r.likes_count || 0) > 100,
             isLiked: likedRecipeIds.includes(r.id),
             nutrition: estimateNutrition(r)

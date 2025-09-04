@@ -2,11 +2,11 @@
 
 import { useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase/client'
-import { RecipeCardProps } from '@/app/components/recipe/recipe-card'
 import { RecipeGrid } from '@/app/components/recipe/recipe-grid'
+import { DashboardRecipeCard } from '@/types'
 
 export default function TopRatedPage() {
-  const [recipes, setRecipes] = useState<RecipeCardProps[]>([])
+  const [recipes, setRecipes] = useState<DashboardRecipeCard[]>([])
 
   useEffect(() => {
     const load = async () => {
@@ -16,7 +16,7 @@ export default function TopRatedPage() {
         .order('rating', { ascending: false })
         .order('likes_count', { ascending: false })
         .limit(24)
-      const mapped: RecipeCardProps[] = (data || []).map((r: any) => ({
+      const mapped: DashboardRecipeCard[] = (data || []).map((r: any) => ({
         id: r.id,
         title: r.title,
         description: r.description,
