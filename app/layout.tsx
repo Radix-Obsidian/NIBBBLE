@@ -7,23 +7,23 @@ import { SpeedInsights } from '@vercel/speed-insights/next'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'PantryPals - Recipe Sharing Platform',
-  description: 'Learn to cook like a pro with step-by-step video guides from home cooks and professional chefs.',
-  keywords: 'recipes, cooking, food, video guides, community',
-  authors: [{ name: 'PantryPals Team' }],
+  title: 'NIBBBLE - The Dribbble for Food Creators',
+  description: 'SNACK. SHARE. SAVOR. Where TikTok meets Pinterest for food lovers. Share your recipes, discover amazing dishes, and build your culinary community.',
+  keywords: 'food, recipes, cooking, social media, food creators, community, video, sharing',
+  authors: [{ name: 'NIBBBLE Team' }],
   icons: {
     icon: '/favicon.svg',
   },
   openGraph: {
-    title: 'PantryPals - Recipe Sharing Platform',
-    description: 'Learn to cook like a pro with step-by-step video guides',
+    title: 'NIBBBLE - The Dribbble for Food Creators',
+    description: 'SNACK. SHARE. SAVOR. Where TikTok meets Pinterest for food lovers.',
     type: 'website',
     locale: 'en_US',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'PantryPals - Recipe Sharing Platform',
-    description: 'Learn to cook like a pro with step-by-step video guides',
+    title: 'NIBBBLE - The Dribbble for Food Creators',
+    description: 'SNACK. SHARE. SAVOR. Where TikTok meets Pinterest for food lovers.',
   },
 }
 

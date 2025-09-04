@@ -10,7 +10,6 @@ import {
   Plus,
   Settings,
   TrendingUp,
-  Users,
   BarChart3
 } from 'lucide-react'
 import { Button } from '../ui/button'
@@ -40,12 +39,7 @@ const navigationItems = [
     icon: TrendingUp,
     description: 'Organized recipe lists'
   },
-  {
-    name: 'Social',
-    href: '/dashboard/social',
-    icon: Users,
-    description: 'Connect with chefs'
-  },
+
   {
     name: 'Analytics',
     href: '/dashboard/analytics',

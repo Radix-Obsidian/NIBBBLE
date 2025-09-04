@@ -1,8 +1,16 @@
+'use client';
+
 import { Header, Footer } from '@/app/components';
 import { Button } from '@/app/components/ui/button';
 import { BookOpen, Users, TrendingUp } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
 export default function LearnMorePage() {
+  const router = useRouter();
+
+  const handleGetStarted = () => {
+    router.push('/signin');
+  };
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-amber-50">
       <Header />
@@ -16,10 +24,8 @@ export default function LearnMorePage() {
           <p className="text-xl text-gray-600 mb-8">
             The ultimate platform for home cooks, food creators, and culinary enthusiasts
           </p>
-          <Button size="xl" className="mr-4">
-            <a href="/signin" className="w-full h-full flex items-center justify-center">
-              Get Started Free
-            </a>
+          <Button size="xl" className="mr-4" onClick={handleGetStarted}>
+            Get Started Free
           </Button>
         </section>
 
@@ -90,10 +96,8 @@ export default function LearnMorePage() {
           <p className="text-xl text-gray-600 mb-8">
             Join thousands of home cooks who are already creating amazing meals
           </p>
-          <Button size="xl">
-            <a href="/signin" className="w-full h-full flex items-center justify-center">
-              Get Started Free
-            </a>
+          <Button size="xl" onClick={handleGetStarted}>
+            Get Started Free
           </Button>
         </section>
       </main>

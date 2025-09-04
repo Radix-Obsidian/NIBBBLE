@@ -36,6 +36,14 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     setMobileMenuOpen(false)
   }, [pathname])
 
+  // Progressive loading for non-critical components
+  const [componentsLoaded, setComponentsLoaded] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setComponentsLoaded(true), 200);
+    return () => clearTimeout(timer);
+  }, []);
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-orange-50 via-white to-amber-50">

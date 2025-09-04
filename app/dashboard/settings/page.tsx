@@ -5,7 +5,7 @@ import { Card } from '@/app/components/ui/card'
 import { supabase } from '@/lib/supabase/client'
 import { useAuth } from '@/hooks/useAuth'
 import { logger } from '@/lib/logger'
-import { SocialConnections } from '@/app/components/social/social-connections'
+
 
 interface Profile {
   id: string
@@ -39,22 +39,7 @@ export default function SettingsPage() {
     favorite_cuisines: [] as string[]
   })
 
-  // Social connections stored locally per user for now
-  const [accounts, setAccounts] = useState<{ tiktok: string; instagram: string }>({ tiktok: '', instagram: '' })
-  const accountsKey = (uid?: string) => `pp_connected_accounts:${uid || 'anon'}`
 
-  useEffect(() => {
-    if (!user) return
-    try {
-      const raw = localStorage.getItem(accountsKey(user.id))
-      if (raw) setAccounts(JSON.parse(raw))
-    } catch {}
-  }, [user])
-
-  useEffect(() => {
-    if (!user) return
-    try { localStorage.setItem(accountsKey(user.id), JSON.stringify(accounts)) } catch {}
-  }, [accounts, user])
 
   const loadProfile = useCallback(async () => {
     if (!user) return
@@ -211,11 +196,7 @@ export default function SettingsPage() {
         </div>
       </Card>
 
-      <Card className='p-4 sm:p-6 border border-gray-200 rounded-2xl'>
-        <h3 className='font-semibold text-gray-900 mb-4'>Social Connections</h3>
-        <p className='text-sm text-gray-600 mb-4'>Connect your TikTok and Instagram accounts to import food content.</p>
-        <SocialConnections />
-      </Card>
+
 
       <Card className='p-4 sm:p-6 border border-gray-200 rounded-2xl'>
         <h3 className='font-semibold text-gray-900 mb-4'>Profile Statistics</h3>

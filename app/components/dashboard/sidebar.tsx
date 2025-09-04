@@ -9,12 +9,14 @@ import {
   Plus,
   Settings,
   TrendingUp,
-  Users,
   BarChart3,
   X,
-  Menu
+  Menu,
+  Video,
+  Bookmark
 } from 'lucide-react'
 import { Button } from '../ui/button'
+import { FEATURES } from '@/lib/config/features'
 
 export interface SidebarProps {
   isCollapsed: boolean
@@ -25,14 +27,31 @@ export interface SidebarProps {
 }
 
 export function Sidebar({ isCollapsed, onToggle, currentPath, onMobileClose, isMobile = false }: SidebarProps) {
-  const navigationItems = useMemo(() => ([
-    { name: 'Dashboard', href: '/dashboard', icon: Home, description: 'Overview and activity' },
-    { name: 'Discover', href: '/dashboard/discover', icon: Search, description: 'Find new recipes' },
-    { name: 'My Recipes', href: '/dashboard/recipes', icon: BookOpen, description: 'Your created recipes' },
-    { name: 'Collections', href: '/dashboard/collections', icon: TrendingUp, description: 'Organized recipe lists' },
-    { name: 'Social', href: '/dashboard/social', icon: Users, description: 'Connect with chefs' },
-    { name: 'Analytics', href: '/dashboard/analytics', icon: BarChart3, description: 'Performance insights' }
-  ]), [])
+  const navigationItems = useMemo(() => {
+    const items = [
+      { name: 'Dashboard', href: '/dashboard', icon: Home, description: 'Overview and activity' },
+      { name: 'Discover', href: '/dashboard/discover', icon: Search, description: 'Find new recipes' },
+      { name: 'My Recipes', href: '/dashboard/recipes', icon: BookOpen, description: 'Your created recipes' },
+      { name: 'Upload Video', href: '/dashboard/upload-video', icon: Video, description: 'Create video recipes' },
+    ];
+
+    // Add NIBBBLE Collections if feature is enabled
+    if (FEATURES.enableNibbleCollections) {
+      items.push({
+        name: 'Your Nibbles',
+        href: '/dashboard/collections',
+        icon: Bookmark,
+        description: 'Organize recipes by mood & cuisine'
+      });
+    }
+
+    // Add other items
+    items.push(
+      { name: 'Analytics', href: '/dashboard/analytics', icon: BarChart3, description: 'Performance insights' }
+    );
+
+    return items;
+  }, [])
 
   const userItems = useMemo(() => ([
     { name: 'Settings', href: '/dashboard/settings', icon: Settings, description: 'App preferences' }
@@ -48,8 +67,8 @@ export function Sidebar({ isCollapsed, onToggle, currentPath, onMobileClose, isM
     `}>
       {/* Mobile Header */}
       <div className="lg:hidden flex items-center justify-between p-4 sm:p-6 border-b border-gray-200/50">
-        <h1 className="text-responsive-xl font-bold bg-gradient-to-r from-primary-600 to-secondary-600 bg-clip-text text-transparent">
-          PantryPals
+        <h1 className="text-responsive-xl font-bold bg-gradient-to-r from-[#FF375F] to-[#FFD84D] bg-clip-text text-transparent">
+          NIBBBLE
         </h1>
         <button
           onClick={onMobileClose}
@@ -63,8 +82,8 @@ export function Sidebar({ isCollapsed, onToggle, currentPath, onMobileClose, isM
       {/* Desktop Toggle Button */}
       <div className="hidden lg:flex items-center justify-between p-4 border-b border-gray-200/50">
         {!isCollapsed && (
-          <h1 className="text-responsive-xl font-bold bg-gradient-to-r from-primary-600 to-secondary-600 bg-clip-text text-transparent">
-            PantryPals
+          <h1 className="text-responsive-xl font-bold bg-gradient-to-r from-[#FF375F] to-[#FFD84D] bg-clip-text text-transparent">
+            NIBBBLE
           </h1>
         )}
         <button
