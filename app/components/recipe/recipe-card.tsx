@@ -5,15 +5,35 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Clock, ChefHat, User, Star } from 'lucide-react';
 import { Recipe } from '@/types';
+import { useAuth } from '@/hooks/useAuth';
+import EnhancedRecipeCard from './enhanced-recipe-card';
 
 export interface RecipeCardProps {
   recipe: Recipe;
   className?: string;
   onLike?: (id: string) => void;
   onView?: (id: string) => void;
+  showCommerceFeatures?: boolean;
 }
 
-function RecipeCard({ recipe, className = '' }: RecipeCardProps) {
+function RecipeCard({ recipe, className = '', onLike, onView, showCommerceFeatures = true }: RecipeCardProps) {
+  const { user } = useAuth();
+
+  // If commerce features are enabled and user is logged in, use enhanced card
+  if (showCommerceFeatures && user) {
+    return (
+      <EnhancedRecipeCard
+        recipe={recipe}
+        userId={user.id}
+        className={className}
+        onLike={onLike}
+        onView={onView}
+        showCommerceFeatures={showCommerceFeatures}
+      />
+    );
+  }
+
+  // Otherwise, use original card
   const formatTime = (minutes: number): string => {
     if (minutes < 60) return `${minutes}m`;
     const hours = Math.floor(minutes / 60);

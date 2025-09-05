@@ -1,11 +1,19 @@
 'use client'
 
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { useAuth } from '@/hooks/useAuth'
 import { logger } from '@/lib/logger'
 import { supabase } from '@/lib/supabase/client'
 import { Activity } from '@/types'
+
+interface Profile {
+  id: string
+  username: string | null
+  display_name: string | null
+  bio: string | null
+  avatar_url: string | null
+}
 
 // Simple interface for dashboard recipe cards
 interface DashboardRecipeCard {
@@ -36,6 +44,7 @@ export default function DashboardPage() {
   const [recipes, setRecipes] = useState<DashboardRecipeCard[]>([])
   const [favorites, setFavorites] = useState<DashboardRecipeCard[]>([])
   const [topRated, setTopRated] = useState<DashboardRecipeCard[]>([])
+  const [profile, setProfile] = useState<Profile | null>(null)
   const [loading, setLoading] = useState(true)
   const [activities, setActivities] = useState<Activity[]>([])
   const [page, setPage] = useState(1)
@@ -140,11 +149,34 @@ export default function DashboardPage() {
     }
   }
 
+  const loadProfile = async () => {
+    if (!user) return
+    try {
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('id, username, display_name, bio, avatar_url')
+        .eq('id', user.id)
+        .single()
+
+      if (error) {
+        logger.error('Error loading profile', error)
+        return
+      }
+
+      setProfile(data)
+    } catch (error) {
+      logger.error('Profile load error', error)
+    }
+  }
+
   useEffect(() => {
     const load = async () => {
       if (!user) return
       try {
         setLoading(true)
+        
+        // Load profile data
+        await loadProfile()
         const { data, error } = await supabase
           .from('recipes')
           .select('id, title, description, cook_time, difficulty, rating, creator_id, likes_count, created_at, cuisine')
@@ -302,7 +334,7 @@ export default function DashboardPage() {
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 sm:gap-6">
           <div className="min-w-0 flex-1">
             <h2 className="text-responsive-2xl font-bold text-gray-900 mb-2">
-              Welcome back{user?.email ? `, ${user.email.split('@')[0]}` : ''}! 🎉✨
+              Welcome back{profile?.display_name ? `, ${profile.display_name}` : user?.email ? `, ${user.email.split('@')[0]}` : ''}! 🎉✨
             </h2>
             <p className="text-responsive text-gray-600">
               Ready to create some delicious recipes today? 🍳👨‍🍳

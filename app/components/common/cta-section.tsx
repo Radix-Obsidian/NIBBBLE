@@ -2,6 +2,7 @@
 
 import { Button } from '../ui/button';
 import { useRouter } from 'next/navigation';
+import { ArrowRight, Brain, Target, Zap, Clock } from 'lucide-react';
 
 export function CTASection() {
   const router = useRouter();
@@ -15,28 +16,88 @@ export function CTASection() {
   };
 
   return (
-    <section className="py-20 bg-white">
+    <section className="py-20 bg-gradient-to-br from-purple-50 via-white to-orange-50">
       <div className="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
+        <div className="inline-flex items-center space-x-2 bg-[#FF375F]/10 border border-[#FF375F]/20 rounded-full px-4 py-2 mb-6">
+          <Clock className="w-4 h-4 text-[#FF375F]" />
+          <span className="text-[#FF375F] font-semibold text-sm">LAUNCHING SOON</span>
+        </div>
+        
         <h2 className="text-4xl font-bold text-gray-900 mb-6">
-          Ready to Start Your Cooking Journey?
+          Ready to Transform Your Cooking with AI?
         </h2>
         <p className="text-xl text-gray-600 mb-8">
-          Join our community of passionate cooks and food lovers today
+          Join the waitlist for NIBBBLE's AI-native cooking platform. Experience recipes that adapt to you, 
+          not the other way around. Be among the first to cook smarter.
         </p>
+        
+        {/* Feature Highlights */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+          <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
+            <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <Brain className="w-6 h-6 text-purple-600" />
+            </div>
+            <h3 className="font-semibold text-gray-900 mb-2">AI Recipe Adaptation</h3>
+            <p className="text-sm text-gray-600">Every recipe personalized to your kitchen and skill level</p>
+          </div>
+          
+          <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
+            <div className="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <Target className="w-6 h-6 text-orange-600" />
+            </div>
+            <h3 className="font-semibold text-gray-900 mb-2">Success Prediction</h3>
+            <p className="text-sm text-gray-600">Know before you cook if you'll succeed</p>
+          </div>
+          
+          <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
+            <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <Zap className="w-6 h-6 text-blue-600" />
+            </div>
+            <h3 className="font-semibold text-gray-900 mb-2">Integrated Commerce</h3>
+            <p className="text-sm text-gray-600">Seamless shopping and cooking experience</p>
+          </div>
+        </div>
+        
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <Button size="xl" onClick={handleGetStarted}>
-            Get Started Free
+          <Button 
+            size="xl" 
+            onClick={handleGetStarted}
+            className="bg-gradient-to-r from-[#FF375F] to-[#FFD84D] hover:from-[#FF375F]/90 hover:to-[#FFD84D]/90 text-white border-0 shadow-lg hover:shadow-xl transition-all duration-200"
+          >
+            <span>Join the Waitlist</span>
+            <ArrowRight className="w-5 h-5 ml-2" />
           </Button>
           <Button 
             variant="outline" 
             size="xl" 
             onClick={() => router.push('/signin?mode=signup')}
+            className="border-2 border-gray-300 hover:border-purple-500 hover:text-purple-600 transition-all duration-200"
           >
-            Create Account
+            Join as Creator
           </Button>
-          <Button variant="outline" size="xl" onClick={handleLearnMore}>
+          <Button 
+            variant="outline" 
+            size="xl" 
+            onClick={handleLearnMore}
+            className="border-2 border-gray-300 hover:border-orange-500 hover:text-orange-600 transition-all duration-200"
+          >
             Learn More
           </Button>
+        </div>
+        
+        {/* Trust Indicators */}
+        <div className="mt-12 pt-8 border-t border-gray-200">
+          <p className="text-sm text-gray-500 mb-4">Building the future of home cooking</p>
+          <div className="flex flex-wrap justify-center items-center gap-8 opacity-60">
+            <div className="text-2xl font-bold text-gray-400">94%</div>
+            <div className="text-sm text-gray-500">Target Success Rate</div>
+            <div className="w-px h-6 bg-gray-300"></div>
+            <div className="text-2xl font-bold text-gray-400">AI-Powered</div>
+            <div className="text-sm text-gray-500">Recipe Adaptation</div>
+            <div className="w-px h-6 bg-gray-300"></div>
+            <div className="text-2xl font-bold text-gray-400">Launching</div>
+            <div className="text-sm text-gray-500">Early 2024</div>
+          </div>
         </div>
       </div>
     </section>

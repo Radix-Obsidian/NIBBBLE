@@ -1,10 +1,29 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import { Search, BookOpen, ChevronDown, User, ShoppingCart } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { ShoppingCart as ShoppingCartComponent } from '@/app/components/commerce/shopping-cart';
+import { CommerceService } from '@/lib/services/commerce-service';
 
 export function Header() {
   const router = useRouter();
+  const [isCartOpen, setIsCartOpen] = useState(false);
+  const [cartItemCount, setCartItemCount] = useState(0);
+  const userId = 'temp-user-id'; // This would come from auth context
+
+  useEffect(() => {
+    loadCartCount();
+  }, []);
+
+  const loadCartCount = async () => {
+    try {
+      const cart = await CommerceService.getCart(userId);
+      setCartItemCount(cart?.cart_items?.length || 0);
+    } catch (error) {
+      console.error('Failed to load cart count:', error);
+    }
+  };
 
   const handleSignIn = () => {
     router.push('/signin');
@@ -67,12 +86,27 @@ export function Header() {
             </button>
             
             {/* Cart Icon */}
-            <button className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-[#FF375F] transition-colors">
+            <button 
+              onClick={() => setIsCartOpen(true)}
+              className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-[#FF375F] transition-colors relative"
+            >
               <ShoppingCart className="w-5 h-5 text-gray-300" />
+              {cartItemCount > 0 && (
+                <span className="absolute -top-1 -right-1 bg-[#FF375F] text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                  {cartItemCount}
+                </span>
+              )}
             </button>
           </div>
         </div>
       </div>
+      
+      {/* Shopping Cart Sidebar */}
+      <ShoppingCartComponent
+        userId={userId}
+        isOpen={isCartOpen}
+        onClose={() => setIsCartOpen(false)}
+      />
     </header>
   );
 }

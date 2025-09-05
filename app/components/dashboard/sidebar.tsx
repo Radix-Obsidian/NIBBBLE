@@ -13,7 +13,10 @@ import {
   X,
   Menu,
   Video,
-  Bookmark
+  Bookmark,
+  User,
+  ShoppingCart,
+  Package
 } from 'lucide-react'
 import { Button } from '../ui/button'
 import { FEATURES } from '@/lib/config/features'
@@ -30,9 +33,12 @@ export function Sidebar({ isCollapsed, onToggle, currentPath, onMobileClose, isM
   const navigationItems = useMemo(() => {
     const items = [
       { name: 'Dashboard', href: '/dashboard', icon: Home, description: 'Overview and activity' },
+      { name: 'My Profile', href: '/dashboard/profile', icon: User, description: 'AI cooking profile & preferences' },
       { name: 'Discover', href: '/dashboard/discover', icon: Search, description: 'Find new recipes' },
       { name: 'My Recipes', href: '/dashboard/recipes', icon: BookOpen, description: 'Your created recipes' },
       { name: 'Upload Video', href: '/dashboard/upload-video', icon: Video, description: 'Create video recipes' },
+      { name: 'Shopping', href: '/dashboard/shopping', icon: ShoppingCart, description: 'Smart grocery shopping' },
+      { name: 'Inventory', href: '/dashboard/inventory', icon: Package, description: 'Pantry management' },
     ];
 
     // Add NIBBBLE Collections if feature is enabled

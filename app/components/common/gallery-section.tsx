@@ -1,74 +1,101 @@
 'use client';
 
-import { ArrowRight, Instagram } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { ArrowRight, Users, Star, Zap, CheckCircle } from 'lucide-react';
 
-export function GallerySection() {
-  const galleryImages = [
+export function EarlyAccessSection() {
+  const router = useRouter();
+
+  const benefits = [
     {
-      id: 1,
-      description: "Chef chopping vegetables",
-      image: "🔪",
-      color: "bg-gray-100"
+      icon: <Users className="w-6 h-6 text-purple-600" />,
+      title: "Exclusive Access",
+      description: "Be among the first 1,000 users to experience NIBBBLE"
     },
     {
-      id: 2,
-      description: "Chef stirring food in pan",
-      image: "🍳",
-      color: "bg-orange-100"
+      icon: <Star className="w-6 h-6 text-yellow-600" />,
+      title: "Free Premium Features",
+      description: "Lifetime access to AI recipe adaptation and success prediction"
     },
     {
-      id: 3,
-      description: "Food cooking with flames",
-      image: "🔥",
-      color: "bg-red-100"
-    },
-    {
-      id: 4,
-      description: "Chef grilling meat",
-      image: "🥩",
-      color: "bg-amber-100"
+      icon: <Zap className="w-6 h-6 text-blue-600" />,
+      title: "Direct Feedback",
+      description: "Help shape the future of home cooking with your input"
     }
   ];
 
   return (
     <section className="py-20 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Section Header */}
-        <div className="flex items-center justify-between mb-16">
-          <h2 className="text-4xl font-bold text-gray-900">
-            Gallery of ours
-          </h2>
-          
-          {/* Instagram Link */}
-          <a 
-            href="#" 
-            className="flex items-center space-x-2 text-[#FF375F] hover:text-[#FF375F]/80 font-medium transition-colors"
-          >
-            <Instagram className="w-6 h-6" />
-            <span>Instagram</span>
-          </a>
-        </div>
-
-        {/* Gallery Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-          {galleryImages.map((item) => (
-            <div key={item.id} className="group cursor-pointer">
-              <div className={`${item.color} rounded-2xl aspect-square flex items-center justify-center p-8 hover:shadow-lg transition-all duration-200`}>
-                <span className="text-6xl group-hover:scale-110 transition-transform">
-                  {item.image}
-                </span>
-              </div>
-              <p className="text-sm text-gray-600 mt-3 text-center">{item.description}</p>
+        <div className="grid lg:grid-cols-2 gap-16 items-center">
+          {/* Left Side - Content */}
+          <div className="space-y-8">
+            <div className="space-y-6">
+              <h2 className="text-4xl font-bold text-gray-900 leading-tight">
+                Join the AI Cooking Revolution
+              </h2>
+              <p className="text-xl text-gray-600 leading-relaxed">
+                NIBBBLE is launching soon, and we're looking for passionate home cooks 
+                to help us build the future of cooking. Get early access and help shape 
+                the platform that will transform how we cook at home.
+              </p>
             </div>
-          ))}
-        </div>
 
-        {/* See More Button */}
-        <div className="text-center">
-          <button className="bg-gradient-to-r from-[#FF375F] to-[#FFD84D] hover:from-[#FF375F]/90 hover:to-[#FFD84D]/90 text-white px-8 py-4 rounded-lg font-semibold flex items-center space-x-3 mx-auto transition-all duration-200 hover:shadow-lg">
-            <span>See More</span>
-            <ArrowRight className="w-5 h-5" />
-          </button>
+            {/* Benefits */}
+            <div className="space-y-4">
+              {benefits.map((benefit, index) => (
+                <div key={index} className="flex items-center space-x-4">
+                  <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center flex-shrink-0">
+                    {benefit.icon}
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-gray-900">{benefit.title}</h3>
+                    <p className="text-gray-600 text-sm">{benefit.description}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* CTA */}
+            <button 
+              onClick={() => router.push('/signin?mode=signup')}
+              className="bg-gradient-to-r from-[#FF375F] to-[#FFD84D] hover:from-[#FF375F]/90 hover:to-[#FFD84D]/90 text-white px-8 py-4 rounded-lg font-semibold flex items-center space-x-3 transition-all duration-200 hover:shadow-lg"
+            >
+              <span>Get Early Access</span>
+              <ArrowRight className="w-5 h-5" />
+            </button>
+          </div>
+
+          {/* Right Side - Visual */}
+          <div className="relative">
+            <div className="bg-gradient-to-br from-[#FF375F] to-[#FFD84D] rounded-3xl p-8 aspect-square flex flex-col items-center justify-center shadow-2xl">
+              <div className="text-center text-white">
+                <div className="w-24 h-24 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center mx-auto mb-6">
+                  <span className="text-4xl">🚀</span>
+                </div>
+                
+                <h3 className="text-2xl font-bold mb-4">Launching Soon</h3>
+                <div className="space-y-3 text-white/90">
+                  <div className="flex items-center justify-center space-x-2">
+                    <CheckCircle className="w-5 h-5" />
+                    <span>AI Recipe Adaptation</span>
+                  </div>
+                  <div className="flex items-center justify-center space-x-2">
+                    <CheckCircle className="w-5 h-5" />
+                    <span>Success Prediction</span>
+                  </div>
+                  <div className="flex items-center justify-center space-x-2">
+                    <CheckCircle className="w-5 h-5" />
+                    <span>Integrated Shopping</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            {/* Floating Elements */}
+            <div className="absolute -top-4 -right-4 w-8 h-8 bg-white rounded-full shadow-lg animate-bounce"></div>
+            <div className="absolute -bottom-4 -left-4 w-6 h-6 bg-white rounded-full shadow-lg animate-bounce delay-500"></div>
+          </div>
         </div>
       </div>
     </section>
