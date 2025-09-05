@@ -1,36 +1,29 @@
 'use client';
 
-import { ArrowRight, Instagram, Twitter } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { ArrowRight, Users, Star, Zap, Clock } from 'lucide-react';
 
-export function TrendsettersSection() {
-  const trendsetters = [
+export function EarlyAdopterSection() {
+  const router = useRouter();
+
+  const earlyAdopterBenefits = [
     {
-      id: 1,
-      name: "Simone and Alex Stream",
-      role: "Food Blogger",
-      image: "👨‍💻",
-      color: "bg-blue-100"
+      icon: <Users className="w-8 h-8 text-white" />,
+      title: "Exclusive Access",
+      description: "Be among the first to experience NIBBBLE's AI-powered cooking",
+      color: "from-blue-500 to-purple-500"
     },
     {
-      id: 2,
-      name: "Ash Robinson",
-      role: "Food Blogger",
-      image: "👨‍🍳",
-      color: "bg-green-100"
+      icon: <Star className="w-8 h-8 text-white" />,
+      title: "Free Premium",
+      description: "Lifetime access to all premium features for early adopters",
+      color: "from-orange-500 to-red-500"
     },
     {
-      id: 3,
-      name: "Charlie Irlove",
-      role: "Food Blogger",
-      image: "👨‍🎨",
-      color: "bg-yellow-100"
-    },
-    {
-      id: 4,
-      name: "Steven Davis",
-      role: "Food Blogger",
-      image: "👨‍💼",
-      color: "bg-purple-100"
+      icon: <Zap className="w-8 h-8 text-white" />,
+      title: "Direct Influence",
+      description: "Help shape the platform with your feedback and suggestions",
+      color: "from-green-500 to-teal-500"
     }
   ];
 
@@ -39,41 +32,39 @@ export function TrendsettersSection() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center mb-16">
+          <div className="inline-flex items-center space-x-2 bg-[#FF375F]/10 border border-[#FF375F]/20 rounded-full px-4 py-2 mb-6">
+            <Clock className="w-4 h-4 text-[#FF375F]" />
+            <span className="text-[#FF375F] font-semibold text-sm">LIMITED SPOTS</span>
+          </div>
           <h2 className="text-4xl font-bold text-gray-900 mb-6">
-            Trendsetters Making Waves in the Spotlight
+            Join Our Early Adopter Community
           </h2>
+          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            We're looking for passionate home cooks to help us build and test NIBBBLE. 
+            Be part of the community that shapes the future of AI-powered cooking.
+          </p>
         </div>
 
-        {/* Trendsetters Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-          {trendsetters.map((person) => (
-            <div key={person.id} className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-xl transition-shadow">
-              {/* Profile Image */}
-              <div className={`${person.color} aspect-square flex items-center justify-center p-8`}>
-                <span className="text-6xl">{person.image}</span>
+        {/* Benefits Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+          {earlyAdopterBenefits.map((benefit, index) => (
+            <div key={index} className="bg-white rounded-2xl p-8 shadow-lg border border-gray-100 hover:shadow-xl transition-all duration-200">
+              <div className={`w-16 h-16 bg-gradient-to-br ${benefit.color} rounded-2xl flex items-center justify-center mx-auto mb-6`}>
+                {benefit.icon}
               </div>
-              
-              {/* Profile Info */}
-              <div className="p-6 text-center">
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                  {person.name}
-                </h3>
-                <p className="text-sm text-gray-600 mb-4">{person.role}</p>
-                
-                {/* Social Media Icons */}
-                <div className="flex items-center justify-center space-x-3">
-                  <Instagram className="w-5 h-5 text-pink-500 hover:text-pink-600 cursor-pointer" />
-                  <Twitter className="w-5 h-5 text-blue-500 hover:text-blue-600 cursor-pointer" />
-                </div>
-              </div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-4 text-center">{benefit.title}</h3>
+              <p className="text-gray-600 text-center leading-relaxed">{benefit.description}</p>
             </div>
           ))}
         </div>
 
-        {/* See More Button */}
+        {/* CTA */}
         <div className="text-center">
-          <button className="bg-gradient-to-r from-[#FF375F] to-[#FFD84D] hover:from-[#FF375F]/90 hover:to-[#FFD84D]/90 text-white px-8 py-4 rounded-lg font-semibold flex items-center space-x-3 mx-auto transition-all duration-200 hover:shadow-lg">
-            <span>See More</span>
+          <button 
+            onClick={() => router.push('/signin?mode=signup')}
+            className="bg-gradient-to-r from-[#FF375F] to-[#FFD84D] hover:from-[#FF375F]/90 hover:to-[#FFD84D]/90 text-white px-8 py-4 rounded-lg font-semibold flex items-center space-x-3 mx-auto transition-all duration-200 hover:shadow-lg"
+          >
+            <span>Become an Early Adopter</span>
             <ArrowRight className="w-5 h-5" />
           </button>
         </div>

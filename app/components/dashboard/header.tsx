@@ -1,8 +1,8 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { User as SupabaseUser } from '@supabase/supabase-js'
-import { Bell, Search, Plus, Menu, X } from 'lucide-react'
+import { Bell, Search, Plus, Menu, X, ShoppingCart } from 'lucide-react'
 import Link from 'next/link'
 import { Input } from '../ui/input'
 import { Button } from '../ui/button'
@@ -21,8 +21,27 @@ export interface HeaderProps {
 export function Header({ user, onSearch, onNotificationClick, onMobileMenuToggle, isMobile = false }: HeaderProps) {
   const [query, setQuery] = useState('')
   const [searchOpen, setSearchOpen] = useState(false)
+  const [cartItemCount, setCartItemCount] = useState(0)
   const { signOut } = useAuth()
   const router = useRouter()
+
+  // Load cart count (would be replaced with real cart service call)
+  useEffect(() => {
+    const loadCartCount = async () => {
+      try {
+        // This would call ShoppingCartService.getActiveCart(user.id)
+        // For now, using mock data
+        setCartItemCount(3)
+      } catch (error) {
+        console.error('Failed to load cart count:', error)
+        setCartItemCount(0)
+      }
+    }
+    
+    if (user?.id) {
+      loadCartCount()
+    }
+  }, [user?.id])
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -85,6 +104,23 @@ export function Header({ user, onSearch, onNotificationClick, onMobileMenuToggle
                 <span className="hidden lg:inline">Create</span>
               </Button>
             </Link>
+            
+            <Link href="/dashboard/shopping">
+              <Button 
+                variant="outline" 
+                size="sm" 
+                aria-label="Shopping cart"
+                className="btn touch-target p-2 relative"
+              >
+                <ShoppingCart className="w-4 h-4" />
+                {cartItemCount > 0 && (
+                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                    {cartItemCount > 9 ? '9+' : cartItemCount}
+                  </span>
+                )}
+              </Button>
+            </Link>
+            
             <Button 
               variant="outline" 
               size="sm" 
@@ -111,6 +147,22 @@ export function Header({ user, onSearch, onNotificationClick, onMobileMenuToggle
 
           {/* Mobile Actions */}
           <div className="md:hidden flex items-center space-x-1">
+            <Link href="/dashboard/shopping">
+              <Button 
+                variant="outline" 
+                size="sm" 
+                aria-label="Shopping cart"
+                className="btn touch-target p-2 relative"
+              >
+                <ShoppingCart className="w-4 h-4" />
+                {cartItemCount > 0 && (
+                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center">
+                    {cartItemCount > 9 ? '9+' : cartItemCount}
+                  </span>
+                )}
+              </Button>
+            </Link>
+            
             <Button 
               variant="outline" 
               size="sm" 

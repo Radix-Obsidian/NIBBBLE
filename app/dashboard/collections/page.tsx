@@ -3,10 +3,11 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Plus, Filter, Search, Grid3X3, List } from 'lucide-react';
+import { Plus, Filter, Search, Grid3X3, List, ShoppingCart } from 'lucide-react';
 import { CollectionCard } from '@/components/nibble/collection-card';
 import { CreateCollectionDialog } from '@/components/nibble/create-collection-dialog';
 import { CollectionsFilter } from '@/components/nibble/collections-filter';
+import CollectionToCart from '@/app/components/commerce/collection-to-cart';
 import { NibbleCollectionsService } from '@/lib/services/nibble-collections';
 import { NibbleCollection, MOOD_TAGS, CUISINE_TYPES, DIETARY_TAGS } from '@/types/nibble-collections';
 import { useAuth } from '@/hooks/useAuth';
