@@ -8,17 +8,17 @@ export function EarlyAccessSection() {
 
   const benefits = [
     {
-      icon: <Users className="w-6 h-6 text-purple-600" />,
+      icon: <Users className="w-6 h-6 text-[#f97316]" />,
       title: "Exclusive Access",
       description: "Be among the first 1,000 users to experience NIBBBLE"
     },
     {
-      icon: <Star className="w-6 h-6 text-yellow-600" />,
+      icon: <Star className="w-6 h-6 text-[#d97706]" />,
       title: "Free Premium Features",
       description: "Lifetime access to AI recipe adaptation and success prediction"
     },
     {
-      icon: <Zap className="w-6 h-6 text-blue-600" />,
+      icon: <Zap className="w-6 h-6 text-[#10b981]" />,
       title: "Direct Feedback",
       description: "Help shape the future of home cooking with your input"
     }
@@ -31,8 +31,8 @@ export function EarlyAccessSection() {
           {/* Left Side - Content */}
           <div className="space-y-8">
             <div className="space-y-6">
-              <h2 className="text-4xl font-bold text-gray-900 leading-tight">
-                Join the AI Cooking Revolution
+              <h2 className="text-4xl font-bold text-[#111827] leading-tight font-['Poppins']">
+                Join the Smart Cooking Movement
               </h2>
               <p className="text-xl text-gray-600 leading-relaxed">
                 NIBBBLE is launching soon, and we're looking for passionate home cooks 
@@ -45,11 +45,11 @@ export function EarlyAccessSection() {
             <div className="space-y-4">
               {benefits.map((benefit, index) => (
                 <div key={index} className="flex items-center space-x-4">
-                  <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center flex-shrink-0">
+                  <div className="w-12 h-12 bg-[#f9fafb] rounded-full flex items-center justify-center flex-shrink-0">
                     {benefit.icon}
                   </div>
                   <div>
-                    <h3 className="font-semibold text-gray-900">{benefit.title}</h3>
+                    <h3 className="font-semibold text-[#111827]">{benefit.title}</h3>
                     <p className="text-gray-600 text-sm">{benefit.description}</p>
                   </div>
                 </div>
@@ -59,7 +59,7 @@ export function EarlyAccessSection() {
             {/* CTA */}
             <button 
               onClick={() => router.push('/signin?mode=signup')}
-              className="bg-gradient-to-r from-[#FF375F] to-[#FFD84D] hover:from-[#FF375F]/90 hover:to-[#FFD84D]/90 text-white px-8 py-4 rounded-lg font-semibold flex items-center space-x-3 transition-all duration-200 hover:shadow-lg"
+              className="bg-gradient-to-r from-[#f97316] to-[#d97706] hover:from-[#f97316]/90 hover:to-[#d97706]/90 text-white px-8 py-4 rounded-lg font-semibold flex items-center space-x-3 transition-all duration-200 hover:shadow-lg"
             >
               <span>Get Early Access</span>
               <ArrowRight className="w-5 h-5" />
@@ -68,13 +68,13 @@ export function EarlyAccessSection() {
 
           {/* Right Side - Visual */}
           <div className="relative">
-            <div className="bg-gradient-to-br from-[#FF375F] to-[#FFD84D] rounded-3xl p-8 aspect-square flex flex-col items-center justify-center shadow-2xl">
+            <div className="bg-gradient-to-br from-[#f97316] to-[#d97706] rounded-3xl p-8 aspect-square flex flex-col items-center justify-center shadow-2xl">
               <div className="text-center text-white">
                 <div className="w-24 h-24 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center mx-auto mb-6">
                   <span className="text-4xl">🚀</span>
                 </div>
                 
-                <h3 className="text-2xl font-bold mb-4">Launching Soon</h3>
+                <h3 className="text-2xl font-bold mb-4 font-['Poppins']">Launching Soon</h3>
                 <div className="space-y-3 text-white/90">
                   <div className="flex items-center justify-center space-x-2">
                     <CheckCircle className="w-5 h-5" />

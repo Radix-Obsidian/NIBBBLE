@@ -1,7 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { ArrowRight, Play, CheckCircle, Users, TrendingUp } from 'lucide-react';
+import { ArrowRight, Play, CheckCircle, Users, TrendingUp, Target } from 'lucide-react';
 
 export function RestaurantQualitySection() {
   const router = useRouter();
@@ -12,28 +12,28 @@ export function RestaurantQualitySection() {
       name: "Quick & Easy",
       image: "🍳",
       color: "bg-yellow-100",
-      successRate: "96%"
+      targetRate: "Aiming for 90%+"
     },
     {
       id: 2,
       name: "Family Favorites",
       image: "🥗",
       color: "bg-green-100",
-      successRate: "94%"
+      targetRate: "Designed for success"
     },
     {
       id: 3,
       name: "Global Flavors",
       image: "🍛",
       color: "bg-orange-100",
-      successRate: "92%"
+      targetRate: "Tailored to you"
     },
     {
       id: 4,
       name: "Healthy Options",
-      image: "🍚",
+      image: "🥑",
       color: "bg-blue-100",
-      successRate: "95%"
+      targetRate: "Kitchen-tested"
     }
   ];
 
@@ -47,7 +47,7 @@ export function RestaurantQualitySection() {
               Cook Better, Not Harder
             </h2>
             <p className="text-xl text-gray-600 leading-relaxed">
-              Stop struggling with complicated recipes. NIBBBLE's AI adapts every dish to your skill level 
+              Stop struggling with complicated recipes. NIBBBLE's AI is designed to adapt every dish to your skill level 
               and kitchen setup. Experience cooking success with recipes that actually work for home cooks.
             </p>
             
@@ -56,14 +56,14 @@ export function RestaurantQualitySection() {
               <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
                 <div className="flex items-center space-x-3 mb-3">
                   <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
-                    <CheckCircle className="w-5 h-5 text-green-600" />
+                    <Target className="w-5 h-5 text-green-600" />
                   </div>
                   <div>
-                    <div className="text-2xl font-bold text-gray-900">94%</div>
-                    <div className="text-sm text-gray-600">Success Rate</div>
+                    <div className="text-2xl font-bold text-gray-900">90%+</div>
+                    <div className="text-sm text-gray-600">Target Success</div>
                   </div>
                 </div>
-                <p className="text-sm text-gray-600">Home cooks who complete their recipes successfully</p>
+                <p className="text-sm text-gray-600">Our goal for home cook success rates</p>
               </div>
               
               <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
@@ -72,28 +72,35 @@ export function RestaurantQualitySection() {
                     <Users className="w-5 h-5 text-blue-600" />
                   </div>
                   <div>
-                    <div className="text-2xl font-bold text-gray-900">10K+</div>
-                    <div className="text-sm text-gray-600">Happy Cooks</div>
+                    <div className="text-2xl font-bold text-gray-900">Growing</div>
+                    <div className="text-sm text-gray-600">Community</div>
                   </div>
                 </div>
-                <p className="text-sm text-gray-600">Home cooks cooking with confidence</p>
+                <p className="text-sm text-gray-600">Join our early cooking community</p>
               </div>
             </div>
             
-            <button 
-              onClick={() => router.push('/dashboard/discover')}
-              className="bg-gradient-to-r from-[#FF375F] to-[#FFD84D] hover:from-[#FF375F]/90 hover:to-[#FFD84D]/90 text-white px-8 py-4 rounded-lg font-semibold flex items-center space-x-3 transition-all duration-200 hover:shadow-lg"
-            >
-              <span>Start Cooking Better</span>
-              <ArrowRight className="w-5 h-5" />
-            </button>
+            <h3 className="text-2xl font-bold text-gray-900 mb-4 font-['Poppins']">
+              Transform Your Kitchen Today
+            </h3>
+            <p className="text-gray-600 mb-6 max-w-2xl mx-auto">
+              Experience cooking that adapts to you. Our smart recipes learn from your preferences and guide you to success every time.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <button className="bg-gradient-to-r from-[#f97316] to-[#d97706] hover:from-[#f97316]/90 hover:to-[#d97706]/90 text-white px-8 py-4 rounded-lg font-semibold transition-all duration-200 hover:shadow-lg">
+                Begin Your Journey
+              </button>
+              <button className="border-2 border-gray-300 hover:border-[#f97316] text-gray-700 hover:text-[#f97316] px-8 py-4 rounded-lg font-semibold transition-all duration-200">
+                See How It Works
+              </button>
+            </div>
           </div>
 
           {/* Right Side - Category Grid */}
           <div className="space-y-6">
             <div className="text-center mb-8">
-              <h3 className="text-2xl font-bold text-gray-900 mb-2">AI-Adapted Recipe Categories</h3>
-              <p className="text-gray-600">Every recipe personalized to your kitchen and skill level</p>
+              <h3 className="text-2xl font-bold text-gray-900 mb-2">AI-Powered Recipe Categories</h3>
+              <p className="text-gray-600">Recipes designed to adapt to your kitchen and skill level</p>
             </div>
             
             <div className="grid grid-cols-2 gap-4">
@@ -106,14 +113,7 @@ export function RestaurantQualitySection() {
                     {/* Success Rate Badge */}
                     <div className="flex items-center space-x-1 bg-white/80 rounded-full px-2 py-1">
                       <CheckCircle className="w-3 h-3 text-green-500" />
-                      <span className="text-xs font-medium text-green-600">{category.successRate}</span>
-                    </div>
-                    
-                    {/* Play Button Overlay */}
-                    <div className="absolute inset-0 bg-black bg-opacity-20 rounded-2xl flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                      <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-lg">
-                        <Play className="w-6 h-6 text-[#FF375F] ml-1" />
-                      </div>
+                      <span className="text-xs font-medium text-green-600">{category.targetRate}</span>
                     </div>
                   </div>
                 </div>
@@ -124,11 +124,11 @@ export function RestaurantQualitySection() {
             <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100 text-center">
               <div className="flex items-center justify-center space-x-2 mb-3">
                 <TrendingUp className="w-5 h-5 text-purple-600" />
-                <span className="text-sm font-medium text-purple-600">Success-Based Creator Economy</span>
+                <span className="text-sm font-medium text-purple-600">Future Creator Economy</span>
               </div>
               <p className="text-sm text-gray-600">
-                Verified creators earn based on cooking success rates, not just views. 
-                Quality content that actually works in real kitchens.
+                We're building a platform where creators will earn based on recipe success rates, not just views. 
+                Our vision: quality content that truly works in real kitchens.
               </p>
             </div>
           </div>

@@ -16,44 +16,44 @@ export function CTASection() {
   };
 
   return (
-    <section className="py-20 bg-gradient-to-br from-purple-50 via-white to-orange-50">
+    <section className="py-20 bg-gradient-to-br from-[#f9fafb] via-white to-[#f3f4f6]">
       <div className="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
-        <div className="inline-flex items-center space-x-2 bg-[#FF375F]/10 border border-[#FF375F]/20 rounded-full px-4 py-2 mb-6">
-          <Clock className="w-4 h-4 text-[#FF375F]" />
-          <span className="text-[#FF375F] font-semibold text-sm">LAUNCHING SOON</span>
+        <div className="inline-flex items-center space-x-2 bg-[#f97316]/10 border border-[#f97316]/20 rounded-full px-4 py-2 mb-6">
+          <Clock className="w-4 h-4 text-[#f97316]" />
+          <span className="text-[#f97316] font-semibold text-sm">LAUNCHING SOON</span>
         </div>
         
-        <h2 className="text-4xl font-bold text-gray-900 mb-6">
-          Ready to Transform Your Cooking with AI?
+        <h2 className="text-4xl font-bold text-[#111827] mb-6 font-['Poppins']">
+          Ready to Transform Your Cooking?
         </h2>
         <p className="text-xl text-gray-600 mb-8">
-          Join the waitlist for NIBBBLE's AI-native cooking platform. Experience recipes that adapt to you, 
-          not the other way around. Be among the first to cook smarter.
+          Join the waitlist for NIBBBLE's smart cooking platform. Experience recipes that adapt to you, 
+          not the other way around. Be among the first to cook with confidence.
         </p>
         
         {/* Feature Highlights */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
           <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
-            <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <Brain className="w-6 h-6 text-purple-600" />
+            <div className="w-12 h-12 bg-[#f97316]/10 rounded-full flex items-center justify-center mx-auto mb-4">
+              <Brain className="w-6 h-6 text-[#f97316]" />
             </div>
-            <h3 className="font-semibold text-gray-900 mb-2">AI Recipe Adaptation</h3>
+            <h3 className="font-semibold text-[#111827] mb-2">AI Recipe Adaptation</h3>
             <p className="text-sm text-gray-600">Every recipe personalized to your kitchen and skill level</p>
           </div>
           
           <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
-            <div className="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <Target className="w-6 h-6 text-orange-600" />
+            <div className="w-12 h-12 bg-[#10b981]/10 rounded-full flex items-center justify-center mx-auto mb-4">
+              <Target className="w-6 h-6 text-[#10b981]" />
             </div>
-            <h3 className="font-semibold text-gray-900 mb-2">Success Prediction</h3>
+            <h3 className="font-semibold text-[#111827] mb-2">Success Prediction</h3>
             <p className="text-sm text-gray-600">Know before you cook if you'll succeed</p>
           </div>
           
           <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
-            <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <Zap className="w-6 h-6 text-blue-600" />
+            <div className="w-12 h-12 bg-[#d97706]/10 rounded-full flex items-center justify-center mx-auto mb-4">
+              <Zap className="w-6 h-6 text-[#d97706]" />
             </div>
-            <h3 className="font-semibold text-gray-900 mb-2">Integrated Commerce</h3>
+            <h3 className="font-semibold text-[#111827] mb-2">Integrated Commerce</h3>
             <p className="text-sm text-gray-600">Seamless shopping and cooking experience</p>
           </div>
         </div>
@@ -62,7 +62,7 @@ export function CTASection() {
           <Button 
             size="xl" 
             onClick={handleGetStarted}
-            className="bg-gradient-to-r from-[#FF375F] to-[#FFD84D] hover:from-[#FF375F]/90 hover:to-[#FFD84D]/90 text-white border-0 shadow-lg hover:shadow-xl transition-all duration-200"
+            className="bg-gradient-to-r from-[#f97316] to-[#d97706] hover:from-[#f97316]/90 hover:to-[#d97706]/90 text-white border-0 shadow-lg hover:shadow-xl transition-all duration-200"
           >
             <span>Join the Waitlist</span>
             <ArrowRight className="w-5 h-5 ml-2" />
@@ -71,7 +71,7 @@ export function CTASection() {
             variant="outline" 
             size="xl" 
             onClick={() => router.push('/signin?mode=signup')}
-            className="border-2 border-gray-300 hover:border-purple-500 hover:text-purple-600 transition-all duration-200"
+            className="border-2 border-gray-300 hover:border-[#f97316] hover:text-[#f97316] transition-all duration-200"
           >
             Join as Creator
           </Button>
@@ -79,7 +79,7 @@ export function CTASection() {
             variant="outline" 
             size="xl" 
             onClick={handleLearnMore}
-            className="border-2 border-gray-300 hover:border-orange-500 hover:text-orange-600 transition-all duration-200"
+            className="border-2 border-gray-300 hover:border-[#d97706] hover:text-[#d97706] transition-all duration-200"
           >
             Learn More
           </Button>

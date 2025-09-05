@@ -10,20 +10,20 @@ export function EarlyAdopterSection() {
     {
       icon: <Users className="w-8 h-8 text-white" />,
       title: "Exclusive Access",
-      description: "Be among the first to experience NIBBBLE's AI-powered cooking",
-      color: "from-blue-500 to-purple-500"
+      description: "Be among the first to experience NIBBBLE's smart cooking platform",
+      color: "from-[#f97316] to-[#d97706]"
     },
     {
       icon: <Star className="w-8 h-8 text-white" />,
       title: "Free Premium",
       description: "Lifetime access to all premium features for early adopters",
-      color: "from-orange-500 to-red-500"
+      color: "from-[#10b981] to-[#059669]"
     },
     {
       icon: <Zap className="w-8 h-8 text-white" />,
       title: "Direct Influence",
       description: "Help shape the platform with your feedback and suggestions",
-      color: "from-green-500 to-teal-500"
+      color: "from-[#ef4444] to-[#dc2626]"
     }
   ];
 
@@ -32,11 +32,11 @@ export function EarlyAdopterSection() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center mb-16">
-          <div className="inline-flex items-center space-x-2 bg-[#FF375F]/10 border border-[#FF375F]/20 rounded-full px-4 py-2 mb-6">
-            <Clock className="w-4 h-4 text-[#FF375F]" />
-            <span className="text-[#FF375F] font-semibold text-sm">LIMITED SPOTS</span>
+          <div className="inline-flex items-center space-x-2 bg-[#f97316]/10 border border-[#f97316]/20 rounded-full px-4 py-2 mb-6">
+            <Clock className="w-4 h-4 text-[#f97316]" />
+            <span className="text-[#f97316] font-semibold text-sm">LIMITED SPOTS</span>
           </div>
-          <h2 className="text-4xl font-bold text-gray-900 mb-6">
+          <h2 className="text-4xl font-bold text-[#111827] mb-6 font-['Poppins']">
             Join Our Early Adopter Community
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
@@ -52,7 +52,7 @@ export function EarlyAdopterSection() {
               <div className={`w-16 h-16 bg-gradient-to-br ${benefit.color} rounded-2xl flex items-center justify-center mx-auto mb-6`}>
                 {benefit.icon}
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-4 text-center">{benefit.title}</h3>
+              <h3 className="text-xl font-semibold text-[#111827] mb-4 text-center font-['Poppins']">{benefit.title}</h3>
               <p className="text-gray-600 text-center leading-relaxed">{benefit.description}</p>
             </div>
           ))}
@@ -62,7 +62,7 @@ export function EarlyAdopterSection() {
         <div className="text-center">
           <button 
             onClick={() => router.push('/signin?mode=signup')}
-            className="bg-gradient-to-r from-[#FF375F] to-[#FFD84D] hover:from-[#FF375F]/90 hover:to-[#FFD84D]/90 text-white px-8 py-4 rounded-lg font-semibold flex items-center space-x-3 mx-auto transition-all duration-200 hover:shadow-lg"
+            className="bg-gradient-to-r from-[#f97316] to-[#d97706] hover:from-[#f97316]/90 hover:to-[#d97706]/90 text-white px-8 py-4 rounded-lg font-semibold flex items-center space-x-3 mx-auto transition-all duration-200 hover:shadow-lg"
           >
             <span>Become an Early Adopter</span>
             <ArrowRight className="w-5 h-5" />

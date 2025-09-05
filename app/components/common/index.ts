@@ -1,12 +1,12 @@
 export { HeroSection } from './hero-section';
-export { WeeklyCookingSection } from './weekly-cooking-section';
+export { ComingSoonRecipesSection as WeeklyCookingSection } from './weekly-cooking-section';
 export { RestaurantQualitySection } from './restaurant-quality-section';
 export { HowItWorksSection } from './how-it-works-section';
 export { CookingClassesSection } from './cooking-classes-section';
-export { TrendsettersSection } from './trendsetters-section';
+export { EarlyAdopterSection as TrendsettersSection } from './trendsetters-section';
 export { CookForYourselfSection } from './cook-for-yourself-section';
-export { GallerySection } from './gallery-section';
-export { GuidanceSection } from './guidance-section';
-export { CulinaryExpertsSection } from './culinary-experts-section';
+export { EarlyAccessSection as GallerySection } from './gallery-section';
+export { ComingSoonSection as GuidanceSection } from './guidance-section';
+export { CreatorCommunitySection as CulinaryExpertsSection } from './culinary-experts-section';
 export { FeaturesSection } from './features-section';
 export { CTASection } from './cta-section';
