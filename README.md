@@ -41,15 +41,32 @@ NIBBBLE is the complete infrastructure for successful home cooking. Built with N
    ```
 
 3. **Set up environment variables**
-   ```bash
-   cp .env.example .env.local
-   ```
+   Create a `.env.local` file in the root directory with the following variables:
    
-   Edit `.env.local` and add your Supabase credentials:
    ```env
+   # Required: Supabase Configuration
    NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
    NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+   SUPABASE_SERVICE_ROLE_KEY=your_supabase_service_role_key
+   
+   # Optional: External APIs
+   SPOONACULAR_API_KEY=your_spoonacular_api_key
+   STRIPE_SECRET_KEY=your_stripe_secret_key
+   USDA_API_KEY=your_usda_api_key
+   EDAMAM_APP_ID=your_edamam_app_id
+   EDAMAM_APP_KEY=your_edamam_app_key
+   FATSECRET_API_KEY=your_fatsecret_api_key
+   KROGER_CLIENT_ID=your_kroger_client_id
+   KROGER_CLIENT_SECRET=your_kroger_client_secret
+   
+   # Development
+   NODE_ENV=development
    ```
+   
+   **Required for basic functionality:**
+   - `NEXT_PUBLIC_SUPABASE_URL` - Your Supabase project URL
+   - `NEXT_PUBLIC_SUPABASE_ANON_KEY` - Your Supabase anonymous key
+   - `SUPABASE_SERVICE_ROLE_KEY` - Your Supabase service role key (for admin operations)
 
 4. **Start the development server**
    ```bash

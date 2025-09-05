@@ -12,7 +12,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { toast } from "@/components/ui/use-toast"
 import { searchEnhancedProducts, EnhancedProduct } from "@/lib/services/enhanced-grocery-service"
 import { ShoppingCartService } from "@/lib/services/shopping-cart-service"
-import { debounce } from 'lodash'
+import { debounce } from "@/lib/utils"
 
 interface ProductSearchProps {
   userId: string

@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { 
-  ShoppingCart, 
+  ShoppingCart as ShoppingCartIcon, 
   Plus, 
   Minus, 
   Trash2, 
@@ -136,7 +136,7 @@ export function ShoppingCart({ userId, isOpen, onClose, onCheckout }: ShoppingCa
           {/* Header */}
           <div className="flex items-center justify-between border-b px-4 py-3 bg-white">
             <h2 className="text-lg font-semibold flex items-center gap-2">
-              <ShoppingCart className="w-5 h-5 text-[#FF375F]" />
+              <ShoppingCartIcon className="w-5 h-5 text-[#FF375F]" />
               Shopping Cart
               {cart && cart.items_count > 0 && (
                 <span className="bg-[#FF375F] text-white text-xs px-2 py-1 rounded-full">
@@ -164,7 +164,7 @@ export function ShoppingCart({ userId, isOpen, onClose, onCheckout }: ShoppingCa
               </div>
             ) : !cart || cart.cart_items.length === 0 ? (
               <div className="flex flex-col items-center justify-center h-64 text-gray-500 p-8">
-                <ShoppingCart className="w-16 h-16 mb-4 text-gray-300" />
+                <ShoppingCartIcon className="w-16 h-16 mb-4 text-gray-300" />
                 <h3 className="text-lg font-medium mb-2 text-gray-800">Your cart is empty</h3>
                 <p className="text-sm text-center mb-4">
                   Add items from recipes or search for products to get started

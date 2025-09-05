@@ -5,7 +5,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 // Initialize Stripe (you'll need to add STRIPE_SECRET_KEY to your .env)
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '', {
-  apiVersion: '2024-12-18.acacia',
+  apiVersion: '2025-08-27.basil',
 });
 
 // POST - Create payment intent for grocery order
@@ -232,7 +232,7 @@ export async function PUT(request: NextRequest) {
     if (paymentIntent.status === 'succeeded') {
       newStatus = 'confirmed';
       paymentStatus = 'completed';
-    } else if (paymentIntent.status === 'payment_failed') {
+    } else if (paymentIntent.status === 'canceled') {
       newStatus = 'cancelled';
       paymentStatus = 'failed';
     }

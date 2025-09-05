@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { 
-  ShoppingCart, 
+  ShoppingCart as ShoppingCartIcon, 
   Plus, 
   Minus, 
   Trash2, 
@@ -16,29 +16,32 @@ import {
 } from 'lucide-react'
 import { toast } from "@/components/ui/use-toast"
 import { ShoppingCartService, CartWithItems, CartItem } from '@/lib/services/shopping-cart-service'
+import { useAuth } from '@/hooks/useAuth'
 
 interface ShoppingCartProps {
-  userId: string
   isOpen?: boolean
   onClose?: () => void
   onCheckout?: () => void
 }
 
-export default function ShoppingCart({ userId, isOpen = true, onClose, onCheckout }: ShoppingCartProps) {
+export default function ShoppingCart({ isOpen = true, onClose, onCheckout }: ShoppingCartProps) {
+  const { user } = useAuth()
   const [cart, setCart] = useState<CartWithItems | null>(null)
   const [loading, setLoading] = useState(false)
   const [updating, setUpdating] = useState<string | null>(null)
 
   useEffect(() => {
-    if (userId) {
+    if (user?.id) {
       fetchCart()
     }
-  }, [userId])
+  }, [user?.id])
 
   const fetchCart = async () => {
+    if (!user?.id) return
+    
     setLoading(true)
     try {
-      const cartData = await ShoppingCartService.getActiveCart(userId)
+      const cartData = await ShoppingCartService.getActiveCart(user.id)
       setCart(cartData)
     } catch (error) {
       console.error('Error fetching cart:', error)
@@ -143,7 +146,7 @@ export default function ShoppingCart({ userId, isOpen = true, onClose, onCheckou
       {/* Empty State */}
       {!loading && (!cart || cart.cart_items.length === 0) && (
         <div className="flex flex-col items-center justify-center py-12 text-gray-500">
-          <ShoppingCart className="w-16 h-16 mb-4 text-gray-300" />
+          <ShoppingCartIcon className="w-16 h-16 mb-4 text-gray-300" />
           <h3 className="text-lg font-medium mb-2 text-gray-800">Your cart is empty</h3>
           <p className="text-sm text-center mb-4">
             Add items from recipes or search for products to get started
@@ -157,7 +160,7 @@ export default function ShoppingCart({ userId, isOpen = true, onClose, onCheckou
           {/* Header */}
           <div className="flex items-center justify-between">
             <h2 className="text-xl font-semibold flex items-center gap-2">
-              <ShoppingCart className="w-6 h-6 text-[#FF375F]" />
+              <ShoppingCartIcon className="w-6 h-6 text-[#FF375F]" />
               Shopping Cart
               <span className="bg-[#FF375F] text-white text-sm px-2 py-1 rounded-full">
                 {cart.items_count}

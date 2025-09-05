@@ -3,23 +3,28 @@
 import { useState, useEffect } from 'react';
 import { Search, BookOpen, ChevronDown, User, ShoppingCart } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { ShoppingCart as ShoppingCartComponent } from '@/app/components/commerce/shopping-cart';
-import { CommerceService } from '@/lib/services/commerce-service';
+import ShoppingCartComponent from '@/app/components/commerce/shopping-cart';
+import { ShoppingCartService } from '@/lib/services/shopping-cart-service';
+import { useAuth } from '@/hooks/useAuth';
 
 export function Header() {
   const router = useRouter();
+  const { user } = useAuth();
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [cartItemCount, setCartItemCount] = useState(0);
-  const userId = 'temp-user-id'; // This would come from auth context
 
   useEffect(() => {
-    loadCartCount();
-  }, []);
+    if (user?.id) {
+      loadCartCount();
+    }
+  }, [user?.id]);
 
   const loadCartCount = async () => {
+    if (!user?.id) return;
+    
     try {
-      const cart = await CommerceService.getCart(userId);
-      setCartItemCount(cart?.cart_items?.length || 0);
+      const cart = await ShoppingCartService.getActiveCart(user.id);
+      setCartItemCount(cart?.items_count || 0);
     } catch (error) {
       console.error('Failed to load cart count:', error);
     }
@@ -103,7 +108,6 @@ export function Header() {
       
       {/* Shopping Cart Sidebar */}
       <ShoppingCartComponent
-        userId={userId}
         isOpen={isCartOpen}
         onClose={() => setIsCartOpen(false)}
       />
