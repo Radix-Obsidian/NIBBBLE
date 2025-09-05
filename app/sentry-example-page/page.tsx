@@ -11,9 +11,13 @@ class SentryExampleFrontendError extends Error {
   }
 }
 
+// Get the logger from Sentry
+const { logger } = Sentry;
+
 export default function Page() {
   const [hasSentError, setHasSentError] = useState(false);
   const [isConnected, setIsConnected] = useState(true);
+  const [logMessages, setLogMessages] = useState<string[]>([]);
   
   useEffect(() => {
     async function checkConnectivity() {
@@ -22,6 +26,136 @@ export default function Page() {
     }
     checkConnectivity();
   }, []);
+
+  // Example: Exception catching with proper error handling
+  const handleExceptionExample = () => {
+    try {
+      // Simulate an error that might occur
+      throw new Error("This is a simulated error for testing exception catching");
+    } catch (error) {
+      // Capture the exception in Sentry
+      Sentry.captureException(error);
+      setHasSentError(true);
+      logger.error("Exception caught and sent to Sentry", { 
+        error: error instanceof Error ? error.message : 'Unknown error',
+        timestamp: new Date().toISOString()
+      });
+    }
+  };
+
+  // Example: UI interaction tracing
+  const handleTestButtonClick = () => {
+    Sentry.startSpan(
+      {
+        op: "ui.click",
+        name: "Test Button Click",
+      },
+      (span) => {
+        const buttonType = "exception-test";
+        const userAction = "button-click";
+
+        // Add meaningful attributes to the span
+        span.setAttribute("button.type", buttonType);
+        span.setAttribute("user.action", userAction);
+        span.setAttribute("timestamp", new Date().toISOString());
+
+        logger.info("Button clicked", { buttonType, userAction });
+        handleExceptionExample();
+      },
+    );
+  };
+
+  // Example: API call tracing
+  const handleApiCallExample = async () => {
+    return Sentry.startSpan(
+      {
+        op: "http.client",
+        name: "GET /api/sentry-example-api",
+      },
+      async (span) => {
+        try {
+          span.setAttribute("http.method", "GET");
+          span.setAttribute("http.url", "/api/sentry-example-api");
+          
+          logger.debug("Making API call to sentry example endpoint");
+          
+          const response = await fetch("/api/sentry-example-api");
+          
+          span.setAttribute("http.status_code", response.status);
+          span.setAttribute("http.response_size", response.headers.get("content-length") || "unknown");
+          
+          if (!response.ok) {
+            throw new Error(`API call failed with status: ${response.status}`);
+          }
+          
+          logger.info("API call successful", { 
+            status: response.status,
+            url: "/api/sentry-example-api"
+          });
+          
+          return response;
+        } catch (error) {
+          span.setAttribute("error", true);
+          span.setAttribute("error.message", error instanceof Error ? error.message : 'Unknown error');
+          
+          logger.error("API call failed", { 
+            error: error instanceof Error ? error.message : 'Unknown error',
+            url: "/api/sentry-example-api"
+          });
+          
+          // Capture the exception
+          Sentry.captureException(error);
+          throw error;
+        }
+      },
+    );
+  };
+
+  // Example: Logging with different levels
+  const handleLoggingExamples = () => {
+    const userId = "user_123";
+    const profileId = 345;
+    const endpoint = "/api/results/";
+    const orderId = "order_123";
+    const amount = 99.99;
+
+    // Trace level logging
+    logger.trace("Starting database connection", { database: "users" });
+    
+    // Debug level logging with template literal
+    logger.debug(logger.fmt`Cache miss for user: ${userId}`);
+    
+    // Info level logging
+    logger.info("Updated profile", { profileId });
+    
+    // Warn level logging
+    logger.warn("Rate limit reached for endpoint", {
+      endpoint,
+      isEnterprise: false,
+    });
+    
+    // Error level logging
+    logger.error("Failed to process payment", {
+      orderId,
+      amount,
+    });
+    
+    // Fatal level logging
+    logger.fatal("Database connection pool exhausted", {
+      database: "users",
+      activeConnections: 100,
+    });
+
+    // Update UI to show logs were sent
+    setLogMessages([
+      "Trace: Starting database connection",
+      "Debug: Cache miss for user: user_123",
+      "Info: Updated profile",
+      "Warn: Rate limit reached for endpoint",
+      "Error: Failed to process payment",
+      "Fatal: Database connection pool exhausted"
+    ]);
+  };
 
   return (
     <div>
@@ -40,31 +174,77 @@ export default function Page() {
         </h1>
 
         <p className="description">
-          Click the button below, and view the sample error on the Sentry <a target="_blank" href="https://nibbble.sentry.io/issues/?project=4509967516303360">Issues Page</a>.
+          Test Sentry functionality with comprehensive examples. View results on the Sentry <a target="_blank" href="https://nibbble.sentry.io/issues/?project=4509967516303360">Issues Page</a>.
           For more details about setting up Sentry, <a target="_blank"
            href="https://docs.sentry.io/platforms/javascript/guides/nextjs/">read our docs</a>.
         </p>
 
-        <button
-          type="button"
-          onClick={async () => {
-            await Sentry.startSpan({
-              name: 'Example Frontend/Backend Span',
-              op: 'test'
-            }, async () => {
-              const res = await fetch("/api/sentry-example-api");
-              if (!res.ok) {
-                setHasSentError(true);
-              }
-            });
-            throw new SentryExampleFrontendError("This error is raised on the frontend of the example page.");
-          }}
-          disabled={!isConnected}
-        >
-          <span>
-            Throw Sample Error
-          </span>
-        </button>
+        <div className="button-group">
+          <button
+            type="button"
+            onClick={handleTestButtonClick}
+            disabled={!isConnected}
+            className="example-button"
+          >
+            <span>
+              Exception Catching Example
+            </span>
+          </button>
+
+          <button
+            type="button"
+            onClick={handleApiCallExample}
+            disabled={!isConnected}
+            className="example-button"
+          >
+            <span>
+              API Call Tracing Example
+            </span>
+          </button>
+
+          <button
+            type="button"
+            onClick={handleLoggingExamples}
+            disabled={!isConnected}
+            className="example-button"
+          >
+            <span>
+              Logging Examples
+            </span>
+          </button>
+
+          <button
+            type="button"
+            onClick={async () => {
+              await Sentry.startSpan({
+                name: 'Example Frontend/Backend Span',
+                op: 'test'
+              }, async () => {
+                const res = await fetch("/api/sentry-example-api");
+                if (!res.ok) {
+                  setHasSentError(true);
+                }
+              });
+              throw new SentryExampleFrontendError("This error is raised on the frontend of the example page.");
+            }}
+            disabled={!isConnected}
+            className="example-button"
+          >
+            <span>
+              Original Example
+            </span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => Sentry.showFeedbackDialog()}
+            className="feedback-button"
+          >
+            <span>
+              Send Feedback
+            </span>
+          </button>
+        </div>
 
         {hasSentError ? (
           <p className="success">
@@ -76,6 +256,17 @@ export default function Page() {
           </div>
         ) : (
           <div className="success_placeholder" />
+        )}
+
+        {logMessages.length > 0 && (
+          <div className="log-messages">
+            <h3>Log Messages Sent to Sentry:</h3>
+            <ul>
+              {logMessages.map((message, index) => (
+                <li key={index} className="log-message">{message}</li>
+              ))}
+            </ul>
+          </div>
         )}
 
         <div className="flex-spacer" />
@@ -118,7 +309,15 @@ export default function Page() {
           }
         }
 
-        button {
+        .button-group {
+          display: flex;
+          flex-direction: column;
+          gap: 12px;
+          width: 100%;
+          max-width: 400px;
+        }
+
+        .example-button {
           border-radius: 8px;
           color: white;
           cursor: pointer;
@@ -131,7 +330,7 @@ export default function Page() {
             display: inline-block;
             padding: 12px 16px;
             border-radius: inherit;
-            font-size: 20px;
+            font-size: 16px;
             font-weight: bold;
             line-height: 1;
             background-color: #7553FF;
@@ -156,6 +355,34 @@ export default function Page() {
 	              border: none
 	            }
 	          }
+        }
+
+        .log-messages {
+          margin-top: 20px;
+          padding: 16px;
+          background-color: #f8f9fa;
+          border-radius: 8px;
+          border: 1px solid #e9ecef;
+          max-width: 500px;
+          text-align: left;
+
+          h3 {
+            margin: 0 0 12px 0;
+            font-size: 18px;
+            color: #495057;
+          }
+
+          ul {
+            margin: 0;
+            padding-left: 20px;
+          }
+
+          .log-message {
+            margin: 4px 0;
+            font-size: 14px;
+            color: #6c757d;
+            font-family: monospace;
+          }
         }
 
         .description {
@@ -202,6 +429,36 @@ export default function Page() {
         .connectivity-error a {
           color: #FFFFFF;
           text-decoration: underline;
+        }
+
+        .feedback-button {
+          border-radius: 8px;
+          color: white;
+          cursor: pointer;
+          background-color: #00F261;
+          border: none;
+          padding: 0;
+          margin-top: 4px;
+
+          & > span {
+            display: inline-block;
+            padding: 12px 16px;
+            border-radius: inherit;
+            font-size: 20px;
+            font-weight: bold;
+            line-height: 1;
+            background-color: #00F261;
+            border: 1px solid #00BF4D;
+            transform: translateY(-4px);
+          }
+
+          &:hover > span {
+            transform: translateY(-8px);
+          }
+
+          &:active > span {
+            transform: translateY(0);
+          }
         }
       `}</style>
     </div>
