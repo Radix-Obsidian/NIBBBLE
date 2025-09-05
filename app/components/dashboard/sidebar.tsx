@@ -16,7 +16,8 @@ import {
   Bookmark,
   User,
   ShoppingCart,
-  Package
+  Package,
+  CreditCard
 } from 'lucide-react'
 import { Button } from '../ui/button'
 import { FEATURES } from '@/lib/config/features'
@@ -53,7 +54,8 @@ export function Sidebar({ isCollapsed, onToggle, currentPath, onMobileClose, isM
 
     // Add other items
     items.push(
-      { name: 'Analytics', href: '/dashboard/analytics', icon: BarChart3, description: 'Performance insights' }
+      { name: 'Analytics', href: '/dashboard/analytics', icon: BarChart3, description: 'Performance insights' },
+      { name: 'Stripe Connect', href: '/stripe/connect', icon: CreditCard, description: 'Payment management' }
     );
 
     return items;
