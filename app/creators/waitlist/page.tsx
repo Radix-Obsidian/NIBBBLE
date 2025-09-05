@@ -5,6 +5,7 @@ import { Header, Footer } from '@/app/components';
 import { Button } from '@/app/components/ui/button';
 import { Input } from '@/app/components/ui/input';
 import { Label } from '@/app/components/ui/label';
+import { SentryFeedbackButton } from '@/app/components/common/sentry-feedback-button';
 import { CheckCircle, ArrowRight, Star, Users, Brain } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
@@ -246,6 +247,11 @@ export default function CreatorWaitlistPage() {
                   <span>Join Creator Waitlist</span>
                   <ArrowRight className="w-5 h-5 ml-2" />
                 </Button>
+
+                <div className="mt-4 text-center">
+                  <p className="text-sm text-gray-600 mb-2">Having issues or questions?</p>
+                  <SentryFeedbackButton variant="outline" size="sm" />
+                </div>
               </form>
             </div>
 

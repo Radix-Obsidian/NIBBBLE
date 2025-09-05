@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { CheckCircle, XCircle, Clock, User, Mail, Calendar, Filter } from 'lucide-react';
+import { SentryFeedbackButton } from '@/app/components/common/sentry-feedback-button';
 import type { WaitlistEntry } from '@/lib/waitlist';
 
 export default function AdminWaitlistPage() {
@@ -63,8 +64,13 @@ export default function AdminWaitlistPage() {
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">Waitlist Management</h1>
-          <p className="text-gray-600 mt-2">Manage waitlist entries and approve/reject applications</p>
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900">Waitlist Management</h1>
+              <p className="text-gray-600 mt-2">Manage waitlist entries and approve/reject applications</p>
+            </div>
+            <SentryFeedbackButton variant="outline" size="sm" />
+          </div>
         </div>
 
         <div className="bg-white shadow rounded-lg overflow-hidden">
