@@ -1,5 +1,5 @@
 import { logger } from '@/lib/logger'
-import { supabase } from '@/lib/database/supabase'
+import { supabase } from '@/lib/supabase/client'
 import { ShoppingCartService } from './shopping-cart-service'
 import * as EnhancedGrocery from './enhanced-grocery-service'
 

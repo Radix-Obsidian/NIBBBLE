@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
-import { supabase } from '@/lib/database/supabase';
+import { supabase } from '@/lib/supabase/client';
 import { v4 as uuidv4 } from 'uuid';
 
 // Initialize Stripe (you'll need to add STRIPE_SECRET_KEY to your .env)

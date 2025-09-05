@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { supabaseAdmin } from '@/lib/database/supabase';
+import { supabaseAdmin } from '@/lib/supabase/client';
 import { readFileSync } from 'fs';
 import { join } from 'path';
 
