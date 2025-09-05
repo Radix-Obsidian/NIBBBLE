@@ -84,7 +84,7 @@ export async function POST(request: NextRequest) {
         orderNumber,
         fulfillmentType
       },
-      description: `PantryPals Grocery Order ${orderNumber}`,
+      description: `NIBBBLE Grocery Order ${orderNumber}`,
       receipt_email: undefined // Would get from user profile
     });
 

@@ -2,7 +2,7 @@
 
 ## Overview
 
-PantryPals now includes a comprehensive AI-powered cooking assistant system that personalizes the cooking experience based on individual user profiles, preferences, and skill levels. The system provides intelligent recipe adaptation, success prediction, smart ingredient substitutions, and real-time cooking guidance.
+NIBBBLE now includes a comprehensive AI-powered cooking assistant system that personalizes the cooking experience based on individual user profiles, preferences, and skill levels. The system provides intelligent recipe adaptation, success prediction, smart ingredient substitutions, and real-time cooking guidance.
 
 ## Features
 
@@ -52,7 +52,7 @@ PantryPals now includes a comprehensive AI-powered cooking assistant system that
 
 ### Database Schema
 
-The AI system extends the existing PantryPals database with the following tables:
+The AI system extends the existing NIBBBLE database with the following tables:
 
 #### ai_cooking_profiles
 Stores personalized cooking information for each user:

@@ -5,8 +5,8 @@ import {
 } from '@/types/spoonacular'
 import { logger } from '@/lib/logger'
 
-// PantryPals recipe interface (matching database schema)
-export interface PantryPalsRecipe {
+// NIBBBLE recipe interface (matching database schema)
+export interface NIBBBLERecipe {
   title: string
   description: string | null
   ingredients: string[]
@@ -25,7 +25,7 @@ export interface PantryPalsRecipe {
   is_public: boolean
 }
 
-// Cuisine mapping from Spoonacular to PantryPals
+// Cuisine mapping from Spoonacular to NIBBBLE
 const CUISINE_MAPPING: Record<string, string> = {
   'italian': 'Italian',
   'mexican': 'Mexican',
@@ -150,7 +150,7 @@ function extractDietaryTags(diets: string[]): string[] {
 }
 
 /**
- * Format ingredient for PantryPals format
+ * Format ingredient for NIBBBLE format
  */
 function formatIngredient(ingredient: SpoonacularIngredient): string {
   const amount = ingredient.amount
@@ -267,12 +267,12 @@ function generateTags(
 }
 
 /**
- * Transform Spoonacular recipe to PantryPals format
+ * Transform Spoonacular recipe to NIBBBLE format
  */
 export function transformSpoonacularRecipe(
   spoonacularRecipe: SpoonacularRecipeDetails,
   creatorId: string
-): PantryPalsRecipe {
+): NIBBBLERecipe {
   try {
     logger.info('Transforming Spoonacular recipe', { 
       id: spoonacularRecipe.id, 
@@ -324,7 +324,7 @@ export function transformSpoonacularRecipe(
       ? Math.round((spoonacularRecipe.spoonacularScore / 100) * 5 * 10) / 10
       : null
     
-    const transformedRecipe: PantryPalsRecipe = {
+    const transformedRecipe: NIBBBLERecipe = {
       title,
       description,
       ingredients,
@@ -366,7 +366,7 @@ export function transformSpoonacularRecipe(
 /**
  * Validate transformed recipe before database insertion
  */
-export function validateTransformedRecipe(recipe: PantryPalsRecipe): string[] {
+export function validateTransformedRecipe(recipe: NIBBBLERecipe): string[] {
   const errors: string[] = []
   
   if (!recipe.title || recipe.title.trim().length === 0) {
@@ -406,8 +406,8 @@ export function validateTransformedRecipe(recipe: PantryPalsRecipe): string[] {
 export function transformMultipleRecipes(
   spoonacularRecipes: SpoonacularRecipeDetails[],
   creatorId: string
-): PantryPalsRecipe[] {
-  const transformedRecipes: PantryPalsRecipe[] = []
+): NIBBBLERecipe[] {
+  const transformedRecipes: NIBBBLERecipe[] = []
   const errors: string[] = []
   
   for (const recipe of spoonacularRecipes) {

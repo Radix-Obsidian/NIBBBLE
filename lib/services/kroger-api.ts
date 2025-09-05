@@ -243,7 +243,7 @@ async function makeRequest<T>(
         headers: {
           'Authorization': `Bearer ${token}`,
           'Accept': 'application/json',
-          'User-Agent': 'PantryPals/1.0'
+          'User-Agent': 'NIBBBLE/1.0'
         }
       })
 

@@ -2,7 +2,7 @@
 
 ## Overview
 
-PantryPals uses an intelligent video analysis system that extracts recipe information from cooking videos without requiring external AI services. The system analyzes video frames to understand cooking processes and generate detailed recipe information.
+NIBBBLE uses an intelligent video analysis system that extracts recipe information from cooking videos without requiring external AI services. The system analyzes video frames to understand cooking processes and generate detailed recipe information.
 
 ## How It Works
 

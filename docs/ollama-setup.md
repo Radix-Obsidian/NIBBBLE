@@ -1,8 +1,8 @@
-# Ollama Setup Guide for PantryPals
+# Ollama Setup Guide for NIBBBLE
 
 ## Overview
 
-PantryPals uses Ollama to run local AI models for recipe generation and video analysis. This guide will help you set up Ollama with the MiniCPM-o 2.6 model for optimal performance.
+NIBBBLE uses Ollama to run local AI models for recipe generation and video analysis. This guide will help you set up Ollama with the MiniCPM-o 2.6 model for optimal performance.
 
 ## What is Ollama?
 
@@ -88,7 +88,7 @@ Add to your `.env.local` file:
 NEXT_PUBLIC_OLLAMA_URL=http://localhost:11434
 ```
 
-### **PantryPals Configuration**
+### **NIBBBLE Configuration**
 
 The system is configured to use MiniCPM-o 2.6 as the primary model:
 
@@ -131,7 +131,7 @@ ollama run minicpm-o2.6:latest "What can you help me with?"
 
 ### 3. **Test Video Analysis**
 
-1. Upload a cooking video in PantryPals
+1. Upload a cooking video in NIBBBLE
 2. Watch the console for processing logs
 3. Verify recipe generation completes successfully
 
@@ -246,7 +246,7 @@ ollama rm minicpm-o2.6:latest
 - Ensure adequate cooling
 - Monitor system resources
 
-## Integration with PantryPals
+## Integration with NIBBBLE
 
 ### **How It Works**
 1. User uploads cooking video
@@ -310,4 +310,4 @@ ollama run minicpm-o2.6:latest "Test message"
 # Use Ctrl+C in the terminal running ollama serve
 ```
 
-Your PantryPals setup is now optimized for local AI processing with MiniCPM-o 2.6!
+Your NIBBBLE setup is now optimized for local AI processing with MiniCPM-o 2.6!

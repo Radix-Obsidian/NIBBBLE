@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Deploy AI Services for PantryPals
+# Deploy AI Services for NIBBBLE
 # This script handles the deployment of AI-powered cooking assistant features
 
 set -e  # Exit on any error
@@ -17,7 +17,7 @@ ENVIRONMENT=${1:-staging}
 BACKUP_ENABLED=${2:-true}
 FORCE_DEPLOY=${3:-false}
 
-echo -e "${BLUE}🚀 Starting AI Services Deployment for PantryPals${NC}"
+echo -e "${BLUE}🚀 Starting AI Services Deployment for NIBBBLE${NC}"
 echo -e "${BLUE}Environment: ${ENVIRONMENT}${NC}"
 echo -e "${BLUE}Backup Enabled: ${BACKUP_ENABLED}${NC}"
 

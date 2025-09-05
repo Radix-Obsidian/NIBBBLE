@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 
 /**
- * PantryPals Recipe Import Script
+ * NIBBBLE Recipe Import Script
  * 
- * This script imports recipes from Spoonacular API into the PantryPals database.
+ * This script imports recipes from Spoonacular API into the NIBBBLE database.
  * 
  * Usage:
  *   node scripts/import-recipes.js --cuisine=italian --count=20
@@ -66,7 +66,7 @@ function parseArgs() {
 
 function printHelp() {
   console.log(`
-PantryPals Recipe Import Script
+NIBBBLE Recipe Import Script
 
 Usage:
   node scripts/import-recipes.js [options]
@@ -257,7 +257,7 @@ async function main() {
   try {
     const options = parseArgs()
     
-    log('PantryPals Recipe Import Script Starting...')
+    log('NIBBBLE Recipe Import Script Starting...')
     logVerbose(`Options: ${JSON.stringify(options, null, 2)}`, options)
     
     await validateOptions(options)

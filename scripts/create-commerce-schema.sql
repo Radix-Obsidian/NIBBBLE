@@ -1,4 +1,4 @@
--- PantryPals Commerce Infrastructure Database Schema
+-- NIBBBLE Commerce Infrastructure Database Schema
 -- Tier 2: Complete shopping cart, inventory, and payment system
 
 -- ================================================

@@ -1,4 +1,4 @@
--- Create video recipes schema for PantryPals
+-- Create video recipes schema for NIBBBLE
 -- Run this with: psql -h your-project.supabase.co -U postgres -d postgres -f create-video-recipes-schema.sql
 
 -- Enable necessary extensions

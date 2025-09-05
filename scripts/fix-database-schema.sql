@@ -1,4 +1,4 @@
--- PantryPals Database Schema Fix
+-- NIBBBLE Database Schema Fix
 -- This script will create/update the recipes table to match our TypeScript definitions
 
 -- Step 1: Drop the existing recipes table if it exists (WARNING: This will delete all data)

@@ -1,6 +1,6 @@
-# 🍳 PantryPals - Recipe Sharing Platform
+# 🍳 NIBBBLE - The Shopify for Home Cooks
 
-A modern, social recipe sharing platform built with Next.js 15, React 19, TypeScript, and Supabase. Learn to cook like a pro with step-by-step video guides from home cooks and professional chefs.
+NIBBBLE is the complete infrastructure for successful home cooking. Built with Next.js 15, React 19, TypeScript, and Supabase, we're creating AI-powered cooking experiences that adapt to your kitchen, skill level, and preferences.
 
 [![Next.js](https://img.shields.io/badge/Next.js-15.5.2-black)](https://nextjs.org/)
 [![React](https://img.shields.io/badge/React-19.1.0-blue)](https://react.dev/)
@@ -10,14 +10,14 @@ A modern, social recipe sharing platform built with Next.js 15, React 19, TypeSc
 
 ## ✨ Features
 
-- **🔐 Authentication**: Secure user authentication with Supabase Auth
-- **🍳 Recipe Discovery**: Browse thousands of recipes with advanced filtering
-- **👥 Social Cooking**: Follow creators, like recipes, and build your cooking community
-- **📹 Video Guides**: Step-by-step video tutorials for every skill level
-- **🔍 Smart Search**: Find recipes by ingredients, time, difficulty, and cuisine
-- **📚 Collections**: Save and organize your favorite recipes
-- **📱 Mobile First**: Responsive design that works on all devices
+- **🤖 AI Recipe Adaptation**: Every recipe automatically adapts to your skill level and kitchen setup
+- **🎯 Success Prediction**: Know before you cook if you'll succeed with 94% accuracy
+- **🛒 Integrated Commerce**: Seamless grocery delivery and ingredient sourcing
+- **👨‍🍳 Technique Instruction**: Built-in cooking lessons for every recipe
+- **👥 Creator Economy**: Success-based earnings for verified chefs and home cooks
+- **📱 Complete Experience**: From recipe discovery to ingredient delivery
 - **🎨 Modern UI**: Beautiful interface built with Tailwind CSS and Radix UI
+- **🔐 Secure Platform**: Enterprise-grade security with Supabase Auth
 
 ## 🚀 Quick Start
 
@@ -31,8 +31,8 @@ A modern, social recipe sharing platform built with Next.js 15, React 19, TypeSc
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/yourusername/pantrypals.git
-   cd pantrypals
+   git clone https://github.com/yourusername/nibbble.git
+   cd nibbble
    ```
 
 2. **Install dependencies**
@@ -245,14 +245,14 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 📞 Support
 
-- **Discussions**: [GitHub Discussions](https://github.com/yourusername/pantrypals/discussions)
-- **Issues**: [GitHub Issues](https://github.com/yourusername/pantrypals/issues)
-- **Email**: support@pantrypals.com
+- **Discussions**: [GitHub Discussions](https://github.com/yourusername/nibbble/discussions)
+- **Issues**: [GitHub Issues](https://github.com/yourusername/nibbble/issues)
+- **Email**: support@nibbble.com
 
 ---
 
-**Built with ❤️ by the PantryPals Team**
+**Built with ❤️ by the NIBBBLE Team**
 
-[![GitHub stars](https://img.shields.io/github/stars/yourusername/pantrypals?style=social)](https://github.com/yourusername/pantrypals)
-[![GitHub forks](https://img.shields.io/github/forks/yourusername/pantrypals?style=social)](https://github.com/yourusername/pantrypals)
-[![GitHub issues](https://img.shields.io/github/issues/yourusername/pantrypals)](https://github.com/yourusername/pantrypals/issues)
+[![GitHub stars](https://img.shields.io/github/stars/yourusername/nibbble?style=social)](https://github.com/yourusername/nibbble)
+[![GitHub forks](https://img.shields.io/github/forks/yourusername/nibbble?style=social)](https://github.com/yourusername/nibbble)
+[![GitHub issues](https://img.shields.io/github/issues/yourusername/nibbble)](https://github.com/yourusername/nibbble/issues)
