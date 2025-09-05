@@ -127,14 +127,14 @@ export function HeroSection() {
             {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row gap-4">
               <button
-                onClick={() => router.push('/signin')}
+                onClick={() => router.push('/cookers/beta')}
                 className="group bg-gradient-to-r from-[#f97316] via-[#d97706] to-[#f97316] text-white px-8 py-4 rounded-xl font-semibold text-lg hover:shadow-2xl hover:shadow-[#f97316]/25 transition-all duration-300 flex items-center justify-center space-x-2"
               >
                 <span>Start Cooking Better</span>
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </button>
               <button
-                onClick={() => router.push('/learn-more')}
+                onClick={() => router.push('/cookers/learn-more')}
                 className="border-2 border-gray-300 text-gray-700 px-8 py-4 rounded-xl font-semibold text-lg hover:bg-gray-50 transition-all duration-300"
               >
                 See How It Works

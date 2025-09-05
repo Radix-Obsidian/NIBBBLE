@@ -25,6 +25,77 @@ export const supabaseAdmin = typeof window === 'undefined' && supabaseServiceKey
 export type Database = {
   public: {
     Tables: {
+      waitlist_entries: {
+        Row: {
+          id: string
+          email: string
+          type: 'creator' | 'cooker'
+          name: string
+          status: 'pending' | 'approved' | 'rejected'
+          social_handle: string | null
+          cooking_experience: string | null
+          specialty: string | null
+          audience_size: string | null
+          content_type: string | null
+          goals: string | null
+          kitchen_setup: string | null
+          cooking_goals: string | null
+          frequency: string | null
+          challenges: string | null
+          interests: string | null
+          submitted_at: string
+          approved_at: string | null
+          rejected_at: string | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          email: string
+          type: 'creator' | 'cooker'
+          name: string
+          status?: 'pending' | 'approved' | 'rejected'
+          social_handle?: string | null
+          cooking_experience?: string | null
+          specialty?: string | null
+          audience_size?: string | null
+          content_type?: string | null
+          goals?: string | null
+          kitchen_setup?: string | null
+          cooking_goals?: string | null
+          frequency?: string | null
+          challenges?: string | null
+          interests?: string | null
+          submitted_at?: string
+          approved_at?: string | null
+          rejected_at?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          email?: string
+          type?: 'creator' | 'cooker'
+          name?: string
+          status?: 'pending' | 'approved' | 'rejected'
+          social_handle?: string | null
+          cooking_experience?: string | null
+          specialty?: string | null
+          audience_size?: string | null
+          content_type?: string | null
+          goals?: string | null
+          kitchen_setup?: string | null
+          cooking_goals?: string | null
+          frequency?: string | null
+          challenges?: string | null
+          interests?: string | null
+          submitted_at?: string
+          approved_at?: string | null
+          rejected_at?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+      }
       profiles: {
         Row: {
           id: string
