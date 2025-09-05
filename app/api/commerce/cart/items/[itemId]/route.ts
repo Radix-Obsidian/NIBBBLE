@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { supabase } from '@/lib/database/supabase';
+import { supabase } from '@/lib/supabase/client';
 
 // PUT - Update cart item quantity
 export async function PUT(
