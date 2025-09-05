@@ -8,12 +8,12 @@ import { useState } from 'react';
 // FAQ data
 const faqs = [
   {
-    question: "What is PantryPals?",
-    answer: "PantryPals is a social recipe platform that connects home cooks, food creators, and culinary enthusiasts. You can discover recipes, share your own creations, and build a community around your love for cooking."
+    question: "What is NIBBBLE?",
+    answer: "NIBBBLE is a social recipe platform that connects home cooks, food creators, and culinary enthusiasts. You can discover recipes, share your own creations, and build a community around your love for cooking."
   },
   {
-    question: "Is PantryPals free to use?",
-    answer: "Yes! PantryPals is completely free to use. You can browse recipes, create an account, and start sharing your culinary journey without any cost."
+    question: "Is NIBBBLE free to use?",
+    answer: "Yes! NIBBBLE is completely free to use. You can browse recipes, create an account, and start sharing your culinary journey without any cost."
   },
   {
     question: "How do I create a recipe?",
@@ -29,7 +29,7 @@ const faqs = [
   },
   {
     question: "What types of recipes can I find?",
-    answer: "PantryPals features recipes from all cuisines and skill levels - from quick weeknight dinners to elaborate weekend projects. You'll find everything from traditional dishes to modern fusion recipes."
+    answer: "NIBBBLE features recipes from all cuisines and skill levels - from quick weeknight dinners to elaborate weekend projects. You'll find everything from traditional dishes to modern fusion recipes."
   },
   {
     question: "Is my content safe?",
@@ -56,7 +56,7 @@ export default function FAQPage() {
             Frequently Asked Questions
           </h1>
           <p className="text-xl text-gray-600 mb-8">
-            Everything you need to know about PantryPals
+            Everything you need to know about NIBBBLE
           </p>
           <Button size="xl">
             <a href="/signin" className="w-full h-full flex items-center justify-center">

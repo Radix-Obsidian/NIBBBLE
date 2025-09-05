@@ -1,13 +1,13 @@
-# Contributing to PantryPals
+# Contributing to NIBBBLE
 
-Thank you for your interest in contributing to PantryPals! This document provides guidelines and information for contributors.
+Thank you for your interest in contributing to NIBBBLE! This document provides guidelines and information for contributors.
 
 ## 🤝 How to Contribute
 
 ### **Before You Start**
 - Read this entire document
-- Check existing [issues](https://github.com/yourusername/pantrypals/issues) to avoid duplicates
-- Join our [Discussions](https://github.com/yourusername/pantrypals/discussions) to connect with the community
+- Check existing [issues](https://github.com/yourusername/nibbble/issues) to avoid duplicates
+- Join our [Discussions](https://github.com/yourusername/nibbble/discussions) to connect with the community
 
 ### **Types of Contributions**
 - 🐛 **Bug Reports**: Report issues you find
@@ -27,8 +27,8 @@ Thank you for your interest in contributing to PantryPals! This document provide
 ### **Local Development**
 1. **Fork and clone**
    ```bash
-   git clone https://github.com/yourusername/pantrypals.git
-   cd pantrypals
+   git clone https://github.com/yourusername/nibbble.git
+   cd nibbble
    ```
 
 2. **Install dependencies**
@@ -290,14 +290,14 @@ Screenshots, mockups, etc.
 ## 📞 Getting Help
 
 ### **Resources**
-- [GitHub Issues](https://github.com/yourusername/pantrypals/issues)
-- [GitHub Discussions](https://github.com/yourusername/pantrypals/discussions)
-- [Documentation](https://pantrypals.com/docs)
-- [Discord Community](https://discord.gg/pantrypals)
+- [GitHub Issues](https://github.com/yourusername/nibbble/issues)
+- [GitHub Discussions](https://github.com/yourusername/nibbble/discussions)
+- [Documentation](https://nibbble.com/docs)
+- [Discord Community](https://discord.gg/nibbble)
 
 ### **Contact**
-- **Email**: contributors@pantrypals.com
-- **Twitter**: [@PantryPals](https://twitter.com/PantryPals)
+- **Email**: contributors@nibbble.com
+- **Twitter**: [@NIBBBLE](https://twitter.com/NIBBBLE)
 
 ## 🙏 Recognition
 
@@ -309,10 +309,10 @@ Contributors will be recognized in:
 
 ## 📄 License
 
-By contributing to PantryPals, you agree that your contributions will be licensed under the MIT License.
+By contributing to NIBBBLE, you agree that your contributions will be licensed under the MIT License.
 
 ---
 
-**Thank you for contributing to PantryPals! 🍳**
+**Thank you for contributing to NIBBBLE! 🍳**
 
-Your contributions help make cooking more accessible and enjoyable for everyone.
+Your contributions help us build the future of AI-powered home cooking.

@@ -1,5 +1,5 @@
 -- AI-powered Cooking Assistant Database Schema Extensions
--- This script adds AI-specific tables to enhance the existing PantryPals schema
+-- This script adds AI-specific tables to enhance the existing NIBBBLE schema
 
 -- Enable necessary extensions
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";

@@ -32,7 +32,7 @@ export default function CommunityGuidelinesPage() {
             <div>
               <h2 className="text-2xl font-bold text-gray-900 mb-4">Our Mission</h2>
               <p className="text-gray-600 leading-relaxed">
-                PantryPals is a community where food lovers can share their passion for cooking, 
+                NIBBBLE is a community where food lovers can share their passion for cooking, 
                 discover new recipes, and connect with like-minded individuals. We believe in fostering 
                 a supportive, creative, and respectful environment for everyone.
               </p>

@@ -205,7 +205,7 @@ async function makeRequest<T>(
         headers: {
           'Authorization': authHeader,
           'Accept': 'application/json',
-          'User-Agent': 'PantryPals/1.0'
+          'User-Agent': 'NIBBBLE/1.0'
         }
       })
 

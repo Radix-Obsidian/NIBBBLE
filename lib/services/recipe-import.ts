@@ -1,5 +1,5 @@
 import { supabase } from '@/lib/supabase/client'
-import { PantryPalsRecipe, transformMultipleRecipes, validateTransformedRecipe } from './recipe-transform'
+import { NIBBBLERecipe, transformMultipleRecipes, validateTransformedRecipe } from './recipe-transform'
 import { getRecipeDetails, getMultipleRecipeDetails } from './spoonacular-api'
 import { SpoonacularRecipeDetails } from '@/types/spoonacular'
 import { logger } from '@/lib/logger'
@@ -61,7 +61,7 @@ async function checkDuplicateRecipe(title: string, creatorId: string): Promise<b
  * Import a single recipe to the database
  */
 async function importSingleRecipe(
-  recipe: PantryPalsRecipe, 
+  recipe: NIBBBLERecipe, 
   options: ImportOptions
 ): Promise<{ success: boolean; recipeId?: string; error?: string }> {
   try {

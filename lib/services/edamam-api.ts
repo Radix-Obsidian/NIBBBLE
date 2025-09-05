@@ -200,7 +200,7 @@ async function makeRequest<T>(
         method,
         headers: {
           'Accept': 'application/json',
-          'User-Agent': 'PantryPals/1.0'
+          'User-Agent': 'NIBBBLE/1.0'
         }
       }
 

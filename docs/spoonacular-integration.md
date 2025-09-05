@@ -1,13 +1,13 @@
 # Spoonacular API Integration
 
-This document describes the Spoonacular API integration for PantryPals, which allows importing high-quality recipes from the Spoonacular database.
+This document describes the Spoonacular API integration for NIBBBLE, which allows importing high-quality recipes from the Spoonacular database.
 
 ## Overview
 
 The Spoonacular integration provides:
 - Recipe search by cuisine, diet, meal type, and other filters
 - Detailed recipe information including ingredients, instructions, and nutrition
-- Automatic data transformation to match PantryPals database schema
+- Automatic data transformation to match NIBBBLE database schema
 - Bulk import functionality with progress tracking
 - Rate limiting and error handling
 - CLI and API interfaces for importing recipes
@@ -16,7 +16,7 @@ The Spoonacular integration provides:
 
 ```
 ┌─────────────────┐    ┌──────────────────┐    ┌─────────────────┐
-│   Spoonacular   │    │  PantryPals API  │    │   Supabase DB   │
+│   Spoonacular   │    │  NIBBBLE API  │    │   Supabase DB   │
 │      API        │◄──►│   Services       │◄──►│                 │
 └─────────────────┘    └──────────────────┘    └─────────────────┘
                               │
@@ -36,7 +36,7 @@ The Spoonacular integration provides:
 - Error handling and logging
 
 ### 2. Data Transformation (`lib/services/recipe-transform.ts`)
-- Maps Spoonacular data to PantryPals schema
+- Maps Spoonacular data to NIBBBLE schema
 - Handles ingredient formatting and instruction parsing
 - Determines difficulty levels and cuisine mapping
 - Validates transformed data
@@ -131,9 +131,9 @@ SPOONACULAR_REQUESTS_PER_DAY=150
 
 ## Data Mapping
 
-### Spoonacular → PantryPals
+### Spoonacular → NIBBBLE
 
-| Spoonacular Field | PantryPals Field | Transformation |
+| Spoonacular Field | NIBBBLE Field | Transformation |
 |------------------|------------------|----------------|
 | `title` | `title` | Direct mapping |
 | `summary` | `description` | HTML stripped, truncated to 500 chars |

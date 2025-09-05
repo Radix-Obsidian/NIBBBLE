@@ -32,7 +32,7 @@ export default function TermsPage() {
             <div>
               <h2 className="text-2xl font-bold text-gray-900 mb-4">1. Acceptance of Terms</h2>
               <p className="text-gray-600 leading-relaxed">
-                By accessing and using PantryPals, you accept and agree to be bound by the terms and provision of this agreement. 
+                By accessing and using NIBBBLE, you accept and agree to be bound by the terms and provision of this agreement. 
                 If you do not agree to abide by the above, please do not use this service.
               </p>
             </div>
@@ -40,7 +40,7 @@ export default function TermsPage() {
             <div>
               <h2 className="text-2xl font-bold text-gray-900 mb-4">2. Description of Service</h2>
               <p className="text-gray-600 leading-relaxed">
-                PantryPals is a social recipe platform that allows users to discover, create, and share recipes. 
+                NIBBBLE is a social recipe platform that allows users to discover, create, and share recipes. 
                 Our service includes recipe browsing, user-generated content, community features, and cooking resources.
               </p>
             </div>
@@ -57,7 +57,7 @@ export default function TermsPage() {
               <h2 className="text-2xl font-bold text-gray-900 mb-4">4. User-Generated Content</h2>
               <p className="text-gray-600 leading-relaxed">
                 Users may submit recipes, photos, and other content. You retain ownership of your content, 
-                but grant PantryPals a license to use, display, and distribute your content on our platform.
+                but grant NIBBBLE a license to use, display, and distribute your content on our platform.
               </p>
             </div>
 
@@ -80,7 +80,7 @@ export default function TermsPage() {
             <div>
               <h2 className="text-2xl font-bold text-gray-900 mb-4">7. Disclaimers</h2>
               <p className="text-gray-600 leading-relaxed">
-                PantryPals provides recipes and cooking information for educational purposes. 
+                NIBBBLE provides recipes and cooking information for educational purposes. 
                 We are not responsible for the accuracy of recipes or any outcomes from following them. 
                 Always use proper food safety practices.
               </p>
@@ -89,7 +89,7 @@ export default function TermsPage() {
             <div>
               <h2 className="text-2xl font-bold text-gray-900 mb-4">8. Limitation of Liability</h2>
               <p className="text-gray-600 leading-relaxed">
-                PantryPals shall not be liable for any indirect, incidental, special, consequential, 
+                NIBBBLE shall not be liable for any indirect, incidental, special, consequential, 
                 or punitive damages resulting from your use of the service.
               </p>
             </div>
