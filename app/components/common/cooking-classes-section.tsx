@@ -1,13 +1,59 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { ArrowRight, Play, Users, Star, TrendingUp } from 'lucide-react';
+import { ArrowRight, Users, Star, TrendingUp } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
 
 export function CookingClassesSection() {
   const router = useRouter();
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const [isVideoVisible, setIsVideoVisible] = useState(true);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (sectionRef.current && videoRef.current) {
+        const sectionRect = sectionRef.current.getBoundingClientRect();
+        const isVisible = sectionRect.bottom > 0 && sectionRect.top < window.innerHeight;
+        
+        if (isVisible !== isVideoVisible) {
+          setIsVideoVisible(isVisible);
+          
+          if (isVisible) {
+            if (videoRef.current.paused) {
+              videoRef.current.play().catch(() => {
+                // Silently handle autoplay restrictions
+              });
+            }
+          } else {
+            if (!videoRef.current.paused) {
+              videoRef.current.pause();
+            }
+          }
+        }
+      }
+    };
+
+    handleScroll();
+    
+    let ticking = false;
+    const throttledScroll = () => {
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          handleScroll();
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
+    
+    window.addEventListener('scroll', throttledScroll);
+    
+    return () => window.removeEventListener('scroll', throttledScroll);
+  }, [isVideoVisible]);
 
   return (
-    <section className="py-20 bg-white">
+    <section ref={sectionRef} className="py-20 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
           {/* Left Side - Content */}
@@ -46,27 +92,34 @@ export function CookingClassesSection() {
               onClick={() => router.push('/signin?mode=signup')}
               className="bg-gradient-to-r from-[#f97316] to-[#d97706] hover:from-[#f97316]/90 hover:to-[#d97706]/90 text-white px-8 py-4 rounded-lg font-semibold flex items-center space-x-3 transition-all duration-200 hover:shadow-lg"
             >
-              <span>Explore Classes</span>
+              <span>Classes Coming Soon</span>
               <ArrowRight className="w-5 h-5" />
             </button>
           </div>
 
           {/* Right Side - Creator Video */}
           <div className="relative">
-            <div className="bg-gradient-to-br from-[#f9fafb] to-[#f3f4f6] rounded-3xl p-8 aspect-video flex items-center justify-center border border-gray-100">
-              <div className="text-center">
-                <div className="w-32 h-32 bg-gradient-to-br from-[#f97316] to-[#d97706] rounded-full flex items-center justify-center mx-auto mb-6">
-                  <Users className="w-16 h-16 text-white" />
-                </div>
-                <h3 className="text-lg font-semibold text-[#111827] mb-2 font-['Poppins']">Creator Masterclass</h3>
-                <p className="text-gray-600 text-sm">AI-Enhanced Cooking Techniques</p>
-                
-                {/* Play Button Overlay */}
-                <div className="absolute inset-0 bg-black bg-opacity-20 rounded-3xl flex items-center justify-center">
-                  <div className="w-20 h-20 bg-[#f97316] rounded-full flex items-center justify-center shadow-lg hover:bg-[#f97316]/90 transition-colors cursor-pointer">
-                    <Play className="w-10 h-10 text-white ml-1" />
-                  </div>
-                </div>
+            <div className="relative rounded-3xl overflow-hidden shadow-2xl bg-gray-100">
+              <video
+                ref={videoRef}
+                className="w-full h-auto object-contain bg-black"
+                autoPlay
+                muted
+                loop
+                playsInline
+                preload="auto"
+                webkit-playsinline="true"
+                controls
+                style={{ aspectRatio: '9/16', minHeight: '500px' }}
+              >
+                <source src="/INSTANT Knife Skills.mp4" type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
+              
+              {/* Creator Attribution */}
+              <div className="absolute top-4 right-4 bg-black/70 backdrop-blur-sm rounded-lg px-3 py-2">
+                <p className="text-white text-sm font-medium">Knife Skills Masterclass</p>
+                <p className="text-gray-300 text-xs">Professional Technique</p>
               </div>
             </div>
             
@@ -75,11 +128,11 @@ export function CookingClassesSection() {
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center space-x-3">
                   <div className="w-12 h-12 bg-gradient-to-br from-[#f97316] to-[#d97706] rounded-full flex items-center justify-center">
-                    <span className="text-white font-bold text-lg">MC</span>
+                    <span className="text-white font-bold text-lg">JW</span>
                   </div>
                   <div>
-                    <h4 className="font-semibold text-[#111827]">Maria Chen</h4>
-                    <p className="text-sm text-gray-600">Verified Chef • 2.3k students</p>
+                    <h4 className="font-semibold text-[#111827]">@JoshuaWeissman</h4>
+                    <p className="text-sm text-gray-600">Verified YouTube Chef • 2.3k students</p>
                   </div>
                 </div>
                 <div className="flex items-center space-x-1">

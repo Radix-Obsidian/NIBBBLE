@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
 import { useAuth } from '@/hooks/useAuth'
 import { LoadingSpinner } from '@/app/components/ui/loading-spinner'
+import { WaitlistGate } from '@/app/components/auth/waitlist-gate'
 import { Sidebar } from '@/app/components/dashboard/sidebar'
 import { Header } from '@/app/components/dashboard/header'
 import { NotificationsPanel } from '@/app/components/dashboard/notifications-panel'
@@ -75,62 +76,64 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-amber-50">
-      {/* Mobile Menu Overlay */}
-      {mobileMenuOpen && (
-        <div 
-          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 lg:hidden animate-fade-in"
-          onClick={() => setMobileMenuOpen(false)}
-          aria-hidden="true"
-        />
-      )}
-      
-      {/* Layout Container */}
-      <div className="flex flex-col lg:flex-row min-h-screen">
-        {/* Sidebar */}
-        <div className={`
-          fixed top-0 left-0 h-full z-50 lg:relative lg:z-auto lg:flex-shrink-0
-          transform transition-all duration-300 ease-in-out
-          ${mobileMenuOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
-          ${isMobile ? 'w-80' : 'w-64 lg:w-auto'}
-        `}>
-          <Sidebar 
-            isCollapsed={collapsed} 
-            onToggle={() => setCollapsed((c) => !c)} 
-            currentPath={pathname}
-            onMobileClose={() => setMobileMenuOpen(false)}
-            isMobile={isMobile}
+    <WaitlistGate userEmail={user?.email}>
+      <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-amber-50">
+        {/* Mobile Menu Overlay */}
+        {mobileMenuOpen && (
+          <div 
+            className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 lg:hidden animate-fade-in"
+            onClick={() => setMobileMenuOpen(false)}
+            aria-hidden="true"
           />
+        )}
+        
+        {/* Layout Container */}
+        <div className="flex flex-col lg:flex-row min-h-screen">
+          {/* Sidebar */}
+          <div className={`
+            fixed top-0 left-0 h-full z-50 lg:relative lg:z-auto lg:flex-shrink-0
+            transform transition-all duration-300 ease-in-out
+            ${mobileMenuOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
+            ${isMobile ? 'w-80' : 'w-64 lg:w-auto'}
+          `}>
+            <Sidebar 
+              isCollapsed={collapsed} 
+              onToggle={() => setCollapsed((c) => !c)} 
+              currentPath={pathname}
+              onMobileClose={() => setMobileMenuOpen(false)}
+              isMobile={isMobile}
+            />
+          </div>
+          
+          {/* Main Content Area */}
+          <div className="flex-1 min-w-0 flex flex-col lg:ml-0">
+            {/* Header */}
+            <Header 
+              user={user} 
+              onSearch={() => {}} 
+              onNotificationClick={() => setShowNotifications((v) => !v)}
+              onMobileMenuToggle={() => setMobileMenuOpen(!mobileMenuOpen)}
+              isMobile={isMobile}
+            />
+            
+            {/* Main Content */}
+            <main className="flex-1 container-responsive">
+              <div className="py-4 sm:py-6 lg:py-8">
+                <div className="space-y-4 sm:space-y-6 lg:space-y-8">
+                  {children}
+                </div>
+              </div>
+            </main>
+          </div>
         </div>
         
-        {/* Main Content Area */}
-        <div className="flex-1 min-w-0 flex flex-col lg:ml-0">
-          {/* Header */}
-          <Header 
-            user={user} 
-            onSearch={() => {}} 
-            onNotificationClick={() => setShowNotifications((v) => !v)}
-            onMobileMenuToggle={() => setMobileMenuOpen(!mobileMenuOpen)}
-            isMobile={isMobile}
-          />
-          
-          {/* Main Content */}
-          <main className="flex-1 container-responsive">
-            <div className="py-4 sm:py-6 lg:py-8">
-              <div className="space-y-4 sm:space-y-6 lg:space-y-8">
-                {children}
-              </div>
-            </div>
-          </main>
-        </div>
+        {/* Notifications Panel */}
+        <NotificationsPanel 
+          open={showNotifications} 
+          onClose={() => setShowNotifications(false)} 
+          userId={user.id} 
+        />
       </div>
-      
-      {/* Notifications Panel */}
-      <NotificationsPanel 
-        open={showNotifications} 
-        onClose={() => setShowNotifications(false)} 
-        userId={user.id} 
-      />
-    </div>
+    </WaitlistGate>
   )
 }

@@ -8,11 +8,11 @@ export function CTASection() {
   const router = useRouter();
 
   const handleGetStarted = () => {
-    router.push('/signin');
+    router.push('/cookers/beta');
   };
 
   const handleLearnMore = () => {
-    router.push('/learn-more');
+    router.push('/cookers/learn-more');
   };
 
   return (
@@ -70,7 +70,7 @@ export function CTASection() {
           <Button 
             variant="outline" 
             size="xl" 
-            onClick={() => router.push('/signin?mode=signup')}
+            onClick={() => router.push('/creators/waitlist')}
             className="border-2 border-gray-300 hover:border-[#f97316] hover:text-[#f97316] transition-all duration-200"
           >
             Join as Creator

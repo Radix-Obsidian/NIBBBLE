@@ -4,6 +4,7 @@ import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { useAuth } from '@/hooks/useAuth'
 import { AuthForm } from '@/app/components/auth/auth-form'
+import { WaitlistGate } from '@/app/components/auth/waitlist-gate'
 import { Header } from '@/app/components/layout/header'
 import { Footer } from '@/app/components/layout/footer'
 import { logger } from '@/lib/logger'
@@ -32,21 +33,23 @@ export default function SignInPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-amber-50">
-      <Header />
-      
-      <main className="flex-1 flex items-center justify-center px-4 py-12">
-        <div className="w-full max-w-md">
-          <div className="text-center mb-8">
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">Welcome to NIBBBLE</h1>
-            <p className="text-gray-600">Sign in to your account or create a new one to get started</p>
+    <WaitlistGate userEmail={user?.email}>
+      <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-amber-50">
+        <Header />
+        
+        <main className="flex-1 flex items-center justify-center px-4 py-12">
+          <div className="w-full max-w-md">
+            <div className="text-center mb-8">
+              <h1 className="text-3xl font-bold text-gray-900 mb-2">Welcome to NIBBBLE</h1>
+              <p className="text-gray-600">Sign in to your account or create a new one to get started</p>
+            </div>
+            
+            <AuthForm />
           </div>
-          
-          <AuthForm />
-        </div>
-      </main>
-      
-      <Footer />
-    </div>
+        </main>
+        
+        <Footer />
+      </div>
+    </WaitlistGate>
   )
 }
