@@ -44,9 +44,7 @@ export default function RootLayout({
     <html lang="en">
       <head>
         {/* Hotjar Tracking Code */}
-        <Script
-          id="hotjar-tracking"
-          strategy="afterInteractive"
+        <script
           dangerouslySetInnerHTML={{
             __html: `
               (function(h,o,t,j,a,r){

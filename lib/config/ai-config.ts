@@ -87,7 +87,7 @@ export const AI_CONFIG = {
     enableSkillTracking: true,
     enablePersonalizedInsights: true,
     enableBatchLearning: false, // For production ML training
-    enableA/BTesting: false,
+    enableABTesting: false,
     
     // Debug features (disabled in production)
     debugMode: process.env.NODE_ENV !== 'production',

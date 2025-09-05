@@ -1,4 +1,4 @@
-import { createClientComponentClient, createServerComponentClient } from '@supabase/auth-helpers-nextjs';
+import { createClient } from '@supabase/supabase-js';
 import { cookies } from 'next/headers';
 import { VideoRecipe, VideoIngredient, NutritionInfo, Creator } from '@/types';
 import { nutritionCalculator } from './nutrition-calculator';
