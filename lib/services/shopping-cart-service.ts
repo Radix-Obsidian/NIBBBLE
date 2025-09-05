@@ -1,4 +1,4 @@
-import { supabase } from '@/lib/database/supabase'
+import { supabase } from '@/lib/supabase/client'
 import { logger } from '@/lib/logger'
 import { v4 as uuidv4 } from 'uuid'
 import * as EnhancedGrocery from './enhanced-grocery-service'
