@@ -8,6 +8,7 @@ import { WaitlistGate } from '@/app/components/auth/waitlist-gate'
 import { Sidebar } from '@/app/components/dashboard/sidebar'
 import { Header } from '@/app/components/dashboard/header'
 import { NotificationsPanel } from '@/app/components/dashboard/notifications-panel'
+import { SentryFeedbackButton } from '@/app/components/common/sentry-feedback-button'
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const { user, loading } = useAuth()
@@ -133,6 +134,15 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           onClose={() => setShowNotifications(false)} 
           userId={user.id} 
         />
+
+        {/* Floating Feedback Button */}
+        <div className="fixed bottom-6 right-6 z-50">
+          <SentryFeedbackButton 
+            variant="default" 
+            size="sm"
+            className="shadow-lg hover:shadow-xl transition-shadow duration-200"
+          />
+        </div>
       </div>
     </WaitlistGate>
   )

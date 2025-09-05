@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useAuth } from '@/hooks/useAuth';
 import { logger } from '@/lib/logger';
 import { Header, Footer } from './components/layout';
+import { SentryFeedbackButton } from './components/common/sentry-feedback-button';
 import {
   HeroSection,
   WeeklyCookingSection,
@@ -59,6 +60,15 @@ export default function Home() {
       </main>
       
       <Footer />
+
+      {/* Floating Feedback Button */}
+      <div className="fixed bottom-6 right-6 z-50">
+        <SentryFeedbackButton 
+          variant="default" 
+          size="sm"
+          className="shadow-lg hover:shadow-xl transition-shadow duration-200"
+        />
+      </div>
     </div>
   );
 }
