@@ -68,28 +68,17 @@ export function EarlyAccessSection() {
 
           {/* Right Side - Visual */}
           <div className="relative">
-            <div className="bg-gradient-to-br from-[#f97316] to-[#d97706] rounded-3xl p-8 aspect-square flex flex-col items-center justify-center shadow-2xl">
-              <div className="text-center text-white">
-                <div className="w-24 h-24 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center mx-auto mb-6">
-                  <span className="text-4xl">🚀</span>
-                </div>
-                
-                <h3 className="text-2xl font-bold mb-4 font-['Poppins']">Launching Soon</h3>
-                <div className="space-y-3 text-white/90">
-                  <div className="flex items-center justify-center space-x-2">
-                    <CheckCircle className="w-5 h-5" />
-                    <span>AI Recipe Adaptation</span>
-                  </div>
-                  <div className="flex items-center justify-center space-x-2">
-                    <CheckCircle className="w-5 h-5" />
-                    <span>Success Prediction</span>
-                  </div>
-                  <div className="flex items-center justify-center space-x-2">
-                    <CheckCircle className="w-5 h-5" />
-                    <span>Integrated Shopping</span>
-                  </div>
-                </div>
-              </div>
+            <div className="bg-gradient-to-br from-[#f97316] to-[#d97706] rounded-3xl p-8 aspect-square flex items-center justify-center shadow-2xl overflow-hidden">
+              <video 
+                className="w-full h-full object-cover rounded-2xl"
+                autoPlay 
+                loop 
+                muted 
+                playsInline
+              >
+                <source src="/this has the heart of all asians.mp4" type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
             </div>
             
             {/* Floating Elements */}

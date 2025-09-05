@@ -14,7 +14,9 @@
       "Bash(sed:*)",
       "Bash(find:*)",
       "Bash(curl:*)",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "Bash(npx tsc:*)",
+      "Read(//mnt/c/Users/autre/OneDrive/Pictures/Screenshots/**)"
     ],
     "deny": [],
     "ask": []
