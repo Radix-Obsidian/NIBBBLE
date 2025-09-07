@@ -30,7 +30,8 @@
       "Bash(rm:*)",
       "Bash(git rm:*)",
       "Bash(git checkout:*)",
-      "Bash(cat:*)"
+      "Bash(cat:*)",
+      "WebFetch(domain:nibbble-alpha.vercel.app)"
     ],
     "deny": [],
     "ask": []
