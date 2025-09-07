@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin, hasSupabaseAdmin, getSupabaseAdmin } from '@/lib/supabase/client';
 import { FEATURES } from '@/lib/config/features';
+import { withAppRouterHighlight } from '@/app/_utils/app-router-highlight.config';
 
 interface HealthCheckResponse {
   ok: boolean;
@@ -32,7 +33,7 @@ interface HealthCheckResponse {
   };
 }
 
-export async function GET(request: NextRequest): Promise<NextResponse<HealthCheckResponse>> {
+export const GET = withAppRouterHighlight(async function GET(request: NextRequest): Promise<NextResponse<HealthCheckResponse>> {
   const startTime = Date.now();
   
   try {
@@ -201,10 +202,10 @@ export async function GET(request: NextRequest): Promise<NextResponse<HealthChec
       }
     });
   }
-}
+});
 
-// HEAD method for simple ping checks
-export async function HEAD(): Promise<NextResponse> {
+// HEAD method for simple ping checks  
+export const HEAD = withAppRouterHighlight(async function HEAD(): Promise<NextResponse> {
   try {
     // Quick database ping
     if (hasSupabaseAdmin()) {
@@ -240,4 +241,4 @@ export async function HEAD(): Promise<NextResponse> {
       }
     });
   }
-}
+});

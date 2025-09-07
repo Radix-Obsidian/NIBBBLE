@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { WaitlistService } from '@/lib/waitlist';
+import { withAppRouterHighlight } from '@/app/_utils/app-router-highlight.config';
 
-export async function POST(request: NextRequest) {
+export const POST = withAppRouterHighlight(async function POST(request: NextRequest) {
   try {
     const body = await request.json();
     const { email, type, name, ...additionalData } = body;
@@ -72,9 +73,9 @@ export async function POST(request: NextRequest) {
       { status: 500 }
     );
   }
-}
+});
 
-export async function GET(request: NextRequest) {
+export const GET = withAppRouterHighlight(async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
     const email = searchParams.get('email');
@@ -138,4 +139,4 @@ export async function PATCH(request: NextRequest) {
       { status: 500 }
     );
   }
-}
+});
