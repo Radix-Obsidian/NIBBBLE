@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { IntelligentWaitlistService } from '@/lib/intelligent-waitlist';
 import { WaitlistService } from '@/lib/waitlist';
 import { withAppRouterHighlight } from '@/app/_utils/app-router-highlight.config';
 
@@ -23,17 +24,17 @@ export const POST = withAppRouterHighlight(async function POST(request: NextRequ
       );
     }
 
-    // Check if already on waitlist
-    const existingEntry = await WaitlistService.getEntryByEmail(email);
-    if (existingEntry) {
-      return NextResponse.json(
-        { error: 'Email already on waitlist', status: existingEntry.status },
-        { status: 409 }
-      );
-    }
+    // Extract location data for access control
+    const locationData = {
+      ip: request.ip || request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip'),
+      userAgent: request.headers.get('user-agent'),
+      // TODO: Add country/timezone detection from IP or headers
+      country: request.headers.get('cf-ipcountry') || request.headers.get('x-vercel-ip-country'),
+      timezone: request.headers.get('cf-timezone') || undefined
+    };
 
     // Map camelCase frontend fields to snake_case database fields
-    const mappedData = {
+    const profileData = {
       email: email.toLowerCase(),
       type,
       name,
@@ -52,22 +53,44 @@ export const POST = withAppRouterHighlight(async function POST(request: NextRequ
       interests: additionalData.interests || null,
     };
 
-    // Add to waitlist
-    const entry = await WaitlistService.addEntry(mappedData);
+    // Use intelligent waitlist system
+    const result = await IntelligentWaitlistService.signup(profileData, locationData);
 
+    if (!result.success) {
+      return NextResponse.json(
+        { 
+          error: result.accessDecision.reason,
+          status: result.entry?.status,
+          nextSteps: result.nextSteps,
+          estimatedWaitTime: result.estimatedWaitTime
+        },
+        { status: 409 }
+      );
+    }
+
+    // Return success response with access decision
     return NextResponse.json({
       success: true,
+      instantAccess: result.accessDecision.allowed,
       entry: {
-        id: entry.id,
-        email: entry.email,
-        type: entry.type,
-        status: entry.status,
-        submittedAt: entry.submitted_at
-      }
+        id: result.entry!.id,
+        email: result.entry!.email,
+        type: result.entry!.type,
+        status: result.entry!.status,
+        submittedAt: result.entry!.submitted_at,
+        approvedAt: result.entry!.approved_at
+      },
+      accessDecision: {
+        allowed: result.accessDecision.allowed,
+        reason: result.accessDecision.reason,
+        requiresWaitlist: result.accessDecision.requiresWaitlist
+      },
+      nextSteps: result.nextSteps,
+      estimatedWaitTime: result.estimatedWaitTime
     });
 
   } catch (error) {
-    console.error('Waitlist submission error:', error);
+    console.error('Intelligent waitlist submission error:', error);
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
@@ -79,11 +102,29 @@ export const GET = withAppRouterHighlight(async function GET(request: NextReques
   try {
     const { searchParams } = new URL(request.url);
     const email = searchParams.get('email');
+    const analytics = searchParams.get('analytics');
 
     if (email) {
-      // Check specific email status
-      const status = await WaitlistService.getWaitlistStatus(email);
-      return NextResponse.json({ email, status });
+      // Check specific email status with intelligent system
+      const result = await IntelligentWaitlistService.getStatus(email);
+      return NextResponse.json({
+        email,
+        status: result.status,
+        nextSteps: result.nextSteps,
+        estimatedWaitTime: result.estimatedWaitTime,
+        entry: result.entry ? {
+          id: result.entry.id,
+          email: result.entry.email,
+          type: result.entry.type,
+          status: result.entry.status,
+          submittedAt: result.entry.submitted_at,
+          approvedAt: result.entry.approved_at
+        } : undefined
+      });
+    } else if (analytics === 'true') {
+      // Return analytics dashboard data
+      const analyticsData = await IntelligentWaitlistService.getAnalytics();
+      return NextResponse.json({ analytics: analyticsData });
     } else {
       // Return all entries (admin only in production)
       const entries = await WaitlistService.getAllEntries();
