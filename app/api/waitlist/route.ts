@@ -31,13 +31,28 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Add to waitlist
-    const entry = await WaitlistService.addEntry({
+    // Map camelCase frontend fields to snake_case database fields
+    const mappedData = {
       email: email.toLowerCase(),
       type,
       name,
-      ...additionalData
-    });
+      // Creator-specific fields
+      social_handle: additionalData.socialHandle || null,
+      cooking_experience: additionalData.cookingExperience || null,
+      specialty: additionalData.specialty || null,
+      audience_size: additionalData.audienceSize || null,
+      content_type: additionalData.contentType || null,
+      goals: additionalData.goals || null,
+      // Cooker-specific fields
+      kitchen_setup: additionalData.kitchenSetup || null,
+      cooking_goals: additionalData.cookingGoals || null,
+      frequency: additionalData.frequency || null,
+      challenges: additionalData.challenges || null,
+      interests: additionalData.interests || null,
+    };
+
+    // Add to waitlist
+    const entry = await WaitlistService.addEntry(mappedData);
 
     return NextResponse.json({
       success: true,

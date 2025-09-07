@@ -109,7 +109,7 @@ export default function CookerBetaPage() {
             <h1 className="text-4xl font-bold text-gray-900 mb-4">
               Join the Beta Testing Program
             </h1>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+            <p className="text-xl text-gray-700 max-w-2xl mx-auto">
               Help us build the future of home cooking. Share your feedback and get early access to AI-powered recipes.
             </p>
           </div>
@@ -245,7 +245,7 @@ export default function CookerBetaPage() {
                 </Button>
 
                 <div className="mt-4 text-center">
-                  <p className="text-sm text-gray-600 mb-2">Having issues or questions?</p>
+                  <p className="text-sm text-gray-700 mb-2">Having issues or questions?</p>
                   <SentryFeedbackButton variant="outline" size="sm" />
                 </div>
               </form>
@@ -260,21 +260,21 @@ export default function CookerBetaPage() {
                     <ChefHat className="w-6 h-6 text-[#f97316] mt-1 flex-shrink-0" />
                     <div>
                       <h4 className="font-semibold text-gray-900">Early Access to AI Features</h4>
-                      <p className="text-gray-600 text-sm">Be among the first to experience AI-adapted recipes and success prediction</p>
+                      <p className="text-gray-700 text-sm">Be among the first to experience AI-adapted recipes and success prediction</p>
                     </div>
                   </div>
                   <div className="flex items-start space-x-3">
                     <Brain className="w-6 h-6 text-[#d97706] mt-1 flex-shrink-0" />
                     <div>
                       <h4 className="font-semibold text-gray-900">Shape the Product</h4>
-                      <p className="text-gray-600 text-sm">Your feedback directly influences the features we build and improve</p>
+                      <p className="text-gray-700 text-sm">Your feedback directly influences the features we build and improve</p>
                     </div>
                   </div>
                   <div className="flex items-start space-x-3">
                     <ShoppingCart className="w-6 h-6 text-[#10b981] mt-1 flex-shrink-0" />
                     <div>
                       <h4 className="font-semibold text-gray-900">Free Premium Access</h4>
-                      <p className="text-gray-600 text-sm">Beta testers get free access to premium features when we launch</p>
+                      <p className="text-gray-700 text-sm">Beta testers get free access to premium features when we launch</p>
                     </div>
                   </div>
                 </div>
@@ -282,7 +282,7 @@ export default function CookerBetaPage() {
 
               <div className="bg-gradient-to-br from-[#f97316]/10 to-[#d97706]/10 rounded-2xl p-8 border border-[#f97316]/20">
                 <h3 className="text-xl font-bold text-gray-900 mb-4">What to Expect</h3>
-                <ul className="space-y-2 text-gray-600">
+                <ul className="space-y-2 text-gray-700">
                   <li>• Weekly access to new features</li>
                   <li>• Direct feedback channel to our team</li>
                   <li>• Exclusive beta tester community</li>

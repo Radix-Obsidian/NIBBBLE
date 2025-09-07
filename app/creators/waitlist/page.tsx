@@ -109,7 +109,7 @@ export default function CreatorWaitlistPage() {
             <h1 className="text-4xl font-bold text-gray-900 mb-4">
               Join the Creator Waitlist
             </h1>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+            <p className="text-xl text-gray-700 max-w-2xl mx-auto">
               Be among the first creators to monetize your culinary expertise with AI-enhanced recipes that actually work.
             </p>
           </div>
@@ -249,7 +249,7 @@ export default function CreatorWaitlistPage() {
                 </Button>
 
                 <div className="mt-4 text-center">
-                  <p className="text-sm text-gray-600 mb-2">Having issues or questions?</p>
+                  <p className="text-sm text-gray-700 mb-2">Having issues or questions?</p>
                   <SentryFeedbackButton variant="outline" size="sm" />
                 </div>
               </form>
@@ -264,21 +264,21 @@ export default function CreatorWaitlistPage() {
                     <Star className="w-6 h-6 text-[#f97316] mt-1 flex-shrink-0" />
                     <div>
                       <h4 className="font-semibold text-gray-900">Success-Based Earnings</h4>
-                      <p className="text-gray-600 text-sm">Earn based on cooking success rates, not just views</p>
+                      <p className="text-gray-700 text-sm">Earn based on cooking success rates, not just views</p>
                     </div>
                   </div>
                   <div className="flex items-start space-x-3">
                     <Brain className="w-6 h-6 text-[#d97706] mt-1 flex-shrink-0" />
                     <div>
                       <h4 className="font-semibold text-gray-900">AI-Enhanced Content</h4>
-                      <p className="text-gray-600 text-sm">Your recipes get enhanced with AI adaptation and success prediction</p>
+                      <p className="text-gray-700 text-sm">Your recipes get enhanced with AI adaptation and success prediction</p>
                     </div>
                   </div>
                   <div className="flex items-start space-x-3">
                     <Users className="w-6 h-6 text-[#10b981] mt-1 flex-shrink-0" />
                     <div>
                       <h4 className="font-semibold text-gray-900">Verified Creator Program</h4>
-                      <p className="text-gray-600 text-sm">Join our exclusive community of verified chefs and home cooks</p>
+                      <p className="text-gray-700 text-sm">Join our exclusive community of verified chefs and home cooks</p>
                     </div>
                   </div>
                 </div>
@@ -286,7 +286,7 @@ export default function CreatorWaitlistPage() {
 
               <div className="bg-gradient-to-br from-[#f97316]/10 to-[#d97706]/10 rounded-2xl p-8 border border-[#f97316]/20">
                 <h3 className="text-xl font-bold text-gray-900 mb-4">Early Access Perks</h3>
-                <ul className="space-y-2 text-gray-600">
+                <ul className="space-y-2 text-gray-700">
                   <li>• Priority access to creator tools</li>
                   <li>• Exclusive creator community access</li>
                   <li>• First look at new features</li>

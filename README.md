@@ -2,6 +2,8 @@
 
 NIBBBLE is the complete infrastructure for successful home cooking. Built with Next.js 15, React 19, TypeScript, and Supabase, we're creating AI-powered cooking experiences that adapt to your kitchen, skill level, and preferences.
 
+🚀 **Status:** Webhook deployment testing in progress...
+
 [![Next.js](https://img.shields.io/badge/Next.js-15.5.2-black)](https://nextjs.org/)
 [![React](https://img.shields.io/badge/React-19.1.0-blue)](https://react.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue)](https://www.typescriptlang.org/)
@@ -30,19 +32,22 @@ NIBBBLE is the complete infrastructure for successful home cooking. Built with N
 ### Installation
 
 1. **Clone the repository**
+
    ```bash
    git clone https://github.com/yourusername/nibbble.git
    cd nibbble
    ```
 
 2. **Install dependencies**
+
    ```bash
    npm install
    ```
 
 3. **Set up environment variables**
+
    Create a `.env.local` file in the root directory with the following variables:
-   
+
    ```env
    # Required: Supabase Configuration
    NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
@@ -62,13 +67,14 @@ NIBBBLE is the complete infrastructure for successful home cooking. Built with N
    # Development
    NODE_ENV=development
    ```
-   
+
    **Required for basic functionality:**
    - `NEXT_PUBLIC_SUPABASE_URL` - Your Supabase project URL
    - `NEXT_PUBLIC_SUPABASE_ANON_KEY` - Your Supabase anonymous key
    - `SUPABASE_SERVICE_ROLE_KEY` - Your Supabase service role key (for admin operations)
 
 4. **Start the development server**
+
    ```bash
    npm run dev
    ```
@@ -79,6 +85,7 @@ NIBBBLE is the complete infrastructure for successful home cooking. Built with N
 ## 🛠️ Tech Stack
 
 ### **Frontend**
+
 - **[Next.js 15](https://nextjs.org/)** - React framework with App Router
 - **[React 19](https://react.dev/)** - UI library with latest features
 - **[TypeScript](https://www.typescriptlang.org/)** - Type-safe JavaScript
@@ -87,11 +94,13 @@ NIBBBLE is the complete infrastructure for successful home cooking. Built with N
 - **[Lucide React](https://lucide.dev/)** - Beautiful icons
 
 ### **Backend & Database**
+
 - **[Supabase](https://supabase.com/)** - Open source Firebase alternative
 - **[PostgreSQL](https://www.postgresql.org/)** - Relational database
 - **[Row Level Security](https://supabase.com/docs/guides/auth/row-level-security)** - Data security
 
 ### **Development Tools**
+
 - **[ESLint](https://eslint.org/)** - Code linting
 - **[Prettier](https://prettier.io/)** - Code formatting
 - **[TypeScript](https://www.typescriptlang.org/)** - Static type checking
@@ -99,12 +108,14 @@ NIBBBLE is the complete infrastructure for successful home cooking. Built with N
 ## 🎨 Design System
 
 ### **Design Principles**
+
 - **Clarity**: Clean, readable typography with proper hierarchy
 - **Deference**: Content-first design with subtle visual elements
 - **Depth**: Layered components with shadows and depth indicators
 - **Accessibility**: WCAG 2.1 AA compliant with proper focus states
 
 ### **Color Palette**
+
 ```css
 /* Primary Colors */
 --orange-500: #f97316;  /* Primary brand color */
@@ -121,6 +132,7 @@ NIBBBLE is the complete infrastructure for successful home cooking. Built with N
 ```
 
 ### **Typography**
+
 - **Font Family**: Inter (Google Fonts)
 - **Scale**: 8px grid system
 - **Line Height**: 1.5 for body, 1.2 for headings
@@ -141,6 +153,7 @@ npm run format       # Format code with Prettier
 ### **Code Style Guidelines**
 
 #### **Component Structure**
+
 ```typescript
 // 1. Imports (external libraries first, then internal)
 import { forwardRef } from 'react'
@@ -171,6 +184,7 @@ export { Component }
 ```
 
 #### **Naming Conventions**
+
 - **Components**: PascalCase (`RecipeCard`, `UserProfile`)
 - **Files**: kebab-case (`recipe-card.tsx`, `user-profile.tsx`)
 - **Functions**: camelCase (`handleSubmit`, `formatTime`)
@@ -178,6 +192,7 @@ export { Component }
 - **Types/Interfaces**: PascalCase (`RecipeProps`, `UserData`)
 
 #### **File Organization**
+
 - One component per file
 - Export components as named exports
 - Group related components in directories
@@ -186,6 +201,7 @@ export { Component }
 ### **Database Schema**
 
 #### **Core Tables**
+
 ```sql
 -- Users and profiles
 profiles (id, username, display_name, bio, avatar_url, ...)
@@ -208,12 +224,14 @@ collection_recipes (id, collection_id, recipe_id, ...)
 ## 🧪 Testing
 
 ### **Testing Strategy**
+
 - **Unit Tests**: Component logic and utility functions
 - **Integration Tests**: API routes and database operations
 - **E2E Tests**: Critical user journeys
 - **Accessibility Tests**: Screen reader and keyboard navigation
 
 ### **Running Tests**
+
 ```bash
 npm run test           # Run all tests
 npm run test:watch     # Run tests in watch mode
@@ -232,6 +250,7 @@ npm run test:coverage  # Generate coverage report
 ### **Common Issues**
 
 #### **Build Errors**
+
 ```bash
 # Clear Next.js cache
 rm -rf .next
@@ -239,11 +258,13 @@ npm run build
 ```
 
 #### **Database Connection Issues**
+
 - Verify Supabase credentials in `.env.local`
 - Check Supabase project status
 - Ensure Row Level Security policies are configured
 
 #### **Authentication Problems**
+
 - Clear browser storage and cookies
 - Check Supabase Auth settings
 - Verify redirect URLs in Supabase dashboard
@@ -264,11 +285,11 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 - **Discussions**: [GitHub Discussions](https://github.com/yourusername/nibbble/discussions)
 - **Issues**: [GitHub Issues](https://github.com/yourusername/nibbble/issues)
-- **Email**: support@nibbble.com
+- **Email**: [support@nibbble.com](mailto:support@nibbble.com)
 
 ---
 
-**Built with ❤️ by the NIBBBLE Team**
+## Built with ❤️ by the NIBBBLE Team
 
 [![GitHub stars](https://img.shields.io/github/stars/yourusername/nibbble?style=social)](https://github.com/yourusername/nibbble)
 [![GitHub forks](https://img.shields.io/github/forks/yourusername/nibbble?style=social)](https://github.com/yourusername/nibbble)
