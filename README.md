@@ -2,8 +2,6 @@
 
 NIBBBLE is the complete infrastructure for successful home cooking. Built with Next.js 15, React 19, TypeScript, and Supabase, we're creating AI-powered cooking experiences that adapt to your kitchen, skill level, and preferences.
 
-🚀 **Status:** Webhook deployment testing in progress...
-
 [![Next.js](https://img.shields.io/badge/Next.js-15.5.2-black)](https://nextjs.org/)
 [![React](https://img.shields.io/badge/React-19.1.0-blue)](https://react.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue)](https://www.typescriptlang.org/)

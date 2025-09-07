@@ -21,7 +21,12 @@
       "Bash(npm uninstall:*)",
       "Bash(npm run type-check:*)",
       "Bash(supabase status:*)",
-      "Bash(echo $NODE_ENV)"
+      "Bash(echo $NODE_ENV)",
+      "Read(//Users/saintaugustine/.cursor/**)",
+      "WebFetch(domain:www.notion.so)",
+      "WebSearch",
+      "WebFetch(domain:mcp.zapier.com)",
+      "WebFetch(domain:github.com)"
     ],
     "deny": [],
     "ask": []
