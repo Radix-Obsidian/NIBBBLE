@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { supabaseAdmin } from '@/lib/supabase/client';
+import { supabaseAdmin, hasSupabaseAdmin, getSupabaseAdmin } from '@/lib/supabase/client';
 import { FEATURES } from '@/lib/config/features';
 
 interface HealthCheckResponse {
@@ -59,16 +59,23 @@ export async function GET(request: NextRequest): Promise<NextResponse<HealthChec
     };
 
     // Test database connectivity
-    if (supabaseAdmin) {
+    if (hasSupabaseAdmin()) {
       try {
         const dbStartTime = Date.now();
+        const adminClient = getSupabaseAdmin();
         
-        // Test basic connectivity
-        const { data: healthCheck, error: healthError } = await supabaseAdmin
+        // Test basic connectivity with timeout
+        const dbTimeout = new Promise((_, reject) => {
+          setTimeout(() => reject(new Error('Database timeout')), 5000) // 5s timeout
+        })
+
+        const dbQuery = adminClient
           .from('profiles')
           .select('id')
           .limit(1)
-          .single();
+          .single()
+
+        const { data: healthCheck, error: healthError } = await Promise.race([dbQuery, dbTimeout]) as any;
 
         const dbLatency = Date.now() - dbStartTime;
         healthResponse.services.database.latency = dbLatency;
@@ -80,7 +87,7 @@ export async function GET(request: NextRequest): Promise<NextResponse<HealthChec
 
         // Get alpha user metrics if in alpha mode
         if (FEATURES.alphaMode) {
-          const { count: alphaUserCount, error: countError } = await supabaseAdmin
+          const { count: alphaUserCount, error: countError } = await adminClient
             .from('profiles')
             .select('*', { count: 'exact', head: true })
             .eq('is_alpha_user', true)
@@ -92,7 +99,7 @@ export async function GET(request: NextRequest): Promise<NextResponse<HealthChec
           }
 
           // Get session metrics for alpha users
-          const { data: sessionMetrics, error: metricsError } = await supabaseAdmin
+          const { data: sessionMetrics, error: metricsError } = await adminClient
             .from('cooking_sessions')
             .select('success_rating, status, ai_guidance_used')
             .gte('start_time', new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString()); // Last 24 hours
@@ -200,12 +207,21 @@ export async function GET(request: NextRequest): Promise<NextResponse<HealthChec
 export async function HEAD(): Promise<NextResponse> {
   try {
     // Quick database ping
-    if (supabaseAdmin) {
-      await supabaseAdmin
+    if (hasSupabaseAdmin()) {
+      const adminClient = getSupabaseAdmin();
+      
+      // Quick ping with timeout
+      const pingTimeout = new Promise((_, reject) => {
+        setTimeout(() => reject(new Error('Ping timeout')), 3000) // 3s timeout for HEAD
+      })
+
+      const pingQuery = adminClient
         .from('profiles')
         .select('id')
         .limit(1)
-        .single();
+        .single()
+
+      await Promise.race([pingQuery, pingTimeout]);
     }
     
     return new NextResponse(null, { 

@@ -801,3 +801,52 @@ button, a, input, textarea {
     background: rgba(255, 255, 255, 0.3);
   }
 }
+
+/* Essential Layout Styles */
+.layout-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.layout-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: var(--background);
+  border-bottom: 1px solid var(--border);
+}
+
+.layout-main {
+  flex: 1;
+  padding: 0;
+}
+
+.layout-footer {
+  margin-top: auto;
+  border-top: 1px solid var(--border);
+  background: var(--muted);
+}
+
+/* Error boundary styles */
+.error-boundary {
+  padding: 2rem;
+  text-align: center;
+  background: var(--muted);
+  border-radius: var(--radius);
+  margin: 2rem;
+}
+
+/* Loading states */
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}

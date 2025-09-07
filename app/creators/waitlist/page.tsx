@@ -8,6 +8,7 @@ import { Label } from '@/app/components/ui/label';
 import { SentryFeedbackButton } from '@/app/components/common/sentry-feedback-button';
 import { CheckCircle, ArrowRight, Star, Users, Brain } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { apiHelpers } from '@/lib/config';
 
 export default function CreatorWaitlistPage() {
   const router = useRouter();
@@ -22,6 +23,8 @@ export default function CreatorWaitlistPage() {
     goals: ''
   });
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [submitError, setSubmitError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setFormData({
@@ -32,35 +35,63 @@ export default function CreatorWaitlistPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsLoading(true);
+    setSubmitError('');
     
     try {
-      const response = await fetch('/api/waitlist', {
+      // Client-side validation
+      if (!formData.name.trim()) {
+        throw new Error('Please enter your full name');
+      }
+      if (!formData.email.trim()) {
+        throw new Error('Please enter your email address');
+      }
+      if (!formData.cookingExperience) {
+        throw new Error('Please select your cooking experience level');
+      }
+
+      // Validate email format
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(formData.email)) {
+        throw new Error('Please enter a valid email address');
+      }
+
+      const response = await apiHelpers.fetchWithRetry('/api/waitlist', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
         body: JSON.stringify({
-          email: formData.email,
+          email: formData.email.trim(),
           type: 'creator',
-          name: formData.name,
-          socialHandle: formData.socialHandle,
+          name: formData.name.trim(),
+          socialHandle: formData.socialHandle.trim() || undefined,
           cookingExperience: formData.cookingExperience,
-          specialty: formData.specialty,
-          audienceSize: formData.audienceSize,
-          contentType: formData.contentType,
-          goals: formData.goals
+          specialty: formData.specialty.trim() || undefined,
+          audienceSize: formData.audienceSize || undefined,
+          contentType: formData.contentType || undefined,
+          goals: formData.goals.trim() || undefined
         }),
       });
 
       if (response.ok) {
         setIsSubmitted(true);
       } else {
-        const error = await response.json();
-        alert(`Error: ${error.error}`);
+        const errorData = await response.json().catch(() => ({ error: 'Unknown error occurred' }));
+        
+        if (response.status === 409) {
+          throw new Error('This email is already on our waitlist. Check your inbox for updates!');
+        } else if (response.status === 400) {
+          throw new Error(errorData.error || 'Please check your information and try again');
+        } else if (response.status >= 500) {
+          throw new Error('Our servers are temporarily unavailable. Please try again in a few moments.');
+        } else {
+          throw new Error(errorData.error || `Submission failed (${response.status})`);
+        }
       }
     } catch (error) {
-      console.error('Submission error:', error);
-      alert('Failed to submit. Please try again.');
+      console.error('Creator waitlist submission error:', error);
+      const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred. Please try again.';
+      setSubmitError(errorMessage);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -119,6 +150,12 @@ export default function CreatorWaitlistPage() {
             <div className="bg-white rounded-3xl p-8 shadow-lg border border-gray-100">
               <h2 className="text-2xl font-bold text-gray-900 mb-6">Tell Us About Yourself</h2>
               
+              {submitError && (
+                <div className="mb-6 p-4 bg-red-100 border border-red-300 rounded-lg">
+                  <p className="text-red-800 text-sm">{submitError}</p>
+                </div>
+              )}
+
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div>
                   <Label htmlFor="name">Full Name *</Label>
@@ -243,9 +280,23 @@ export default function CreatorWaitlistPage() {
                   />
                 </div>
 
-                <Button type="submit" size="xl" className="w-full bg-gradient-to-r from-[#f97316] to-[#d97706] hover:from-[#f97316]/90 hover:to-[#d97706]/90 text-white">
-                  <span>Join Creator Waitlist</span>
-                  <ArrowRight className="w-5 h-5 ml-2" />
+                <Button 
+                  type="submit" 
+                  size="xl" 
+                  className="w-full bg-gradient-to-r from-[#f97316] to-[#d97706] hover:from-[#f97316]/90 hover:to-[#d97706]/90 text-white"
+                  disabled={isLoading}
+                >
+                  {isLoading ? (
+                    <div className="flex items-center space-x-2">
+                      <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                      <span>Submitting...</span>
+                    </div>
+                  ) : (
+                    <>
+                      <span>Join Creator Waitlist</span>
+                      <ArrowRight className="w-5 h-5 ml-2" />
+                    </>
+                  )}
                 </Button>
 
                 <div className="mt-4 text-center">

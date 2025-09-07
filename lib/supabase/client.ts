@@ -21,6 +21,19 @@ export const supabaseAdmin = typeof window === 'undefined' && supabaseServiceKey
     })
   : null
 
+// Helper function to safely access admin client
+export function getSupabaseAdmin() {
+  if (!supabaseAdmin) {
+    throw new Error('Supabase admin client is not available. Ensure SUPABASE_SERVICE_ROLE_KEY is set and this is running server-side.')
+  }
+  return supabaseAdmin
+}
+
+// Helper function to check if admin client is available
+export function hasSupabaseAdmin(): boolean {
+  return supabaseAdmin !== null
+}
+
 // Type-safe database client
 export type Database = {
   public: {

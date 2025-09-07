@@ -8,6 +8,7 @@ import { Label } from '@/app/components/ui/label';
 import { SentryFeedbackButton } from '@/app/components/common/sentry-feedback-button';
 import { CheckCircle, ArrowRight, ChefHat, Brain, ShoppingCart } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { apiHelpers } from '@/lib/config';
 
 export default function CookerBetaPage() {
   const router = useRouter();
@@ -34,11 +35,8 @@ export default function CookerBetaPage() {
     e.preventDefault();
     
     try {
-      const response = await fetch('/api/waitlist', {
+      const response = await apiHelpers.fetchWithRetry('/api/waitlist', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
         body: JSON.stringify({
           email: formData.email,
           type: 'cooker',
@@ -56,11 +54,11 @@ export default function CookerBetaPage() {
         setIsSubmitted(true);
       } else {
         const error = await response.json();
-        alert(`Error: ${error.error}`);
+        alert(`Error: ${error.error || 'Submission failed'}`);
       }
     } catch (error) {
       console.error('Submission error:', error);
-      alert('Failed to submit. Please try again.');
+      alert('Failed to submit. Please check your connection and try again.');
     }
   };
 

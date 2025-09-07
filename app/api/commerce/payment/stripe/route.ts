@@ -3,8 +3,12 @@ import Stripe from 'stripe';
 import { supabase } from '@/lib/supabase/client';
 import { v4 as uuidv4 } from 'uuid';
 
-// Initialize Stripe (you'll need to add STRIPE_SECRET_KEY to your .env)
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '', {
+// Initialize Stripe with environment validation
+if (!process.env.STRIPE_SECRET_KEY) {
+  throw new Error('Missing required environment variable: STRIPE_SECRET_KEY')
+}
+
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
   apiVersion: '2025-08-27.basil',
 });
 

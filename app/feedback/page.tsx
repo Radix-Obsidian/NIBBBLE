@@ -20,13 +20,41 @@ export default function FeedbackPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
+    setSubmitStatus('idle');
     
-    // Simulate form submission
-    setTimeout(() => {
+    try {
+      // Validate required fields
+      if (!formData.name.trim() || !formData.email.trim() || !formData.subject.trim() || !formData.message.trim()) {
+        throw new Error('Please fill in all required fields');
+      }
+
+      // Validate email format
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(formData.email)) {
+        throw new Error('Please enter a valid email address');
+      }
+
+      const response = await fetch('/api/feedback', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({ error: 'Failed to submit feedback' }));
+        throw new Error(errorData.error || `Server error: ${response.status}`);
+      }
+
       setSubmitStatus('success');
-      setIsSubmitting(false);
       setFormData({ name: '', email: '', subject: '', message: '' });
-    }, 2000);
+    } catch (error) {
+      console.error('Feedback submission error:', error);
+      setSubmitStatus('error');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -122,6 +150,12 @@ export default function FeedbackPage() {
                 {submitStatus === 'success' && (
                   <div className="mb-6 p-4 bg-green-100 border border-green-300 rounded-lg">
                     <p className="text-green-800">Thank you for your feedback! We&apos;ll get back to you soon.</p>
+                  </div>
+                )}
+
+                {submitStatus === 'error' && (
+                  <div className="mb-6 p-4 bg-red-100 border border-red-300 rounded-lg">
+                    <p className="text-red-800">Failed to submit feedback. Please check your connection and try again.</p>
                   </div>
                 )}
 

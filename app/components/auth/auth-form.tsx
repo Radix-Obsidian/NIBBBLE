@@ -16,6 +16,7 @@ export function AuthForm() {
   const [confirmPassword, setConfirmPassword] = useState('')
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState('')
+  const [messageType, setMessageType] = useState<'success' | 'error' | 'info'>('info')
 
   // Check URL params to set initial mode
   useEffect(() => {
@@ -30,6 +31,7 @@ export function AuthForm() {
     
     if (!email || !password) {
       setMessage('Please enter both email and password')
+      setMessageType('error')
       return
     }
 
@@ -46,14 +48,33 @@ export function AuthForm() {
 
       if (error) {
         logger.error('Sign in error', error)
-        setMessage(error.message)
+        setMessageType('error')
+        
+        // Provide user-friendly error messages
+        switch (error.message) {
+          case 'Invalid login credentials':
+            setMessage('Invalid email or password. Please check your credentials and try again.')
+            break
+          case 'Email not confirmed':
+            setMessage('Please verify your email address before signing in. Check your inbox for a confirmation link.')
+            break
+          case 'Too many requests':
+            setMessage('Too many login attempts. Please wait a few minutes before trying again.')
+            break
+          default:
+            setMessage(error.message.includes('email') || error.message.includes('password') 
+              ? error.message 
+              : 'Login failed. Please check your credentials and try again.')
+        }
       } else {
         logger.info('Sign in successful')
+        setMessageType('success')
         setMessage('Sign in successful! Redirecting...')
       }
     } catch (error) {
       logger.error('Unexpected sign in error', error)
-      setMessage('An unexpected error occurred')
+      setMessageType('error')
+      setMessage('An unexpected error occurred. Please try again.')
     } finally {
       setLoading(false)
     }
@@ -64,16 +85,38 @@ export function AuthForm() {
     
     if (!email || !password) {
       setMessage('Please enter both email and password')
+      setMessageType('error')
       return
     }
 
     if (password !== confirmPassword) {
       setMessage('Passwords do not match')
+      setMessageType('error')
       return
     }
 
     if (password.length < 6) {
       setMessage('Password must be at least 6 characters long')
+      setMessageType('error')
+      return
+    }
+
+    // Additional password validation
+    const hasUpperCase = /[A-Z]/.test(password)
+    const hasLowerCase = /[a-z]/.test(password)
+    const hasNumbers = /\d/.test(password)
+    
+    if (!hasUpperCase || !hasLowerCase || !hasNumbers) {
+      setMessage('Password must contain at least one uppercase letter, lowercase letter, and number')
+      setMessageType('error')
+      return
+    }
+
+    // Email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!emailRegex.test(email)) {
+      setMessage('Please enter a valid email address')
+      setMessageType('error')
       return
     }
 
@@ -90,14 +133,33 @@ export function AuthForm() {
 
       if (error) {
         logger.error('Sign up error', error)
-        setMessage(error.message)
+        setMessageType('error')
+        
+        // Provide user-friendly error messages
+        switch (error.message) {
+          case 'User already registered':
+            setMessage('An account with this email already exists. Please sign in instead.')
+            break
+          case 'Password should be at least 6 characters':
+            setMessage('Password must be at least 6 characters long')
+            break
+          case 'Signup is disabled':
+            setMessage('New account registration is currently disabled. Please contact support.')
+            break
+          default:
+            setMessage(error.message.includes('email') 
+              ? error.message 
+              : 'Failed to create account. Please try again.')
+        }
       } else {
         logger.info('Sign up successful')
+        setMessageType('success')
         setMessage('Account created! Please check your email to verify your account.')
       }
     } catch (error) {
       logger.error('Unexpected sign up error', error)
-      setMessage('An unexpected error occurred')
+      setMessageType('error')
+      setMessage('An unexpected error occurred. Please try again.')
     } finally {
       setLoading(false)
     }
@@ -177,7 +239,13 @@ export function AuthForm() {
         )}
 
         {message && (
-          <div className={`text-sm ${message.includes('error') ? 'text-red-600' : 'text-green-600'}`}>
+          <div className={`p-3 rounded-lg text-sm ${
+            messageType === 'error' 
+              ? 'bg-red-100 border border-red-300 text-red-800' 
+              : messageType === 'success'
+              ? 'bg-green-100 border border-green-300 text-green-800'
+              : 'bg-blue-100 border border-blue-300 text-blue-800'
+          }`}>
             {message}
           </div>
         )}

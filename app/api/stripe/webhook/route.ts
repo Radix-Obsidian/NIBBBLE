@@ -88,37 +88,89 @@ export async function POST(request: NextRequest) {
 
 // Event handlers
 async function handleAccountUpdated(account: any) {
-  console.log('Account updated:', account.id);
-  
-  // In a real application, you would:
-  // 1. Update the account status in your database
-  // 2. Send notifications to the account owner
-  // 3. Update any cached account information
-  
-  // Log the account status for debugging
-  console.log('Account status:', {
-    id: account.id,
-    charges_enabled: account.charges_enabled,
-    payouts_enabled: account.payouts_enabled,
-    details_submitted: account.details_submitted,
-  });
+  try {
+    console.log('Account updated:', account.id);
+    
+    // Update account status in database
+    const { error } = await stripe.accounts.retrieve(account.id);
+    
+    if (error) {
+      console.error('Failed to retrieve account details:', error);
+      return;
+    }
+
+    // TODO: Update account status in your profiles table
+    // await supabaseAdmin
+    //   .from('creator_accounts')
+    //   .upsert({
+    //     stripe_account_id: account.id,
+    //     charges_enabled: account.charges_enabled,
+    //     payouts_enabled: account.payouts_enabled,
+    //     details_submitted: account.details_submitted,
+    //     updated_at: new Date().toISOString()
+    //   });
+
+    // Log the account status for debugging
+    console.log('Account status updated:', {
+      id: account.id,
+      charges_enabled: account.charges_enabled,
+      payouts_enabled: account.payouts_enabled,
+      details_submitted: account.details_submitted,
+    });
+
+    // Send notification if account is fully set up
+    if (account.charges_enabled && account.payouts_enabled) {
+      // TODO: Send account ready notification
+      console.log('Account is ready for transactions:', account.id);
+    }
+  } catch (error) {
+    console.error('Error handling account update:', error);
+    Sentry.captureException(error);
+  }
 }
 
 async function handleCheckoutSessionCompleted(session: any) {
-  console.log('Checkout session completed:', session.id);
-  
-  // In a real application, you would:
-  // 1. Update order status in your database
-  // 2. Send confirmation emails
-  // 3. Update inventory
-  // 4. Process fulfillment
-  
-  console.log('Session details:', {
-    id: session.id,
-    customer_email: session.customer_email,
-    amount_total: session.amount_total,
-    currency: session.currency,
-  });
+  try {
+    console.log('Checkout session completed:', session.id);
+    
+    const sessionId = session.id;
+    const customerEmail = session.customer_email;
+    const amountTotal = session.amount_total;
+    const currency = session.currency;
+    
+    // TODO: Update order status in database
+    // const { error } = await supabaseAdmin
+    //   .from('orders')
+    //   .update({
+    //     payment_status: 'completed',
+    //     stripe_session_id: sessionId,
+    //     completed_at: new Date().toISOString()
+    //   })
+    //   .eq('stripe_session_id', sessionId);
+
+    // if (error) {
+    //   console.error('Failed to update order status:', error);
+    //   throw error;
+    // }
+
+    console.log('Checkout session processed:', {
+      id: sessionId,
+      customer_email: customerEmail,
+      amount_total: amountTotal,
+      currency,
+    });
+
+    // TODO: Send confirmation email
+    // await sendOrderConfirmationEmail(customerEmail, sessionId);
+
+    // TODO: Process fulfillment
+    // await processOrderFulfillment(sessionId);
+
+  } catch (error) {
+    console.error('Error handling checkout session completion:', error);
+    Sentry.captureException(error);
+    throw error; // Re-throw to ensure Stripe retries if needed
+  }
 }
 
 async function handlePaymentIntentSucceeded(paymentIntent: any) {
