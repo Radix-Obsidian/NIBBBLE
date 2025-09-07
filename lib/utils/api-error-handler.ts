@@ -1,6 +1,5 @@
 import { NextResponse } from 'next/server';
 import { logger } from '@/lib/logger';
-import * as Sentry from '@sentry/nextjs';
 
 export interface ApiError {
   message: string;
@@ -138,21 +137,7 @@ export class ApiErrorHandler {
       };
     }
 
-    // Report to Sentry for server errors
-    if (apiError.statusCode >= 500) {
-      Sentry.captureException(error instanceof Error ? error : new Error(String(error)), {
-        tags: {
-          endpoint: context.endpoint,
-          method: context.method,
-          errorCode: apiError.code,
-        },
-        user: context.userId ? { id: context.userId } : undefined,
-        extra: {
-          requestId,
-          context: context.additionalContext,
-        },
-      });
-    }
+    // Server errors are logged via the logger above
 
     return this.createErrorResponse(apiError, requestId);
   }

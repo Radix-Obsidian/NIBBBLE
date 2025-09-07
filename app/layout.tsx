@@ -1,11 +1,11 @@
-import * as Sentry from '@sentry/nextjs';
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
 import { Analytics } from '@vercel/analytics/react'
 import { SpeedInsights } from '@vercel/speed-insights/next'
 import ErrorBoundary from '@/app/components/common/error-boundary'
-import HotjarScript from '@/app/components/common/hotjar-script'
+import { HighlightInit } from '@highlight-run/next/client'
+import HighlightAuthIntegration from '@/app/components/common/highlight-auth-integration'
 
 const inter = Inter({ 
   subsets: ['latin'],
@@ -14,7 +14,6 @@ const inter = Inter({
   variable: '--font-inter'
 })
 
-// Add or edit your "generateMetadata" to include the Sentry trace data:
 export function generateMetadata(): Metadata {
   return {
     title: 'NIBBBLE - The Dribbble for Food Creators',
@@ -35,9 +34,6 @@ export function generateMetadata(): Metadata {
       title: 'NIBBBLE - The Dribbble for Food Creators',
       description: 'SNACK. SHARE. SAVOR. Where TikTok meets Pinterest for food lovers.',
     },
-    other: {
-      ...Sentry.getTraceData()
-    }
   };
 }
 
@@ -47,17 +43,35 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className={inter.variable}>
-      <body className={`${inter.className} antialiased`}>
-        <ErrorBoundary showDetails={process.env.NODE_ENV === 'development'}>
-          {children}
-        </ErrorBoundary>
-        <Analytics />
-        <SpeedInsights />
-        
-        {/* Hotjar Analytics Script with Error Handling */}
-        <HotjarScript />
-      </body>
-    </html>
+    <>
+      <HighlightInit
+        projectId={'ve6yn6ng'}
+        serviceName="nibbble-alpha"
+        tracingOrigins
+        networkRecording={{
+          enabled: true,
+          recordHeadersAndBody: true,
+          urlBlocklist: [
+            // Block sensitive URLs from being recorded
+            '/api/auth',
+            '/api/stripe/webhook',
+          ],
+        }}
+        enableStrictPrivacy={false}
+        enableCanvasRecording={false}
+        enablePerformanceRecording={true}
+      />
+      
+      <html lang="en" className={inter.variable}>
+        <body className={`${inter.className} antialiased`}>
+          <HighlightAuthIntegration />
+          <ErrorBoundary showDetails={process.env.NODE_ENV === 'development'}>
+            {children}
+          </ErrorBoundary>
+          <Analytics />
+          <SpeedInsights />
+        </body>
+      </html>
+    </>
   )
 }

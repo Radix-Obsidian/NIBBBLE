@@ -9,6 +9,7 @@ import { SentryFeedbackButton } from '@/app/components/common/sentry-feedback-bu
 import { CheckCircle, ArrowRight, Star, Users, Brain } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { apiHelpers } from '@/lib/config';
+import { trackEvent, HIGHLIGHT_EVENTS } from '@/lib/highlight';
 
 export default function CreatorWaitlistPage() {
   const router = useRouter();
@@ -72,6 +73,18 @@ export default function CreatorWaitlistPage() {
       });
 
       if (response.ok) {
+        // Track successful waitlist signup
+        trackEvent(HIGHLIGHT_EVENTS.WAITLIST_JOINED, {
+          userType: 'creator',
+          email: formData.email.trim(),
+          name: formData.name.trim(),
+          cookingExperience: formData.cookingExperience,
+          specialty: formData.specialty,
+          audienceSize: formData.audienceSize,
+          contentType: formData.contentType,
+          hasGoals: !!formData.goals.trim(),
+        });
+        
         setIsSubmitted(true);
       } else {
         const errorData = await response.json().catch(() => ({ error: 'Unknown error occurred' }));
@@ -88,6 +101,15 @@ export default function CreatorWaitlistPage() {
       }
     } catch (error) {
       console.error('Creator waitlist submission error:', error);
+      
+      // Track form submission error
+      trackEvent(HIGHLIGHT_EVENTS.FORM_ERROR, {
+        formType: 'creator_waitlist',
+        error: error instanceof Error ? error.message : 'Unknown error',
+        userType: 'creator',
+        email: formData.email.trim(),
+      });
+      
       const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred. Please try again.';
       setSubmitError(errorMessage);
     } finally {

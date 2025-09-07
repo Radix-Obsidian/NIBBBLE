@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { stripe } from '@/lib/stripe/connect';
-import * as Sentry from '@sentry/nextjs';
 
 // Get the webhook secret from environment variables
 const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
@@ -76,8 +75,8 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error('Webhook error:', error);
     
-    // Capture the error in Sentry
-    Sentry.captureException(error);
+    // Log the error
+    console.error('Stripe webhook error:', error);
     
     return NextResponse.json(
       { error: 'Webhook handler failed' },

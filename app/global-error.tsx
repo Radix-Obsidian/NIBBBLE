@@ -12,18 +12,6 @@ export default function GlobalError({
   reset: () => void
 }) {
   useEffect(() => {
-    // Log error to monitoring service in production
-    if (typeof window !== 'undefined' && window.Sentry) {
-      window.Sentry.captureException(error, {
-        tags: {
-          errorBoundary: 'global',
-        },
-        extra: {
-          digest: error.digest,
-        },
-      })
-    }
-    
     console.error('Global error caught:', error)
   }, [error])
 

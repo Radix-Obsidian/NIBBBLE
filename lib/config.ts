@@ -50,16 +50,6 @@ export const config = {
     connectClientId: process.env.STRIPE_CONNECT_CLIENT_ID!,
   },
   
-  sentry: {
-    dsn: process.env.NEXT_PUBLIC_SENTRY_DSN,
-    environment: process.env.NEXT_PUBLIC_SENTRY_ENVIRONMENT || process.env.NODE_ENV,
-    tracesSampleRate: isProduction ? 0.1 : 1.0,
-  },
-  
-  hotjar: {
-    id: 6512561,
-    enabled: isProduction, // Only enable in production
-  },
   
   // Feature flags
   features: {

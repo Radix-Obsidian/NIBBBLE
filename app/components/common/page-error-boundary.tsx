@@ -53,21 +53,6 @@ class PageErrorBoundary extends Component<PageErrorBoundaryProps, PageErrorBound
 
     logger.error('Page-level error caught', { error, errorInfo, context: errorContext });
 
-    // Log to Sentry with additional context
-    if (typeof window !== 'undefined' && window.Sentry) {
-      window.Sentry.captureException(error, {
-        tags: {
-          errorBoundary: 'page',
-          pageName: this.props.pageName,
-        },
-        extra: {
-          errorId,
-          componentStack: errorInfo.componentStack,
-          url: window.location.href,
-        },
-      });
-    }
-
     // Call custom error handler if provided
     if (this.props.onError) {
       this.props.onError(error, errorInfo, errorId);
