@@ -2,11 +2,17 @@ import * as Sentry from '@sentry/nextjs';
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
+import './layout.css'
 import { Analytics } from '@vercel/analytics/react'
 import { SpeedInsights } from '@vercel/speed-insights/next'
 import Script from 'next/script'
 
-const inter = Inter({ subsets: ['latin'] })
+const inter = Inter({ 
+  subsets: ['latin'],
+  display: 'swap',
+  preload: true,
+  variable: '--font-inter'
+})
 
 // Add or edit your "generateMetadata" to include the Sentry trace data:
 export function generateMetadata(): Metadata {
@@ -41,10 +47,16 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
-      <head>
-        {/* Hotjar Tracking Code */}
-        <script
+    <html lang="en" className={inter.variable}>
+      <body className={`${inter.className} antialiased`}>
+        {children}
+        <Analytics />
+        <SpeedInsights />
+        
+        {/* Hotjar Analytics Script */}
+        <Script
+          id="hotjar-script"
+          strategy="afterInteractive"
           dangerouslySetInnerHTML={{
             __html: `
               (function(h,o,t,j,a,r){
@@ -58,11 +70,6 @@ export default function RootLayout({
             `,
           }}
         />
-      </head>
-      <body className={inter.className}>
-        {children}
-        <Analytics />
-        <SpeedInsights />
       </body>
     </html>
   )

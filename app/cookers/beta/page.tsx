@@ -79,14 +79,14 @@ export default function CookerBetaPage() {
                 Welcome to the Beta Program!
               </h1>
               <p className="text-xl text-gray-600 mb-8">
-                Thank you for joining our beta testing program. We'll be in touch soon with early access and exclusive updates.
+                Thank you for joining our beta testing program. We&apos;ll be in touch soon with early access and exclusive updates.
               </p>
               <div className="space-y-4">
                 <Button size="xl" onClick={() => router.push('/cookers/learn-more')} className="bg-gradient-to-r from-[#f97316] to-[#d97706] hover:from-[#f97316]/90 hover:to-[#d97706]/90 text-white">
                   Learn More About NIBBBLE
                 </Button>
                 <Button size="xl" variant="outline" onClick={() => router.push('/creators/learn-more')} className="border-2 border-gray-300 hover:border-[#f97316] hover:text-[#f97316]">
-                  I'm a Content Creator
+                  I&apos;m a Content Creator
                 </Button>
               </div>
             </div>
@@ -156,7 +156,7 @@ export default function CookerBetaPage() {
                     required
                     value={formData.cookingExperience}
                     onChange={handleInputChange}
-                    className="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#f97316] focus:border-transparent"
+                    className="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#f97316] focus:border-transparent"
                   >
                     <option value="">Select your experience level</option>
                     <option value="beginner">Beginner - Just starting out</option>
@@ -173,7 +173,7 @@ export default function CookerBetaPage() {
                     name="kitchenSetup"
                     value={formData.kitchenSetup}
                     onChange={handleInputChange}
-                    className="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#f97316] focus:border-transparent"
+                    className="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#f97316] focus:border-transparent"
                   >
                     <option value="">Select your kitchen setup</option>
                     <option value="basic">Basic - Essential appliances only</option>
@@ -190,7 +190,7 @@ export default function CookerBetaPage() {
                     name="frequency"
                     value={formData.frequency}
                     onChange={handleInputChange}
-                    className="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#f97316] focus:border-transparent"
+                    className="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#f97316] focus:border-transparent"
                   >
                     <option value="">Select frequency</option>
                     <option value="daily">Daily</option>
@@ -208,7 +208,7 @@ export default function CookerBetaPage() {
                     value={formData.cookingGoals}
                     onChange={handleInputChange}
                     rows={3}
-                    className="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#f97316] focus:border-transparent"
+                    className="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#f97316] focus:border-transparent"
                     placeholder="e.g., Learn new techniques, cook healthier meals, impress friends..."
                   />
                 </div>
@@ -221,7 +221,7 @@ export default function CookerBetaPage() {
                     value={formData.challenges}
                     onChange={handleInputChange}
                     rows={3}
-                    className="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#f97316] focus:border-transparent"
+                    className="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#f97316] focus:border-transparent"
                     placeholder="e.g., Recipes don't work, hard to find ingredients, time management..."
                   />
                 </div>

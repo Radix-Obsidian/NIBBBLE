@@ -169,7 +169,7 @@ export default function CreatorWaitlistPage() {
                     required
                     value={formData.cookingExperience}
                     onChange={handleInputChange}
-                    className="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#f97316] focus:border-transparent"
+                    className="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#f97316] focus:border-transparent"
                   >
                     <option value="">Select your experience level</option>
                     <option value="home-cook">Home Cook</option>
@@ -201,7 +201,7 @@ export default function CreatorWaitlistPage() {
                     name="audienceSize"
                     value={formData.audienceSize}
                     onChange={handleInputChange}
-                    className="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#f97316] focus:border-transparent"
+                    className="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#f97316] focus:border-transparent"
                   >
                     <option value="">Select audience size</option>
                     <option value="0-1k">0 - 1,000 followers</option>
@@ -218,7 +218,7 @@ export default function CreatorWaitlistPage() {
                     name="contentType"
                     value={formData.contentType}
                     onChange={handleInputChange}
-                    className="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#f97316] focus:border-transparent"
+                    className="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#f97316] focus:border-transparent"
                   >
                     <option value="">Select content type</option>
                     <option value="recipes">Recipe Videos</option>
@@ -238,7 +238,7 @@ export default function CreatorWaitlistPage() {
                     value={formData.goals}
                     onChange={handleInputChange}
                     rows={3}
-                    className="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#f97316] focus:border-transparent"
+                    className="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#f97316] focus:border-transparent"
                     placeholder="Tell us about your aspirations and what you hope to achieve..."
                   />
                 </div>
