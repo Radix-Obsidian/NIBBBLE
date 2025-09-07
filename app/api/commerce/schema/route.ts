@@ -5,6 +5,13 @@ import { join } from 'path';
 
 export async function POST(request: NextRequest) {
   try {
+    if (!supabaseAdmin) {
+      return NextResponse.json(
+        { success: false, error: 'Supabase admin client not available' },
+        { status: 500 }
+      );
+    }
+
     // Read the commerce schema SQL file
     const schemaPath = join(process.cwd(), 'scripts', 'create-commerce-schema.sql');
     const schemaSql = readFileSync(schemaPath, 'utf-8');

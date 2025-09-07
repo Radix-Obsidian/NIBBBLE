@@ -74,7 +74,7 @@ export function InventoryDashboard({ userId }: InventoryDashboardProps) {
   };
 
   const filteredInventory = inventory.filter(item => {
-    const name = item.custom_item_name || item.products?.name || '';
+    const name = item.custom_item_name || '';
     const matchesSearch = name.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesLocation = locationFilter === 'all' || item.location === locationFilter;
     return matchesSearch && matchesLocation;
@@ -161,8 +161,8 @@ export function InventoryDashboard({ userId }: InventoryDashboardProps) {
     );
   }
 
-  const expiringItems = inventory.filter(item => getExpiryStatus(item.expiry_date) === 'expiring').length;
-  const expiredItems = inventory.filter(item => getExpiryStatus(item.expiry_date) === 'expired').length;
+  const expiringItems = inventory.filter(item => getExpiryStatus(item.expiry_date || null) === 'expiring').length;
+  const expiredItems = inventory.filter(item => getExpiryStatus(item.expiry_date || null) === 'expired').length;
   const lowStockItems = inventory.filter(item => item.quantity <= item.minimum_quantity).length;
 
   return (
@@ -395,7 +395,7 @@ export function InventoryDashboard({ userId }: InventoryDashboardProps) {
             </div>
           ) : (
             filteredInventory.map((item) => {
-              const expiryStatus = getExpiryStatus(item.expiry_date);
+              const expiryStatus = getExpiryStatus(item.expiry_date || null);
               const isLowStock = item.quantity <= item.minimum_quantity;
               
               return (
@@ -405,7 +405,7 @@ export function InventoryDashboard({ userId }: InventoryDashboardProps) {
                       <div className="flex items-center gap-2 mb-2">
                         <span className="text-lg">{getLocationIcon(item.location || 'pantry')}</span>
                         <h3 className="font-semibold">
-                          {item.custom_item_name || `${item.products?.brand || ''} ${item.products?.name || ''}`.trim()}
+                          {item.custom_item_name || 'Unnamed Item'}
                         </h3>
                         
                         {/* Status badges */}

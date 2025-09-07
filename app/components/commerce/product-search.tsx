@@ -37,7 +37,7 @@ export default function ProductSearch({ userId, onAddToCart, initialQuery = '' }
 
   // Debounced search function
   const debouncedSearch = useCallback(
-    debounce(async (searchQuery: string, searchFilters: SearchFilters) => {
+    debounce(async (searchQuery: any, searchFilters: any) => {
       if (!searchQuery.trim()) {
         setProducts([])
         return

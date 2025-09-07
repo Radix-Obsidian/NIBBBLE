@@ -2,22 +2,21 @@
 
 import { Button } from '@/app/components/ui/button';
 import { MessageCircle } from 'lucide-react';
-import * as Sentry from '@sentry/nextjs';
 
 interface SentryFeedbackButtonProps {
   className?: string;
   variant?: 'default' | 'outline' | 'ghost';
-  size?: 'sm' | 'default' | 'lg';
+  size?: 'sm' | 'md' | 'lg' | 'xl';
 }
 
 export function SentryFeedbackButton({ 
   className, 
   variant = 'outline',
-  size = 'default' 
+  size = 'md' 
 }: SentryFeedbackButtonProps) {
   const handleFeedbackClick = () => {
-    // Open the Sentry feedback widget
-    Sentry.showFeedbackDialog();
+    // Feedback feature - for now show alert
+    alert('Feedback feature coming soon! Please contact support@nibbble.com for now.');
   };
 
   return (

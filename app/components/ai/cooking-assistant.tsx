@@ -21,6 +21,11 @@ import { useAuth } from '@/hooks/useAuth'
 import { aiRecipeAdapter } from '@/lib/services/ai-recipe-adapter'
 import { VideoRecipe, RecipeAdaptation, CookingInsight } from '@/types'
 import { logger } from '@/lib/logger'
+import { alphaMetrics } from '@/lib/monitoring/alpha-metrics'
+import { alphaFeedback } from '@/lib/feedback/alpha-feedback'
+import { FEATURES } from '@/lib/config/features'
+import { checkAlphaAccess } from '@/lib/auth/alpha-user-management'
+import { AlphaFeedbackModal } from '@/app/components/alpha/alpha-feedback-modal'
 
 export interface CookingAssistantProps {
   recipe: VideoRecipe;
@@ -52,6 +57,8 @@ interface CookingSession {
 
 export function CookingAssistant({ recipe, adaptations, onComplete, className }: CookingAssistantProps) {
   const { user } = useAuth()
+  const [hasAlphaAccess, setHasAlphaAccess] = useState<boolean>(false)
+  const [sessionId, setSessionId] = useState<string | null>(null)
   const [session, setSession] = useState<CookingSession>({
     currentStep: 0,
     startTime: new Date(),
@@ -78,6 +85,20 @@ export function CookingAssistant({ recipe, adaptations, onComplete, className }:
   })
   const [timers, setTimers] = useState<{ [key: string]: { duration: number; remaining: number; active: boolean } }>({})
   const [currentTimer, setCurrentTimer] = useState<string | null>(null)
+  const [showAlphaFeedback, setShowAlphaFeedback] = useState(false)
+
+  // Check alpha access on mount
+  useEffect(() => {
+    const checkAccess = async () => {
+      if (user && FEATURES.alphaMode) {
+        const access = await checkAlphaAccess(user.id)
+        setHasAlphaAccess(access)
+      } else {
+        setHasAlphaAccess(true) // Non-alpha mode, allow all users
+      }
+    }
+    checkAccess()
+  }, [user])
 
   useEffect(() => {
     if (session.isActive && session.currentStep < recipe.instructions.length) {
@@ -109,6 +130,8 @@ export function CookingAssistant({ recipe, adaptations, onComplete, className }:
               [currentTimer]: { ...timer, active: false }
             }
           }
+          // Return unchanged state if no timer or other conditions
+          return prev
         })
       }
     }, 1000)
@@ -138,7 +161,9 @@ export function CookingAssistant({ recipe, adaptations, onComplete, className }:
     }
   }
 
-  const startCooking = () => {
+  const startCooking = async () => {
+    if (!user) return
+
     const now = new Date()
     setSession({
       ...session,
@@ -152,6 +177,32 @@ export function CookingAssistant({ recipe, adaptations, onComplete, className }:
     // Request notification permission
     if ('Notification' in window && Notification.permission === 'default') {
       Notification.requestPermission()
+    }
+
+    // Track cooking session start for alpha metrics
+    if (FEATURES.alphaMode || FEATURES.enableAnalytics) {
+      try {
+        const newSessionId = await alphaMetrics.startCookingSession({
+          userId: user.id,
+          recipeId: recipe.id,
+          adaptationId: adaptations?.[0]?.id,
+          aiGuidanceEnabled: FEATURES.enableCookingAssistant
+        })
+        setSessionId(newSessionId)
+
+        // Track user journey event
+        await alphaMetrics.trackUserJourneyEvent({
+          userId: user.id,
+          event: 'first_cooking_session',
+          metadata: {
+            recipeId: recipe.id,
+            hasAdaptations: Boolean(adaptations?.length),
+            sessionId: newSessionId
+          }
+        })
+      } catch (error) {
+        logger.error('Failed to track cooking session start:', error)
+      }
     }
   }
 
@@ -222,7 +273,14 @@ export function CookingAssistant({ recipe, adaptations, onComplete, className }:
 
   const finishCooking = () => {
     const totalTime = Math.floor((Date.now() - session.startTime.getTime()) / 1000 / 60)
-    setShowCompletionModal(true)
+    
+    // For alpha mode, show enhanced feedback modal
+    if (FEATURES.alphaMode && FEATURES.enableFeedbackCollection) {
+      setShowAlphaFeedback(true)
+    } else {
+      setShowCompletionModal(true)
+    }
+    
     setCompletionData(prev => ({
       ...prev,
       issues: session.issues.filter(i => !i.resolved).map(i => i.issue)
@@ -234,7 +292,7 @@ export function CookingAssistant({ recipe, adaptations, onComplete, className }:
 
     const totalTime = Math.floor((Date.now() - session.startTime.getTime()) / 1000 / 60)
     const completedStepsCount = session.completedSteps.filter(Boolean).length
-    const success = completedStepsCount === recipe.instructions.length ? 'success' :
+    const success: "success" | "partial_success" | "failure" | "abandoned" = completedStepsCount === recipe.instructions.length ? 'success' :
                    completedStepsCount > recipe.instructions.length * 0.7 ? 'partial_success' : 'failure'
 
     const outcome = {
@@ -246,6 +304,7 @@ export function CookingAssistant({ recipe, adaptations, onComplete, className }:
     }
 
     try {
+      // Record in existing system
       await aiRecipeAdapter.recordCookingOutcome(user.id, recipe.id, {
         success,
         rating: completionData.rating,
@@ -254,12 +313,91 @@ export function CookingAssistant({ recipe, adaptations, onComplete, className }:
         issuesEncountered: completionData.issues,
         notes: completionData.notes
       })
+
+      // Update alpha metrics if session ID exists
+      if (sessionId && (FEATURES.alphaMode || FEATURES.enableAnalytics)) {
+        await alphaMetrics.updateCookingSession(sessionId, {
+          status: 'completed',
+          successRating: completionData.rating,
+          difficultyRating: Math.max(1, Math.min(5, completionData.issues.length + 1)),
+          issuesEncountered: completionData.issues,
+          stepsCompleted: completedStepsCount,
+          totalSteps: recipe.instructions.length,
+          duration: totalTime,
+          endTime: new Date()
+        })
+      }
     } catch (error) {
       logger.error('Failed to record cooking outcome:', error)
     }
 
     onComplete?.(outcome)
     setShowCompletionModal(false)
+  }
+
+  const submitAlphaFeedback = async (feedbackData: any) => {
+    if (!user || !sessionId) return
+
+    const totalTime = Math.floor((Date.now() - session.startTime.getTime()) / 1000 / 60)
+    const completedStepsCount = session.completedSteps.filter(Boolean).length
+
+    try {
+      await alphaFeedback.submitCookingFeedback({
+        userId: user.id,
+        sessionId,
+        recipeId: recipe.id,
+        overallRating: feedbackData.overallRating,
+        difficultyRating: feedbackData.difficultyRating,
+        aiHelpfulnessRating: feedbackData.aiHelpfulnessRating,
+        whatWorkedWell: feedbackData.whatWorkedWell || [],
+        whatWasConfusing: feedbackData.whatWasConfusing || [],
+        suggestedImprovements: feedbackData.suggestedImprovements || [],
+        timeSpent: totalTime,
+        stepsCompleted: completedStepsCount,
+        totalSteps: recipe.instructions.length,
+        adaptationsUsed: adaptations?.map(a => a.id) || [],
+        issuesEncountered: session.issues.filter(i => !i.resolved).map(i => i.issue),
+        aiFeatures: {
+          recipeAdaptation: {
+            used: Boolean(adaptations?.length),
+            helpful: feedbackData.aiFeatures?.recipeAdaptation?.helpful || 0,
+            suggestions: feedbackData.aiFeatures?.recipeAdaptation?.suggestions || []
+          },
+          cookingAssistant: {
+            used: FEATURES.enableCookingAssistant,
+            helpful: feedbackData.aiFeatures?.cookingAssistant?.helpful || 0,
+            mostValuableFeature: feedbackData.aiFeatures?.cookingAssistant?.mostValuableFeature || ''
+          },
+          successPrediction: {
+            used: FEATURES.enableSuccessPrediction,
+            accurate: feedbackData.aiFeatures?.successPrediction?.accurate || false,
+            confidence: feedbackData.aiFeatures?.successPrediction?.confidence || 0
+          }
+        },
+        additionalComments: feedbackData.additionalComments || '',
+        wouldRecommend: feedbackData.wouldRecommend || false,
+        likelyToReturnRating: feedbackData.likelyToReturnRating || 3,
+        deviceType: typeof window !== 'undefined' && window.innerWidth < 768 ? 'mobile' : 
+                   typeof window !== 'undefined' && window.innerWidth < 1024 ? 'tablet' : 'desktop',
+        cookingContext: feedbackData.cookingContext || 'general',
+        skillLevel: feedbackData.skillLevel || 5,
+        previousExperience: feedbackData.previousExperience || ''
+      })
+
+      const outcome = {
+        success: completedStepsCount === recipe.instructions.length ? 'success' as const :
+                completedStepsCount > recipe.instructions.length * 0.7 ? 'partial_success' as const : 'failure' as const,
+        rating: feedbackData.overallRating,
+        timeTaken: totalTime,
+        issues: session.issues.filter(i => !i.resolved).map(i => i.issue),
+        notes: feedbackData.additionalComments
+      }
+
+      onComplete?.(outcome)
+      setShowAlphaFeedback(false)
+    } catch (error) {
+      logger.error('Failed to submit alpha feedback:', error)
+    }
   }
 
   const currentInstruction = recipe.instructions[session.currentStep]
@@ -277,8 +415,40 @@ export function CookingAssistant({ recipe, adaptations, onComplete, className }:
     return `${mins}:${secs.toString().padStart(2, '0')}`
   }
 
+  // Alpha access gate
+  if (FEATURES.alphaMode && !hasAlphaAccess) {
+    return (
+      <Card className="p-6 text-center">
+        <AlertTriangle className="h-12 w-12 text-orange-500 mx-auto mb-4" />
+        <h3 className="text-lg font-semibold text-gray-900 mb-2">Alpha Access Required</h3>
+        <p className="text-gray-600 mb-4">
+          The AI cooking assistant is currently in alpha testing. 
+          You'll need an alpha invite to access this feature.
+        </p>
+        <Button 
+          onClick={() => window.open('/waitlist', '_blank')}
+          className="bg-purple-600 hover:bg-purple-700"
+        >
+          Join Waitlist
+        </Button>
+      </Card>
+    )
+  }
+
   return (
     <div className={`space-y-4 ${className}`}>
+      {/* Alpha Mode Indicator */}
+      {FEATURES.alphaMode && (
+        <div className="bg-purple-50 border border-purple-200 rounded-lg p-3 text-center">
+          <div className="flex items-center justify-center space-x-2">
+            <Zap className="h-4 w-4 text-purple-600" />
+            <span className="text-sm font-medium text-purple-800">
+              Alpha Feature - Help us improve by providing feedback!
+            </span>
+          </div>
+        </div>
+      )}
+
       {/* Session Header */}
       <Card className="p-4">
         <div className="flex items-center justify-between mb-4">
@@ -519,7 +689,7 @@ export function CookingAssistant({ recipe, adaptations, onComplete, className }:
         </>
       )}
 
-      {/* Completion Modal */}
+      {/* Standard Completion Modal */}
       {showCompletionModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
           <Card className="max-w-md w-full p-6 space-y-4">
@@ -562,6 +732,22 @@ export function CookingAssistant({ recipe, adaptations, onComplete, className }:
           </Card>
         </div>
       )}
+
+      {/* Alpha Feedback Modal */}
+      <AlphaFeedbackModal
+        isOpen={showAlphaFeedback}
+        onClose={() => setShowAlphaFeedback(false)}
+        onSubmit={submitAlphaFeedback}
+        recipeTitle={recipe.title}
+        totalTime={Math.floor((Date.now() - session.startTime.getTime()) / 1000 / 60)}
+        stepsCompleted={session.completedSteps.filter(Boolean).length}
+        totalSteps={recipe.instructions.length}
+        aiFeatures={{
+          hasAdaptations: Boolean(adaptations?.length),
+          usedCookingAssistant: FEATURES.enableCookingAssistant,
+          usedSuccessPrediction: FEATURES.enableSuccessPrediction
+        }}
+      />
     </div>
   )
 }

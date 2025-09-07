@@ -6,7 +6,7 @@ import { Button } from '@/app/components/ui/button';
 import { Card, CardContent, CardHeader, CardFooter } from '@/app/components/ui/card';
 import { Badge } from '@/app/components/ui/badge';
 import { useAuth } from '@/hooks/useAuth';
-import { toast } from '@/hooks/use-toast';
+import { toast } from '@/components/ui/use-toast';
 import type { RecipeReview } from '@/lib/services/social-service';
 
 interface RecipeReviewCardProps {

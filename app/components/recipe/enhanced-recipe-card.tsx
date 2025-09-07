@@ -77,7 +77,7 @@ export default function EnhancedRecipeCard({
       setAddingToCart(true)
       
       const ingredients = recipe.ingredients.map(ingredient => ({
-        name: typeof ingredient === 'string' ? ingredient : ingredient.name || ingredient.ingredient,
+        name: typeof ingredient === 'string' ? ingredient : ingredient.name || 'Unknown ingredient',
         quantity: typeof ingredient === 'string' ? 1 : ingredient.amount || 1,
         unit: typeof ingredient === 'string' ? 'item' : ingredient.unit || 'item'
       }))
@@ -141,8 +141,8 @@ export default function EnhancedRecipeCard({
             {showCommerceFeatures && (
               <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
                 <Button
-                  size="icon"
-                  variant="secondary"
+                  size="sm"
+                  variant="outline"
                   className="h-8 w-8 bg-white/90 hover:bg-white"
                   onClick={handleAddToCart}
                   disabled={addingToCart}
@@ -298,7 +298,7 @@ export default function EnhancedRecipeCard({
                   {recipe.ingredients.slice(0, 8).map((ingredient, index) => {
                     const ingredientName = typeof ingredient === 'string' 
                       ? ingredient 
-                      : ingredient.name || ingredient.ingredient || 'Unknown ingredient'
+                      : ingredient.name || 'Unknown ingredient'
                     
                     const isUnavailable = recipe.ingredientAvailability?.unavailable.includes(ingredientName)
                     

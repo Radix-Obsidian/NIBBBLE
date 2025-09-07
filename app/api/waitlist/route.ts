@@ -46,7 +46,7 @@ export async function POST(request: NextRequest) {
         email: entry.email,
         type: entry.type,
         status: entry.status,
-        submittedAt: entry.submittedAt
+        submittedAt: entry.submitted_at
       }
     });
 

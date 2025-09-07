@@ -5,7 +5,8 @@ import { Share2, Twitter, Facebook, Instagram, Link as LinkIcon, Copy, CheckCirc
 import { Button } from '@/app/components/ui/button';
 import { Card, CardContent } from '@/app/components/ui/card';
 import { useAuth } from '@/hooks/useAuth';
-import { toast } from '@/hooks/use-toast';
+import { toast } from '@/components/ui/use-toast';
+import { FEATURES } from '@/lib/config/features';
 
 interface SocialShareButtonProps {
   contentType: 'recipe' | 'review' | 'thread';
@@ -165,6 +166,11 @@ export function SocialShareButton({
     }
   };
 
+  // Feature gate - don't render if social features are disabled
+  if (!FEATURES.enableSocialSharing) {
+    return null;
+  }
+
   return (
     <div className="relative">
       <Button
@@ -251,7 +257,7 @@ export function SocialShareButton({
               </div>
 
               {/* Native Share (Mobile) */}
-              {navigator.share && (
+              {typeof navigator !== 'undefined' && 'share' in navigator && (
                 <Button
                   variant="default"
                   size="sm"

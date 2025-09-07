@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { Button } from '@/app/components/ui/button';
 import { UserPlus, UserMinus, Heart } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
-import { toast } from '@/hooks/use-toast';
+import { toast } from '@/components/ui/use-toast';
 
 interface FollowButtonProps {
   creatorId: string;

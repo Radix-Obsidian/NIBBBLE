@@ -27,98 +27,20 @@ export default function CollectionToCart({
   const [expanded, setExpanded] = useState(false)
 
   const handleAddCollectionToCart = async () => {
-    if (!collection.recipes || collection.recipes.length === 0) {
-      toast({
-        title: "No Recipes",
-        description: "This collection doesn't have any recipes to add",
-        variant: "destructive"
-      })
-      return
-    }
-
-    try {
-      setAdding(true)
-      
-      let totalAdded = 0
-      let totalErrors: string[] = []
-
-      // Process each recipe in the collection
-      for (const recipe of collection.recipes) {
-        if (!recipe.ingredients || recipe.ingredients.length === 0) {
-          totalErrors.push(`${recipe.title}: No ingredients found`)
-          continue
-        }
-
-        // Prepare ingredients
-        const ingredients = recipe.ingredients.map(ingredient => ({
-          name: typeof ingredient === 'string' ? ingredient : ingredient.name || ingredient.ingredient,
-          quantity: typeof ingredient === 'string' ? 1 : ingredient.amount || 1,
-          unit: typeof ingredient === 'string' ? 'item' : ingredient.unit || 'item'
-        }))
-
-        // Add recipe to cart
-        const result = await ShoppingCartService.addRecipeToCart(
-          userId,
-          recipe.id,
-          ingredients,
-          recipe.servings || 4
-        )
-
-        if (result.success) {
-          totalAdded += result.addedItems
-        }
-        
-        totalErrors.push(...result.errors)
-      }
-
-      // Show results
-      if (totalAdded > 0) {
-        toast({
-          title: "Collection Added!",
-          description: `${totalAdded} ingredients from ${collection.recipes.length} recipes added to your cart`
-        })
-        onAddToCart?.()
-      }
-
-      if (totalErrors.length > 0 && totalAdded === 0) {
-        toast({
-          title: "Failed to Add Collection",
-          description: "Unable to add any ingredients from this collection",
-          variant: "destructive"
-        })
-      } else if (totalErrors.length > 0) {
-        toast({
-          title: "Partially Added",
-          description: `${totalAdded} items added, ${totalErrors.length} items had issues`,
-          variant: "destructive"
-        })
-      }
-
-    } catch (error) {
-      console.error('Failed to add collection to cart:', error)
-      toast({
-        title: "Error",
-        description: "Failed to add collection to cart",
-        variant: "destructive"
-      })
-    } finally {
-      setAdding(false)
-    }
+    // Note: NibbleCollection doesn't have recipes directly
+    // This would need to be fetched separately via the collection service
+    // For now, show a message that this feature is coming soon
+    toast({
+      title: "Feature Coming Soon",
+      description: "Adding entire collections to cart will be available soon",
+      variant: "default"
+    })
   }
 
-  const estimatedCost = collection.recipes?.reduce((sum, recipe) => {
-    // Rough cost estimation - would be more accurate with real pricing
-    const ingredientCount = recipe.ingredients?.length || 0
-    return sum + (ingredientCount * 2.5) // ~$2.50 per ingredient average
-  }, 0) || 0
-
-  const totalIngredients = collection.recipes?.reduce((sum, recipe) => 
-    sum + (recipe.ingredients?.length || 0), 0
-  ) || 0
-
-  const estimatedTime = collection.recipes?.reduce((sum, recipe) => 
-    sum + (recipe.prepTime || 30), 0
-  ) || 0
+  // Note: These would be calculated from collection items once the proper data structure is implemented
+  const estimatedCost = 0
+  const totalIngredients = 0
+  const estimatedTime = 0
 
   return (
     <Card className={className}>
@@ -129,7 +51,7 @@ export default function CollectionToCart({
             Shop Collection
           </span>
           <Badge variant="outline">
-            {collection.recipes?.length || 0} recipes
+            0 items
           </Badge>
         </CardTitle>
       </CardHeader>
@@ -187,43 +109,17 @@ export default function CollectionToCart({
           </div>
         </div>
 
-        {/* Recipe List (expandable) */}
-        {collection.recipes && collection.recipes.length > 0 && (
-          <div>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => setExpanded(!expanded)}
-              className="w-full justify-between text-sm"
-            >
-              {expanded ? 'Hide' : 'Show'} Recipe Details
-              <span className="text-xs">
-                {expanded ? '▲' : '▼'}
-              </span>
-            </Button>
-            
-            {expanded && (
-              <div className="mt-2 space-y-2 max-h-40 overflow-y-auto">
-                {collection.recipes.map((recipe, index) => (
-                  <div key={recipe.id || index} className="text-sm p-2 bg-muted rounded">
-                    <div className="font-medium">{recipe.title}</div>
-                    <div className="text-xs text-muted-foreground">
-                      {recipe.ingredients?.length || 0} ingredients • 
-                      {recipe.prepTime || 30}min cook time
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-        )}
+        {/* Recipe List - Coming Soon */}
+        <div className="text-sm text-muted-foreground text-center py-4">
+          Recipe details will be displayed here once the collection structure is implemented
+        </div>
 
         <Separator />
 
         {/* Action Button */}
         <Button
           onClick={handleAddCollectionToCart}
-          disabled={adding || !collection.recipes?.length}
+          disabled={adding}
           className="w-full"
           size="lg"
         >

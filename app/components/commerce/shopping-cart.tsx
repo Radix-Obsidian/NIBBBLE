@@ -17,6 +17,7 @@ import {
 import { toast } from "@/components/ui/use-toast"
 import { ShoppingCartService, CartWithItems, CartItem } from '@/lib/services/shopping-cart-service'
 import { useAuth } from '@/hooks/useAuth'
+import { FEATURES } from '@/lib/config/features'
 
 interface ShoppingCartProps {
   isOpen?: boolean
@@ -25,6 +26,11 @@ interface ShoppingCartProps {
 }
 
 export default function ShoppingCart({ isOpen = true, onClose, onCheckout }: ShoppingCartProps) {
+  // Feature gate - don't render if commerce features are disabled
+  if (!FEATURES.enableCommerce) {
+    return null;
+  }
+
   const { user } = useAuth()
   const [cart, setCart] = useState<CartWithItems | null>(null)
   const [loading, setLoading] = useState(false)

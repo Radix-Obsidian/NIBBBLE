@@ -16,9 +16,15 @@
       "Bash(curl:*)",
       "Bash(git commit:*)",
       "Bash(npx tsc:*)",
-      "Read(//mnt/c/Users/autre/OneDrive/Pictures/Screenshots/**)"
+      "Read(//mnt/c/Users/autre/OneDrive/Pictures/Screenshots/**)",
+      "Bash(vercel:*)",
+      "Bash(npm uninstall:*)",
+      "Bash(npm run type-check:*)",
+      "Bash(supabase status:*)",
+      "Bash(echo $NODE_ENV)"
     ],
     "deny": [],
     "ask": []
-  }
+  },
+  "outputStyle": "Code Guardian & Implementation Architect"
 }

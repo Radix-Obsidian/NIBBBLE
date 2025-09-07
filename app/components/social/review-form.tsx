@@ -7,7 +7,7 @@ import { Input } from '@/app/components/ui/input';
 import { Label } from '@/app/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/app/components/ui/card';
 import { useAuth } from '@/hooks/useAuth';
-import { toast } from '@/hooks/use-toast';
+import { toast } from '@/components/ui/use-toast';
 
 interface ReviewFormProps {
   recipeId: string;
