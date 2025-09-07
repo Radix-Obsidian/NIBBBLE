@@ -96,9 +96,9 @@ export const GET = withAppRouterHighlight(async function GET(request: NextReques
       { status: 500 }
     );
   }
-}
+});
 
-export async function PATCH(request: NextRequest) {
+export const PATCH = withAppRouterHighlight(async function PATCH(request: NextRequest) {
   try {
     const body = await request.json();
     const { email, status } = body;

@@ -16,7 +16,7 @@ const inter = Inter({
 
 export function generateMetadata(): Metadata {
   return {
-    title: 'NIBBBLE - The Dribbble for Food Creators',
+    title: 'NIBBBLE - Social Platform for Food Creators',
     description: 'SNACK. SHARE. SAVOR. Where TikTok meets Pinterest for food lovers. Share your recipes, discover amazing dishes, and build your culinary community.',
     keywords: 'food, recipes, cooking, social media, food creators, community, video, sharing',
     authors: [{ name: 'NIBBBLE Team' }],
@@ -24,14 +24,14 @@ export function generateMetadata(): Metadata {
       icon: '/favicon.svg',
     },
     openGraph: {
-      title: 'NIBBBLE - The Dribbble for Food Creators',
+      title: 'NIBBBLE - Social Platform for Food Creators',
       description: 'SNACK. SHARE. SAVOR. Where TikTok meets Pinterest for food lovers.',
       type: 'website',
       locale: 'en_US',
     },
     twitter: {
       card: 'summary_large_image',
-      title: 'NIBBBLE - The Dribbble for Food Creators',
+      title: 'NIBBBLE - Social Platform for Food Creators',
       description: 'SNACK. SHARE. SAVOR. Where TikTok meets Pinterest for food lovers.',
     },
   };
