@@ -95,7 +95,7 @@ export default function SocialLayout({ children }: { children: React.ReactNode }
             <h1 className="text-2xl font-bold text-gray-900 mb-4">Join NIBBBLE</h1>
             <p className="text-gray-600 mb-6">Sign in to discover amazing recipes and connect with food creators.</p>
             <button 
-              onClick={() => window.location.href = '/signin'}
+              onClick={() => window.location.href = '/signin?direct=true'}
               className="bg-gradient-to-r from-pink-500 to-orange-500 text-white px-6 py-3 rounded-full font-medium hover:from-pink-600 hover:to-orange-600 transition-all w-full"
             >
               Sign In

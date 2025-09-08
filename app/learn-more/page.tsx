@@ -9,7 +9,7 @@ export default function LearnMorePage() {
   const router = useRouter();
 
   const handleGetStarted = () => {
-    router.push('/signin');
+    router.push('/cookers/beta');
   };
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-amber-50">

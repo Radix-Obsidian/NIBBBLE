@@ -9,11 +9,11 @@ export function Header() {
   const { user } = useAuth();
 
   const handleSignIn = () => {
-    router.push('/signin');
+    router.push('/signin?direct=true');
   };
 
   const handleGetStarted = () => {
-    router.push('/signin');
+    router.push('/cookers/beta');
   };
 
   return (
@@ -51,7 +51,7 @@ export function Header() {
                   onClick={handleGetStarted}
                   className="bg-[#f97316] text-white px-6 py-2 rounded-lg font-semibold hover:bg-[#d97706] transition-all duration-200"
                 >
-                  Get Started
+                  Join Waitlist
                 </button>
               </>
             )}

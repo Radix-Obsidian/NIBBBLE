@@ -41,7 +41,7 @@ export function ReviewForm({
       <Card>
         <CardContent className="text-center py-8">
           <p className="text-gray-600 mb-4">Please sign in to leave a review.</p>
-          <Button onClick={() => window.location.href = '/signin'}>
+          <Button onClick={() => window.location.href = '/signin?direct=true'}>
             Sign In
           </Button>
         </CardContent>

@@ -82,7 +82,7 @@ export default function CommunityPage() {
         <div className="text-center">
           <h2 className="text-xl font-semibold text-gray-800 mb-4">Authentication Required</h2>
           <p className="text-gray-600 mb-6">Please sign in to access the community.</p>
-          <Button onClick={() => window.location.href = '/signin'}>
+          <Button onClick={() => window.location.href = '/signin?direct=true'}>
             Sign In
           </Button>
         </div>

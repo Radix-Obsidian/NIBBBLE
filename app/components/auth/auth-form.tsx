@@ -1,22 +1,30 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useSearchParams } from 'next/navigation'
+import { useSearchParams, useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabase/client'
 import { Button } from '../ui/button'
 import { Input } from '../ui/input'
 import { Card } from '../ui/card'
 import { logger } from '@/lib/logger'
 
-export function AuthForm() {
+interface AuthFormProps {
+  prefilledEmail?: string | null
+}
+
+export function AuthForm({ prefilledEmail }: AuthFormProps = {}) {
   const searchParams = useSearchParams()
+  const router = useRouter()
   const [isSignUp, setIsSignUp] = useState(false)
-  const [email, setEmail] = useState('')
+  const [email, setEmail] = useState(prefilledEmail || '')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState('')
   const [messageType, setMessageType] = useState<'success' | 'error' | 'info'>('info')
+  
+  // Check if this is a direct signin access
+  const isDirect = searchParams.get('direct') === 'true'
 
   // Check URL params to set initial mode
   useEffect(() => {
@@ -82,6 +90,12 @@ export function AuthForm() {
 
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault()
+    
+    // If in direct mode, redirect to waitlist instead of allowing signup
+    if (isDirect) {
+      router.push('/cookers/beta')
+      return
+    }
     
     if (!email || !password) {
       setMessage('Please enter both email and password')
@@ -182,16 +196,33 @@ export function AuthForm() {
         </button>
         <button
           type="button"
-          onClick={() => setIsSignUp(true)}
+          onClick={() => {
+            if (isDirect) {
+              // If in direct mode, redirect new users to waitlist
+              router.push('/cookers/beta')
+              return
+            }
+            setIsSignUp(true)
+          }}
           className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-colors ${
             isSignUp
               ? 'bg-white text-gray-900 shadow-sm'
               : 'text-gray-600 hover:text-gray-900'
           }`}
         >
-          Sign Up
+          {isDirect ? 'Join Waitlist' : 'Sign Up'}
         </button>
       </div>
+
+      {isDirect && !isSignUp && (
+        <div className="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+          <p className="text-sm text-blue-800">
+            <strong>Existing users:</strong> Sign in with your email and password.
+            <br />
+            <strong>New to NIBBBLE?</strong> Click "Join Waitlist" above to get early access.
+          </p>
+        </div>
+      )}
 
       <form onSubmit={isSignUp ? handleSignUp : handleSignIn} className="space-y-4">
         <div>

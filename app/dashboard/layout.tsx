@@ -65,7 +65,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             <h1 className="text-responsive-2xl font-bold text-red-600 mb-4">Access Denied</h1>
             <p className="text-responsive text-gray-600 mb-6">You need to be signed in to view this page.</p>
             <button 
-              onClick={() => window.location.href = '/signin'}
+              onClick={() => window.location.href = '/signin?direct=true'}
               className="btn bg-primary-600 text-white hover:bg-primary-700 w-full"
             >
               Sign In
