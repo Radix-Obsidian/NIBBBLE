@@ -1,6 +1,7 @@
 'use client';
 
 import { BookOpen, Instagram, ArrowRight, Utensils } from 'lucide-react';
+import Image from 'next/image';
 
 export function Footer() {
   return (
@@ -10,7 +11,18 @@ export function Footer() {
           {/* Company Info */}
           <div className="space-y-6">
             <div className="flex flex-col space-y-3">
-              <h3 className="text-2xl font-bold text-[#f97316] font-['Inter'] tracking-tight">NIBBBLE</h3>
+              <div className="flex items-center space-x-3">
+                <div className="w-8 h-8 relative">
+                  <Image
+                    src="/nibbble-logo-temp.svg"
+                    alt="NIBBBLE Logo"
+                    width={32}
+                    height={32}
+                    className="rounded-full object-cover"
+                  />
+                </div>
+                <h3 className="text-2xl font-bold text-[#f97316] font-['Inter'] tracking-tight">NIBBBLE</h3>
+              </div>
               <div className="flex items-center space-x-2">
                 <p className="text-sm text-gray-400 font-medium tracking-wider">SNACK. SHARE. SAVOR.</p>
                 <Utensils className="w-4 h-4 text-[#f97316]" />

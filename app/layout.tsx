@@ -21,9 +21,9 @@ export function generateMetadata(): Metadata {
     keywords: 'food, recipes, cooking, social media, food creators, community, video, sharing',
     authors: [{ name: 'NIBBBLE Team' }],
     icons: {
-      icon: '/favicon.png',
-      shortcut: '/favicon.png',
-      apple: '/favicon.png',
+      icon: '/favicon.svg',
+      shortcut: '/favicon.svg',
+      apple: '/favicon.svg',
     },
     openGraph: {
       title: 'NIBBBLE - Social Platform for Food Creators',

@@ -5,6 +5,7 @@ import { useRouter, usePathname } from 'next/navigation';
 import { useAuth } from '@/hooks/useAuth';
 import { Search, Menu, X } from 'lucide-react';
 import { Button } from '@/app/components/ui/button';
+import Image from 'next/image';
 
 export function Header() {
   const router = useRouter();
@@ -47,8 +48,15 @@ export function Header() {
             onClick={handleLogo}
             className="flex items-center space-x-3 hover:opacity-80 transition-opacity"
           >
-            <div className="w-10 h-10 bg-gradient-to-br from-[#f97316] to-[#d97706] rounded-full flex items-center justify-center shadow-sm">
-              <span className="text-white font-bold text-sm">N</span>
+            <div className="w-10 h-10 relative">
+              <Image
+                src="/nibbble-logo-temp.svg"
+                alt="NIBBBLE Logo"
+                width={40}
+                height={40}
+                className="rounded-full shadow-sm object-cover"
+                priority
+              />
             </div>
             <h1 className="text-2xl font-bold text-[#111827] font-['Inter']">
               NIBBBLE

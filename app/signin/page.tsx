@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useAuth } from '@/hooks/useAuth'
 import { AuthForm } from '@/app/components/auth/auth-form'
@@ -8,7 +8,7 @@ import { Header } from '@/app/components/layout/header'
 import { Footer } from '@/app/components/layout/footer'
 import { logger } from '@/lib/logger'
 
-export default function SignInPage() {
+function SignInPageContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const { user, loading } = useAuth()
@@ -98,4 +98,20 @@ export default function SignInPage() {
 
   // No waitlist gate needed - direct access to signin
   return <SignInContent />
+}
+
+function LoadingFallback() {
+  return (
+    <div className="min-h-screen flex items-center justify-center">
+      <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-orange-500"></div>
+    </div>
+  )
+}
+
+export default function SignInPage() {
+  return (
+    <Suspense fallback={<LoadingFallback />}>
+      <SignInPageContent />
+    </Suspense>
+  )
 }
