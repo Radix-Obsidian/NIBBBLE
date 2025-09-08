@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { CheckCircle, Clock, XCircle, ArrowRight } from 'lucide-react';
 import { Button } from '../ui/button';
+import { UserRecognitionService } from '@/lib/user-recognition';
 
 interface WaitlistGateProps {
   children: React.ReactNode;
@@ -13,15 +14,41 @@ interface WaitlistGateProps {
 export function WaitlistGate({ children, userEmail }: WaitlistGateProps) {
   const [waitlistStatus, setWaitlistStatus] = useState<'loading' | 'not_found' | 'pending' | 'approved' | 'rejected'>('loading');
   const [userType, setUserType] = useState<'creator' | 'cooker' | null>(null);
+  const [nextSteps, setNextSteps] = useState<string>('');
   const router = useRouter();
 
   useEffect(() => {
-    if (userEmail) {
-      checkWaitlistStatus(userEmail);
-    } else {
+    checkUserAccess();
+  }, [userEmail]);
+
+  const checkUserAccess = async () => {
+    try {
+      // Use UserRecognitionService for comprehensive user checking
+      const recognition = await UserRecognitionService.checkUserRecognition();
+      
+      if (recognition.isRecognized && recognition.userData) {
+        setUserType(recognition.userData.type);
+        setWaitlistStatus(recognition.userData.accessStatus);
+        setNextSteps(recognition.message || '');
+        
+        // If user should be redirected, they have approved status
+        if (recognition.shouldRedirect && recognition.redirectPath) {
+          // Auto-redirect approved users to their feed
+          router.push(recognition.redirectPath);
+          return;
+        }
+      } else if (userEmail) {
+        // Fallback to direct API check if userEmail is provided but not recognized
+        await checkWaitlistStatus(userEmail);
+      } else {
+        setWaitlistStatus('not_found');
+      }
+      
+    } catch (error) {
+      console.error('Error checking user access:', error);
       setWaitlistStatus('not_found');
     }
-  }, [userEmail]);
+  };
 
   const checkWaitlistStatus = async (email: string) => {
     try {
@@ -29,13 +56,22 @@ export function WaitlistGate({ children, userEmail }: WaitlistGateProps) {
       if (response.ok) {
         const data = await response.json();
         setWaitlistStatus(data.status);
+        setNextSteps(data.nextSteps || '');
         
-        // Determine user type based on waitlist entry
-        if (data.status !== 'not_found') {
-          // In a real app, you'd get this from the waitlist entry
-          // For now, we'll determine based on the email or other logic
-          setUserType('cooker'); // Default to cooker, could be enhanced
+        // Get user type from API response
+        const apiUserType = data.entry?.type as 'creator' | 'cooker' | null;
+        setUserType(apiUserType);
+        
+        // Store using UserRecognitionService if we have entry data
+        if (data.entry && data.entry.name) {
+          UserRecognitionService.storeUserData({
+            email: email,
+            type: apiUserType || 'cooker',
+            name: data.entry.name,
+            accessStatus: data.status
+          });
         }
+        
       } else {
         setWaitlistStatus('not_found');
       }
@@ -106,7 +142,7 @@ export function WaitlistGate({ children, userEmail }: WaitlistGateProps) {
               Waitlist Pending
             </h1>
             <p className="text-gray-600 mb-6">
-              Your waitlist application is being reviewed. We'll notify you as soon as you're approved for early access.
+              {nextSteps || "Your waitlist application is being reviewed. We'll notify you as soon as you're approved for early access."}
             </p>
             <div className="space-y-4">
               <Button 
@@ -135,7 +171,7 @@ export function WaitlistGate({ children, userEmail }: WaitlistGateProps) {
               Application Not Approved
             </h1>
             <p className="text-gray-600 mb-6">
-              Unfortunately, your waitlist application wasn't approved at this time. You can reapply or join our general waitlist.
+              {nextSteps || "Unfortunately, your waitlist application wasn't approved at this time. You can reapply or join our general waitlist."}
             </p>
             <div className="space-y-4">
               <Button 

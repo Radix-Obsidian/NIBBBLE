@@ -343,7 +343,7 @@ export class IntelligentWaitlistService {
     return data;
   }
 
-  private static async getAllEntries(): Promise<WaitlistEntry[]> {
+  static async getAllEntries(): Promise<WaitlistEntry[]> {
     if (!supabaseAdmin) {
       throw new Error('Supabase admin client not available');
     }
@@ -361,7 +361,7 @@ export class IntelligentWaitlistService {
     return data || [];
   }
 
-  private static async getEntriesByStatus(status: 'pending' | 'approved' | 'rejected'): Promise<WaitlistEntry[]> {
+  static async getEntriesByStatus(status: 'pending' | 'approved' | 'rejected'): Promise<WaitlistEntry[]> {
     if (!supabaseAdmin) {
       throw new Error('Supabase admin client not available');
     }
@@ -380,7 +380,7 @@ export class IntelligentWaitlistService {
     return data || [];
   }
 
-  private static async approveEntry(email: string): Promise<boolean> {
+  static async approveEntry(email: string): Promise<boolean> {
     if (!supabaseAdmin) {
       throw new Error('Supabase admin client not available');
     }
@@ -397,6 +397,29 @@ export class IntelligentWaitlistService {
 
     if (error) {
       console.error('Error approving waitlist entry:', error);
+      return false;
+    }
+
+    return !!data;
+  }
+
+  static async rejectEntry(email: string): Promise<boolean> {
+    if (!supabaseAdmin) {
+      throw new Error('Supabase admin client not available');
+    }
+
+    const { data, error } = await supabaseAdmin
+      .from('waitlist_entries')
+      .update({ 
+        status: 'rejected',
+        rejected_at: new Date().toISOString()
+      })
+      .eq('email', email.toLowerCase())
+      .select()
+      .single();
+
+    if (error) {
+      console.error('Error rejecting waitlist entry:', error);
       return false;
     }
 

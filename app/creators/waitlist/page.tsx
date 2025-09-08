@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Header, Footer } from '@/app/components';
 import { Button } from '@/app/components/ui/button';
 import { Input } from '@/app/components/ui/input';
@@ -10,6 +10,17 @@ import { CheckCircle, ArrowRight, Star, Users, Brain } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { apiHelpers } from '@/lib/config';
 import { trackEvent, HIGHLIGHT_EVENTS } from '@/lib/highlight';
+import { UserRecognitionService } from '@/lib/user-recognition';
+
+// Generate secure password for auto-authentication
+const generateSecurePassword = (): string => {
+  const charset = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*';
+  let password = '';
+  for (let i = 0; i < 16; i++) {
+    password += charset.charAt(Math.floor(Math.random() * charset.length));
+  }
+  return password;
+};
 
 export default function CreatorWaitlistPage() {
   const router = useRouter();
@@ -24,14 +35,50 @@ export default function CreatorWaitlistPage() {
     goals: ''
   });
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [hasInstantAccess, setHasInstantAccess] = useState(false);
+  const [isCheckingExisting, setIsCheckingExisting] = useState(true);
   const [submitError, setSubmitError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+
+  // Check for existing user on component mount
+  useEffect(() => {
+    checkExistingUser();
+  }, []);
+
+  const checkExistingUser = async () => {
+    try {
+      const recognition = await UserRecognitionService.checkUserRecognition();
+      
+      if (recognition.shouldRedirect && recognition.redirectPath) {
+        router.push(recognition.redirectPath);
+        return;
+      }
+      
+      if (recognition.isRecognized && recognition.userData) {
+        // User is recognized but doesn't have access yet
+        if (recognition.userData.type === 'creator') {
+          if (recognition.userData.accessStatus === 'pending') {
+            setIsSubmitted(true);
+            return;
+          }
+        }
+      }
+    } catch (error) {
+      console.error('Error checking existing user:', error);
+    } finally {
+      setIsCheckingExisting(false);
+    }
+  };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value
     });
+    // Clear any previous errors when user starts typing
+    if (submitError) {
+      setSubmitError('');
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -73,6 +120,16 @@ export default function CreatorWaitlistPage() {
       });
 
       if (response.ok) {
+        const data = await response.json();
+        
+        // Store user info using recognition service
+        UserRecognitionService.storeUserData({
+          email: formData.email.trim(),
+          type: 'creator',
+          name: formData.name.trim(),
+          accessStatus: data.entry.status as 'pending' | 'approved' | 'rejected'
+        });
+        
         // Track successful waitlist signup
         trackEvent(HIGHLIGHT_EVENTS.WAITLIST_JOINED, {
           userType: 'creator',
@@ -83,13 +140,76 @@ export default function CreatorWaitlistPage() {
           audienceSize: formData.audienceSize,
           contentType: formData.contentType,
           hasGoals: !!formData.goals.trim(),
+          instantAccess: data.instantAccess,
+          status: data.entry.status
         });
         
-        setIsSubmitted(true);
+        if (data.instantAccess && data.entry.status === 'approved') {
+          // Creator has instant access - auto-create account and authenticate!
+          setHasInstantAccess(true);
+          localStorage.setItem('nibbble_access_status', 'approved');
+          
+          try {
+            // Auto-create Supabase account for instant access
+            const authResponse = await apiHelpers.fetchWithRetry('/api/auth/instant-access', {
+              method: 'POST',
+              body: JSON.stringify({
+                email: formData.email.trim(),
+                password: generateSecurePassword(), // Auto-generate secure password
+                name: formData.name.trim(),
+                type: 'creator',
+                profileData: formData
+              })
+            });
+
+            if (authResponse.ok) {
+              const authData = await authResponse.json();
+              
+              // Show quick success message and redirect immediately
+              setIsSubmitted(true);
+              setTimeout(() => {
+                // Use the auth link for seamless login or direct feed redirect
+                if (authData.authLink) {
+                  window.location.href = authData.authLink;
+                } else {
+                  router.push('/feed?welcome=true&instant=true&creator=true');
+                }
+              }, 1500); // Reduced to 1.5 seconds for faster access
+            } else {
+              // Fallback to manual signin if auto-auth fails
+              console.warn('Auto-authentication failed, redirecting to signin');
+              setIsSubmitted(true);
+              setTimeout(() => {
+                router.push(`/signin?email=${encodeURIComponent(formData.email.trim())}&message=Creator account created! Please sign in to access your feed.`);
+              }, 1500);
+            }
+          } catch (authError) {
+            console.error('Auto-authentication error:', authError);
+            // Fallback to signin page
+            setIsSubmitted(true);
+            setTimeout(() => {
+              router.push(`/signin?email=${encodeURIComponent(formData.email.trim())}&instant=true&creator=true`);
+            }, 1500);
+          }
+        } else {
+          // Regular waitlist flow
+          setIsSubmitted(true);
+        }
       } else {
         const errorData = await response.json().catch(() => ({ error: 'Unknown error occurred' }));
         
         if (response.status === 409) {
+          // Check if they actually have access now
+          if (errorData.status === 'approved') {
+            UserRecognitionService.storeUserData({
+              email: formData.email.trim(),
+              type: 'creator',
+              name: formData.name.trim(),
+              accessStatus: 'approved'
+            });
+            router.push('/feed');
+            return;
+          }
           throw new Error('This email is already on our waitlist. Check your inbox for updates!');
         } else if (response.status === 400) {
           throw new Error(errorData.error || 'Please check your information and try again');
@@ -117,6 +237,18 @@ export default function CreatorWaitlistPage() {
     }
   };
 
+  // Show loading state while checking existing user
+  if (isCheckingExisting) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-orange-50 via-white to-amber-50">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#f97316] mx-auto mb-4"></div>
+          <p className="text-gray-600">Checking your status...</p>
+        </div>
+      </div>
+    );
+  }
+
   if (isSubmitted) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-amber-50">
@@ -125,23 +257,47 @@ export default function CreatorWaitlistPage() {
         <main className="py-20">
           <div className="max-w-2xl mx-auto text-center px-4 sm:px-6 lg:px-8">
             <div className="bg-white rounded-3xl p-12 shadow-lg border border-gray-100">
-              <div className="w-20 h-20 bg-[#10b981]/10 rounded-full flex items-center justify-center mx-auto mb-6">
-                <CheckCircle className="w-10 h-10 text-[#10b981]" />
-              </div>
-              <h1 className="text-3xl font-bold text-gray-900 mb-4">
-                Welcome to the Creator Waitlist!
-              </h1>
-              <p className="text-xl text-gray-600 mb-8">
-                Thank you for joining our creator community. We'll be in touch soon with early access and exclusive updates.
-              </p>
-              <div className="space-y-4">
-                <Button size="xl" onClick={() => router.push('/creators/learn-more')} className="bg-gradient-to-r from-[#f97316] to-[#d97706] hover:from-[#f97316]/90 hover:to-[#d97706]/90 text-white">
-                  Learn More About Creating
-                </Button>
-                <Button size="xl" variant="outline" onClick={() => router.push('/cookers/learn-more')} className="border-2 border-gray-300 hover:border-[#f97316] hover:text-[#f97316]">
-                  I'm a Home Cook
-                </Button>
-              </div>
+              {hasInstantAccess ? (
+                // Instant access celebration
+                <>
+                  <div className="w-20 h-20 bg-[#10b981]/10 rounded-full flex items-center justify-center mx-auto mb-6 animate-bounce">
+                    <CheckCircle className="w-10 h-10 text-[#10b981] animate-pulse" />
+                  </div>
+                  <h1 className="text-3xl font-bold text-gray-900 mb-4">
+                    🎉 Welcome to NIBBBLE!
+                  </h1>
+                  <p className="text-xl text-gray-600 mb-8">
+                    Congratulations! You have instant access to our creator platform. Redirecting you to your dashboard...
+                  </p>
+                  <div className="flex items-center justify-center space-x-2 mb-6">
+                    <div className="w-3 h-3 bg-[#f97316] rounded-full animate-pulse"></div>
+                    <div className="w-3 h-3 bg-[#d97706] rounded-full animate-pulse" style={{animationDelay: '0.2s'}}></div>
+                    <div className="w-3 h-3 bg-[#10b981] rounded-full animate-pulse" style={{animationDelay: '0.4s'}}></div>
+                  </div>
+                  <p className="text-sm text-gray-500">Setting up your creator dashboard...</p>
+                </>
+              ) : (
+                // Regular waitlist confirmation
+                <>
+                  <div className="w-20 h-20 bg-[#10b981]/10 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <CheckCircle className="w-10 h-10 text-[#10b981]" />
+                  </div>
+                  <h1 className="text-3xl font-bold text-gray-900 mb-4">
+                    Welcome to the Creator Waitlist!
+                  </h1>
+                  <p className="text-xl text-gray-600 mb-8">
+                    Thank you for joining our creator community. We&apos;ll notify you as soon as access becomes available!
+                  </p>
+                  <div className="space-y-4">
+                    <Button size="xl" onClick={() => router.push('/creators/learn-more')} className="bg-gradient-to-r from-[#f97316] to-[#d97706] hover:from-[#f97316]/90 hover:to-[#d97706]/90 text-white">
+                      Learn More About Creating
+                    </Button>
+                    <Button size="xl" variant="outline" onClick={() => router.push('/cookers/learn-more')} className="border-2 border-gray-300 hover:border-[#f97316] hover:text-[#f97316]">
+                      I&apos;m a Home Cook
+                    </Button>
+                  </div>
+                </>
+              )}
             </div>
           </div>
         </main>

@@ -126,8 +126,8 @@ export const GET = withAppRouterHighlight(async function GET(request: NextReques
       const analyticsData = await IntelligentWaitlistService.getAnalytics();
       return NextResponse.json({ analytics: analyticsData });
     } else {
-      // Return all entries (admin only in production)
-      const entries = await WaitlistService.getAllEntries();
+      // Return all entries (admin only in production) - use IntelligentWaitlistService
+      const entries = await IntelligentWaitlistService.getAllEntries();
       return NextResponse.json({ entries });
     }
   } catch (error) {
@@ -158,11 +158,12 @@ export const PATCH = withAppRouterHighlight(async function PATCH(request: NextRe
       );
     }
 
+    // Use IntelligentWaitlistService for manual overrides
     let success = false;
     if (status === 'approved') {
-      success = await WaitlistService.approveEntry(email);
+      success = await IntelligentWaitlistService.approveEntry(email);
     } else if (status === 'rejected') {
-      success = await WaitlistService.rejectEntry(email);
+      success = await IntelligentWaitlistService.rejectEntry(email);
     }
 
     if (success) {
