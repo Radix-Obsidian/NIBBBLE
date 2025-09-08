@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
 import { useAuth } from '@/hooks/useAuth'
 import { LoadingSpinner } from '@/app/components/ui/loading-spinner'
-import { WaitlistGate } from '@/app/components/auth/waitlist-gate'
 import { Sidebar } from '@/app/components/dashboard/sidebar'
 import { Header } from '@/app/components/dashboard/header'
 import { NotificationsPanel } from '@/app/components/dashboard/notifications-panel'
@@ -77,8 +76,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   }
 
   return (
-    <WaitlistGate userEmail={user?.email}>
-      <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-amber-50">
+    <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-amber-50">
         {/* Mobile Menu Overlay */}
         {mobileMenuOpen && (
           <div 
@@ -143,7 +141,6 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             className="shadow-lg hover:shadow-xl transition-shadow duration-200"
           />
         </div>
-      </div>
-    </WaitlistGate>
+    </div>
   )
 }

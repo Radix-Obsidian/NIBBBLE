@@ -1,12 +1,16 @@
 'use client'
 
 import { useEffect, useState, useRef, useCallback } from 'react'
+import { useRouter } from 'next/navigation'
+import { motion } from 'framer-motion'
 import { useAuth } from '@/hooks/useAuth'
 import { logger } from '@/lib/logger'
 import { supabase } from '@/lib/supabase/client'
 import { VideoRecipeCard } from '@/app/components/social/video-recipe-card'
 import { CreatorStoryBar } from '@/app/components/social/creator-story-bar'
 import { LoadingSpinner } from '@/app/components/ui/loading-spinner'
+import { Button } from '@/app/components/ui/button'
+import { Heart, MessageCircle, Share2, Bookmark } from 'lucide-react'
 
 interface FeedRecipe {
   id: string
@@ -41,18 +45,72 @@ interface FeedRecipe {
   isBookmarked: boolean
 }
 
+// Guest Signup Prompt Component
+const GuestPrompt = ({ action, onSignup, onDismiss }: {
+  action: string;
+  onSignup: () => void;
+  onDismiss: () => void;
+}) => (
+  <motion.div
+    initial={{ opacity: 0 }}
+    animate={{ opacity: 1 }}
+    exit={{ opacity: 0 }}
+    className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4"
+    onClick={onDismiss}
+  >
+    <motion.div
+      initial={{ scale: 0.9, y: 20 }}
+      animate={{ scale: 1, y: 0 }}
+      exit={{ scale: 0.9, y: 20 }}
+      className="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl"
+      onClick={(e) => e.stopPropagation()}
+    >
+      <div className="text-center">
+        <div className="w-16 h-16 bg-gradient-to-br from-orange-500 to-pink-500 rounded-full flex items-center justify-center mx-auto mb-4">
+          <Heart className="w-8 h-8 text-white" />
+        </div>
+        
+        <h3 className="text-2xl font-bold text-gray-900 mb-2">
+          Ready to {action}?
+        </h3>
+        
+        <p className="text-gray-600 mb-6">
+          Join NIBBBLE to save recipes, follow creators, and share your own cooking adventures.
+        </p>
+        
+        <div className="space-y-3">
+          <Button
+            onClick={onSignup}
+            className="w-full bg-gradient-to-r from-orange-500 to-pink-500 hover:from-orange-600 hover:to-pink-600 text-white font-semibold py-3 rounded-2xl"
+          >
+            Join NIBBBLE Free
+          </Button>
+          
+          <button
+            onClick={onDismiss}
+            className="w-full text-gray-500 hover:text-gray-700 text-sm py-2"
+          >
+            Continue browsing
+          </button>
+        </div>
+      </div>
+    </motion.div>
+  </motion.div>
+);
+
 export default function FeedPage() {
+  const router = useRouter()
   const { user } = useAuth()
   const [recipes, setRecipes] = useState<FeedRecipe[]>([])
   const [loading, setLoading] = useState(true)
   const [hasMore, setHasMore] = useState(true)
   const [page, setPage] = useState(0)
+  const [showGuestPrompt, setShowGuestPrompt] = useState(false)
+  const [guestAction, setGuestAction] = useState('')
   const observerTarget = useRef<HTMLDivElement>(null)
 
-  // Load feed recipes with infinite scroll
+  // Load feed recipes with infinite scroll - now works for both authenticated and guest users
   const loadFeedRecipes = useCallback(async (pageNum: number = 0, append: boolean = false) => {
-    if (!user) return
-
     try {
       if (pageNum === 0) setLoading(true)
 
@@ -118,7 +176,7 @@ export default function FeedPage() {
     } finally {
       if (pageNum === 0) setLoading(false)
     }
-  }, [user])
+  }, [])
 
   // Generate video URL for recipe
   const generateVideoUrl = (recipe: any): string => {
@@ -201,9 +259,23 @@ export default function FeedPage() {
     loadFeedRecipes(0, false)
   }, [loadFeedRecipes])
 
+  // Handle guest engagement prompts
+  const handleGuestAction = (action: string) => {
+    if (!user) {
+      setGuestAction(action)
+      setShowGuestPrompt(true)
+      return false
+    }
+    return true
+  }
+
+  const handleSignup = () => {
+    router.push('/cookers/beta?action=' + encodeURIComponent(guestAction))
+  }
+
   // Handle recipe interactions
   const handleLike = async (recipeId: string) => {
-    if (!user) return
+    if (!handleGuestAction('like recipes')) return
 
     try {
       // Optimistic update
@@ -218,23 +290,29 @@ export default function FeedPage() {
       ))
 
       // TODO: Implement actual like API call
-      logger.info('Like toggled', { recipeId, userId: user.id })
+      logger.info('Like toggled', { recipeId, userId: user!.id })
     } catch (error) {
       logger.error('Like error', error)
     }
   }
 
   const handleComment = (recipeId: string) => {
+    if (!handleGuestAction('comment on recipes')) return
+    
     logger.info('Comment clicked', { recipeId })
     // TODO: Open comments modal
   }
 
   const handleShare = (recipeId: string) => {
+    if (!handleGuestAction('share recipes')) return
+    
     logger.info('Share clicked', { recipeId })
     // TODO: Open share modal
   }
 
   const handleBookmark = (recipeId: string) => {
+    if (!handleGuestAction('save recipes')) return
+    
     setRecipes(prev => prev.map(recipe => 
       recipe.id === recipeId 
         ? { ...recipe, isBookmarked: !recipe.isBookmarked }
@@ -290,6 +368,15 @@ export default function FeedPage() {
           </div>
         )}
       </div>
+
+      {/* Guest Signup Prompt */}
+      {showGuestPrompt && (
+        <GuestPrompt
+          action={guestAction}
+          onSignup={handleSignup}
+          onDismiss={() => setShowGuestPrompt(false)}
+        />
+      )}
     </div>
   )
 }

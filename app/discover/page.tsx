@@ -65,10 +65,8 @@ export default function DiscoverPage() {
   const difficultyFilters = ['Easy', 'Medium', 'Hard']
   const timeFilters = ['Under 15min', '15-30min', '30-60min', '60+ min']
 
-  // Load discover recipes
+  // Load discover recipes - now works for both authenticated and guest users
   const loadDiscoverRecipes = async () => {
-    if (!user) return
-
     try {
       setLoading(true)
 
@@ -206,7 +204,7 @@ export default function DiscoverPage() {
   // Load recipes on category change
   useEffect(() => {
     loadDiscoverRecipes()
-  }, [selectedCategory, user])
+  }, [selectedCategory])
 
   return (
     <div className="min-h-screen">

@@ -6,6 +6,9 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/app/components/ui/avatar'
 import { Button } from '@/app/components/ui/button'
 import { cn } from '@/lib/utils'
 import Link from 'next/link'
+import { useAuth } from '@/hooks/useAuth'
+import { useGuestBrowsing, ConversionTriggers } from '@/hooks/useGuestBrowsing'
+import { GuestSignupPrompt } from '@/app/components/marketing/guest-signup-prompt'
 
 interface VideoRecipeCardProps {
   recipe: {
@@ -51,10 +54,15 @@ export function VideoRecipeCard({
   onBookmark,
   autoPlay = false
 }: VideoRecipeCardProps) {
+  const { user } = useAuth()
+  const { trackView, isGuestUser } = useGuestBrowsing()
   const [isPlaying, setIsPlaying] = useState(autoPlay)
   const [isMuted, setIsMuted] = useState(true)
   const [showDescription, setShowDescription] = useState(false)
+  const [showSignupPrompt, setShowSignupPrompt] = useState(false)
+  const [signupTrigger, setSignupTrigger] = useState<string>('')
   const videoRef = useRef<HTMLVideoElement>(null)
+  const [hasTrackedView, setHasTrackedView] = useState(false)
 
   // Handle video play/pause
   const togglePlayPause = () => {
@@ -76,12 +84,18 @@ export function VideoRecipeCard({
     }
   }
 
-  // Auto-play when visible
+  // Auto-play when visible and track guest views
   useEffect(() => {
     const observer = new IntersectionObserver(
       entries => {
         entries.forEach(entry => {
           if (entry.isIntersecting && videoRef.current) {
+            // Track view for guest users
+            if (isGuestUser && !hasTrackedView) {
+              trackView()
+              setHasTrackedView(true)
+            }
+            
             if (autoPlay) {
               videoRef.current.play()
               setIsPlaying(true)
@@ -100,12 +114,22 @@ export function VideoRecipeCard({
     }
 
     return () => observer.disconnect()
-  }, [autoPlay])
+  }, [autoPlay, isGuestUser, trackView, hasTrackedView])
 
   const formatCount = (count: number): string => {
     if (count >= 1000000) return `${(count / 1000000).toFixed(1)}M`
     if (count >= 1000) return `${(count / 1000).toFixed(1)}K`
     return count.toString()
+  }
+
+  // Handle guest user actions with signup prompts
+  const handleGuestAction = (action: string) => {
+    if (isGuestUser) {
+      setSignupTrigger(action)
+      setShowSignupPrompt(true)
+      return true // Indicates guest action was intercepted
+    }
+    return false // User is authenticated, proceed normally
   }
 
   return (
@@ -139,7 +163,17 @@ export function VideoRecipeCard({
           {/* Creator Info & Recipe Details */}
           <div className="flex-1 min-w-0 pr-4">
             {/* Creator */}
-            <Link href={`/creator/${recipe.creator.username}`} className="flex items-center gap-2 mb-2">
+            <button 
+              onClick={() => {
+                if (isGuestUser) {
+                  handleGuestAction(ConversionTriggers.FOLLOW_ATTEMPT)
+                } else {
+                  // Navigate to creator profile for authenticated users
+                  window.location.href = `/creator/${recipe.creator.username}`
+                }
+              }}
+              className="flex items-center gap-2 mb-2 text-left"
+            >
               <Avatar className="w-10 h-10 border-2 border-white">
                 <AvatarImage src={recipe.creator.avatar_url} alt={recipe.creator.display_name} />
                 <AvatarFallback className="bg-gradient-to-r from-pink-500 to-orange-500 text-white font-medium">
@@ -161,7 +195,7 @@ export function VideoRecipeCard({
                   {formatCount(recipe.creator.followers_count)} followers
                 </span>
               </div>
-            </Link>
+            </button>
 
             {/* Recipe Title */}
             <h3 className="text-white font-bold text-lg mb-2 leading-tight">
@@ -228,7 +262,11 @@ export function VideoRecipeCard({
         <div className="flex items-center gap-6">
           {/* Like */}
           <button
-            onClick={() => onLike(recipe.id)}
+            onClick={() => {
+              if (!handleGuestAction(ConversionTriggers.LIKE_ATTEMPT)) {
+                onLike(recipe.id)
+              }
+            }}
             className="flex items-center gap-2 group"
           >
             <Heart 
@@ -249,7 +287,11 @@ export function VideoRecipeCard({
 
           {/* Comment */}
           <button
-            onClick={() => onComment(recipe.id)}
+            onClick={() => {
+              if (!handleGuestAction(ConversionTriggers.COMMENT_ATTEMPT)) {
+                onComment(recipe.id)
+              }
+            }}
             className="flex items-center gap-2 group"
           >
             <MessageCircle className="w-6 h-6 text-gray-700 group-hover:text-blue-500 group-hover:scale-110 transition-all duration-200" />
@@ -260,7 +302,11 @@ export function VideoRecipeCard({
 
           {/* Share */}
           <button
-            onClick={() => onShare(recipe.id)}
+            onClick={() => {
+              if (!handleGuestAction(ConversionTriggers.SHARE_ATTEMPT)) {
+                onShare(recipe.id)
+              }
+            }}
             className="flex items-center gap-2 group"
           >
             <Share2 className="w-6 h-6 text-gray-700 group-hover:text-green-500 group-hover:scale-110 transition-all duration-200" />
@@ -274,7 +320,11 @@ export function VideoRecipeCard({
         <div className="flex items-center gap-2">
           {/* Bookmark */}
           <button
-            onClick={() => onBookmark(recipe.id)}
+            onClick={() => {
+              if (!handleGuestAction(ConversionTriggers.BOOKMARK_ATTEMPT)) {
+                onBookmark(recipe.id)
+              }
+            }}
             className="p-2 group"
           >
             <Bookmark 
@@ -293,6 +343,16 @@ export function VideoRecipeCard({
           </button>
         </div>
       </div>
+
+      {/* Guest Signup Prompt */}
+      {showSignupPrompt && (
+        <GuestSignupPrompt
+          trigger={signupTrigger as any}
+          recipeName={recipe.title}
+          creatorName={recipe.creator.display_name}
+          onClose={() => setShowSignupPrompt(false)}
+        />
+      )}
     </div>
   )
 }

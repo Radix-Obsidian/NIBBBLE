@@ -38,18 +38,23 @@ export interface AccessControlDecision {
 
 export class AccessControlService {
   private static config: AccessControlConfig = {
-    maxCapacity: 10000, // Total system capacity
-    warningThreshold: 0.6, // 60% - start monitoring closely
-    throttleThreshold: 0.8, // 80% - switch to waitlist
-    allowedCountries: ['US', 'CA', 'GB', 'AU', 'NZ', 'IE'], // English-speaking markets
+    maxCapacity: 50000, // Increased capacity for social platform growth
+    warningThreshold: 0.9, // 90% - start monitoring closely (was 60%)
+    throttleThreshold: 0.95, // 95% - switch to waitlist (was 80%) - enables 95% auto-approval
+    allowedCountries: ['US', 'CA', 'GB', 'AU', 'NZ', 'IE', 'DE', 'FR', 'ES', 'IT', 'NL', 'SE', 'NO', 'DK'], // Expanded to major markets
     allowedTimezones: [
+      // Americas
       'America/New_York', 'America/Chicago', 'America/Denver', 'America/Los_Angeles',
-      'America/Toronto', 'Europe/London', 'Europe/Dublin', 
+      'America/Toronto', 'America/Vancouver', 'America/Mexico_City',
+      // Europe
+      'Europe/London', 'Europe/Dublin', 'Europe/Paris', 'Europe/Berlin', 'Europe/Madrid',
+      'Europe/Rome', 'Europe/Amsterdam', 'Europe/Stockholm', 'Europe/Oslo', 'Europe/Copenhagen',
+      // Oceania  
       'Australia/Sydney', 'Australia/Melbourne', 'Pacific/Auckland'
     ],
-    maxSignupsPerMinute: 10,
-    maxSignupsPerHour: 100,
-    minProfileCompleteness: 0.7 // 70% of profile fields completed
+    maxSignupsPerMinute: 50, // Increased for social platform growth
+    maxSignupsPerHour: 500, // Increased for social platform growth
+    minProfileCompleteness: 0.3 // Reduced to 30% - minimal barrier for social platforms
   };
 
   static async checkAccess(

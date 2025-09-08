@@ -1,11 +1,9 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { useAuth } from '@/hooks/useAuth';
-import { logger } from '@/lib/logger';
 import { Header, Footer } from './components/layout';
 import { SentryFeedbackButton } from './components/common/sentry-feedback-button';
+import { ContentPreviewFeed } from './components/landing/content-preview-feed';
 import {
   HeroSection,
   WeeklyCookingSection,
@@ -20,26 +18,7 @@ import {
 } from './components/common';
 
 export default function Home() {
-  const router = useRouter();
   const { user, loading: authLoading } = useAuth();
-  const [hasRedirected, setHasRedirected] = useState(false);
-
-  // Check if user is authenticated and redirect to social feed
-  useEffect(() => {
-    logger.debug('HomePage auth check', { 
-      hasUser: !!user, 
-      authLoading, 
-      hasRedirected 
-    })
-    
-    if (user && !authLoading && !hasRedirected) {
-      logger.info('Redirecting authenticated user to social feed')
-      setHasRedirected(true)
-      setTimeout(() => {
-        router.push('/feed')
-      }, 100)
-    }
-  }, [user, authLoading, hasRedirected, router])
 
   return (
     <div className="min-h-screen bg-white">
@@ -47,7 +26,12 @@ export default function Home() {
       
       {/* Main Content */}
       <main>
+        {/* Content-First Hero with Recipe Previews */}
         <HeroSection />
+        
+        {/* Featured Content Preview - Show actual recipes */}
+        <ContentPreviewFeed />
+        
         <WeeklyCookingSection />
         <RestaurantQualitySection />
         <HowItWorksSection />
