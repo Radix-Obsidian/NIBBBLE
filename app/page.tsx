@@ -24,7 +24,7 @@ export default function Home() {
   const { user, loading: authLoading } = useAuth();
   const [hasRedirected, setHasRedirected] = useState(false);
 
-  // Check if user is authenticated and redirect to dashboard
+  // Check if user is authenticated and redirect to social feed
   useEffect(() => {
     logger.debug('HomePage auth check', { 
       hasUser: !!user, 
@@ -33,10 +33,10 @@ export default function Home() {
     })
     
     if (user && !authLoading && !hasRedirected) {
-      logger.info('Redirecting authenticated user to dashboard')
+      logger.info('Redirecting authenticated user to social feed')
       setHasRedirected(true)
       setTimeout(() => {
-        router.push('/dashboard')
+        router.push('/feed')
       }, 100)
     }
   }, [user, authLoading, hasRedirected, router])

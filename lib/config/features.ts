@@ -20,17 +20,19 @@ export const FEATURES = {
   enableFeedbackSystem: true,
   enableCookingAssistant: true,
   
+  // SOCIAL FEATURES ENABLED - Core Social Experience
+  enableSocialFeatures: true,
+  enableCreatorProfiles: true,
+  enableSocialSharing: true,
+  enableFollowSystem: true,
+  enableReviews: true,
+  
   // ALPHA DISABLED - Beta Features
-  enableSocialFeatures: false,
   enableNibbleCollections: false,
-  enableCreatorProfiles: false,
   enableMonetization: false,
   enableGroceryOrdering: false,
   enablePaymentProcessing: false,
   enableCollaborativeBoards: false,
-  enableSocialSharing: false,
-  enableFollowSystem: false,
-  enableReviews: false,
   enableCommerce: false,
   enableShopping: false,
   enableInventoryManagement: false,
